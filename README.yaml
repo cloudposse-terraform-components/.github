@@ -1,0 +1,90 @@
+name: "cloudposse-terraform-components"
+
+# Canonical GitHub repo
+github_repo: "cloudposse-terraform-components/.github"
+
+
+# Short description of this project
+description: |-
+  _Actively being developed, January 2023_
+
+  This is a collection of reusable Terraform components for provisioning infrastructure used by the Cloud Posse [reference architectures](https://cloudposse.com).
+
+introduction: |-
+  In this repo you'll find real-world examples of how we've implemented various common patterns using our [terraform modules](https://cpco.io/terraform-modules) for our customers.
+
+  The [component library](https://docs.cloudposse.com/components/) captures the business logic, opinions, best practices and non-functional requirements.
+
+  It's from this library that other developers in your organization will pick and choose from anytime they need to deploy some new capability.
+
+  These components make a lot of assumptions about how we've configured our environments. That said, they can still serve as an excellent reference for others.
+
+  ## Using `pre-commit` Hooks
+
+  This repository uses [pre-commit](https://pre-commit.com/) and [pre-commit-terraform](https://github.com/antonbabenko/pre-commit-terraform) to enforce consistent Terraform code and documentation. This is accomplished by triggering hooks during `git commit` to block commits that don't pass checks (E.g. format, and module documentation). You can find the hooks that are being executed in the [`.pre-commit-config.yaml`](.pre-commit-config.yaml) file.
+
+  You can install [pre-commit](https://pre-commit.com/) and this repo's pre-commit hooks on a Mac machine by running the following commands:
+
+  ```bash
+  brew install pre-commit gawk terraform-docs coreutils
+  pre-commit install --install-hooks
+  ```
+
+  Then run the following command to rebuild the docs for all Terraform components:
+
+  ```bash
+  make rebuild-docs
+  ```
+
+# How to use this project
+usage: |-
+  Please take a look at each [component's README](https://docs.cloudposse.com/components/) for usage.
+
+tags:
+  - terraform
+  - terraform-modules
+  - aws
+  - components
+  - terraform-components
+  - root
+  - geodesic
+  - reference-implementation
+  - reference-architecture
+
+# Categories of this project
+categories:
+  - terraform-modules/root
+  - terraform-components
+
+# Logo for this project
+#logo: docs/logo.png
+
+# License of this project
+license: "APACHE2"
+
+# Badges to display
+badges:
+  - name: "Latest Release"
+    image: "https://img.shields.io/github/release/cloudposse/terraform-aws-components.svg"
+    url: "https://github.com/cloudposse/terraform-aws-components/releases/latest"
+  - name: "Slack Community"
+    image: "https://slack.cloudposse.com/badge.svg"
+    url: "https://slack.cloudposse.com"
+
+references:
+  - name: "Cloud Posse Documentation"
+    description: "Complete documentation for the Cloud Posse solution"
+    url: "https://docs.cloudposse.com"
+  - name: "Reference Architectures"
+    description: "Launch effortlessly with our turnkey reference architectures, built either by your team or ours."
+    url: "https://cloudposse.com/"
+
+related:
+- name: "Cloud Posse Terraform Modules"
+  description: Our collection of reusable Terraform modules used by our reference architectures.
+  url: "https://docs.cloudposse.com/modules/"
+- name: "Atmos"
+  description: "Atmos is like docker-compose but for your infrastructure"
+  url: "https://atmos.tools"
+
+contributors: [] # If included generates contribs

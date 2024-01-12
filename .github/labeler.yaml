@@ -1,0 +1,13 @@
+# TODO
+docs:
+  - docs/**
+  - README.md
+
+automation:
+  - .github/**
+  - .spacelift/**
+  - Makefile
+  - .pre-commit-config.yaml
+
+configuration:
+  - stacks/**
