@@ -4,4 +4,11 @@
 # Order is important: the last matching pattern has the highest precedence
 
 # These owners will be the default owners for everything
-# *  @cloudposse-examples/devops @cloudposse-examples/cloudposse
+*             @cloudposse-terraform-components/engineering @cloudposse-terraform-components/admins
+
+# Cloud Posse admins must review any changes to Makefiles
+**/Makefile   @cloudposse-terraform-components/admins
+**/Makefile.* @cloudposse-terraform-components/admins
+
+# Cloud Posse admins must review any changes to GitHub actions
+.github/workflows/*     @cloudposse-terraform-components/admins
