@@ -21,13 +21,6 @@ repos:
 
       # YAML
       - id: check-yaml  # checks yaml files for parseable syntax.
-        exclude: |
-          (?x)^(
-              deprecated/github-actions-runner/runners/actions-runner/chart/templates/.*.yaml |
-              modules/eks/cert-manager/cert-manager-issuer/templates/.*.yaml |
-              modules/strongdm/charts/strongdm/templates/.*.yaml |
-              modules/eks/.*/charts/.*/templates/.*.yaml
-          )$
 
   - repo: https://github.com/antonbabenko/pre-commit-terraform
     rev: v1.81.0
