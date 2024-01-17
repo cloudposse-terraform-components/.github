@@ -11,7 +11,7 @@ description: |-
   This is a collection of reusable Terraform components for provisioning infrastructure used by the Cloud Posse [reference architectures](https://cloudposse.com).
 
 introduction: |-
-  In this repo you'll find real-world examples of how we've implemented various common patterns using our [terraform modules](https://cpco.io/terraform-modules) for our customers.
+  In this GitHub Organization you'll find real-world examples of how we've implemented various common patterns using our [terraform modules](https://cpco.io/terraform-modules) for our customers.
 
   The [component library](https://docs.cloudposse.com/components/) captures the business logic, opinions, best practices and non-functional requirements.
 
