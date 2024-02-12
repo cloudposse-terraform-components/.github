@@ -6,3 +6,6 @@ export README_TEMPLATE_REPO_REF ?= "DEV-1548/component-requirements"
 all: init readme
 
 readme: readme/build
+
+test::
+	@exit 0

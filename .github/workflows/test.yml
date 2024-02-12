@@ -1,14 +1,8 @@
-# This is a required workflow for all `type: component` repos in the `cloudposse-terraform-components` Organization
-#
-# When a workflow is run as a required workflow it will ignore all the filters in the on: section.
-# The required workflow will run only for the pull_request and pull_request_target default events.
-#
-# This workflow is not used in this repo itself, since it is specifically for testing components.
-
 name: 🔬 Test
 
 on:
   workflow_dispatch:
+  pull_request:
 
 # Concurrency ensures only the latest push for this PR will run at a time
 concurrency:
