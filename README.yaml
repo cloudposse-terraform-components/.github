@@ -3,7 +3,6 @@ name: "cloudposse-terraform-components"
 # Canonical GitHub repo
 github_repo: "cloudposse-terraform-components/.github"
 
-
 # Short description of this project
 description: |-
   _Actively being developed, January 2023_
