@@ -4,8 +4,5 @@ export README_TEMPLATE_REPO_REF ?= "DEV-1548/component-requirements"
 -include $(shell curl -sSL -o .build-harness "https://cloudposse.tools/build-harness"; echo .build-harness)
 
 all: init readme
-#
-readme: readme/build
 
-test::
-	@exit 0
+readme: readme/build
