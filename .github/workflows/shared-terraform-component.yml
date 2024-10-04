@@ -1,20 +1,16 @@
-name: "Terraform Component"
+name: "Shared terraform module"
 on:
-  pull_request:
-    branches:
-      - main
-      - release/**
-    types: [opened, synchronize, reopened, labeled, unlabeled]
-  push:
-    branches:
-      - main
-      - release/v*
-    paths-ignore:
-      - '.github/**'
-      - 'docs/**'
-      - 'examples/**'
-      - 'test/**'
-      - 'README.md'
+  workflow_call:
+    inputs:
+      runs-on:
+        description: "Overrides job runs-on setting (json-encoded list)"
+        type: string
+        required: false
+        default: '["ubuntu-latest"]'
+    secrets:
+      REPO_ACCESS_TOKEN:
+        description: "GitHub API token"
+        required: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -29,14 +25,14 @@ jobs:
       # We should switch to nofilter once it's fixed
       filter-mode: ${{ github.event_name == 'pull_request' && 'diff_context' || 'nofilter' }}
       suggestions: "${{ github.event_name == 'pull_request' }}"
-      runs-on: '["ubuntu-latest"]'
+      runs-on: ${{ inputs.runs-on }}
 
   ci-readme:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-readme.yml@main
     name: "Readme"
     if: ${{ github.event_name == 'push' }}
     with:
-      runs-on: '["ubuntu-latest"]'
+      runs-on: ${{ inputs.runs-on }}
     secrets: inherit
 
   ci-codeowners:
@@ -44,12 +40,12 @@ jobs:
     name: "CI"
     with:
       is_fork: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
-      runs-on: '["ubuntu-latest"]'
+      runs-on: ${{ inputs.runs-on }}
     secrets:
       github_access_token: ${{ secrets.REPO_ACCESS_TOKEN }}
 
   ci-labels:
-    runs-on: ["ubuntu-latest"]
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
     name: "CI / Labels Validate"
     steps:
       - uses: cloudposse/github-action-release-label-validator@v1
@@ -69,6 +65,6 @@ jobs:
     uses: cloudposse/.github/.github/workflows/shared-auto-release.yml@main
     if: ${{ github.event_name == 'push' }}
     with:
-      runs-on: '["ubuntu-latest"]'
+      runs-on: ${{ inputs.runs-on }}
       publish: true
     secrets: inherit
