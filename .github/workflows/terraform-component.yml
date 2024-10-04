@@ -49,7 +49,7 @@ jobs:
       github_access_token: ${{ secrets.REPO_ACCESS_TOKEN }}
 
   ci-labels:
-    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    runs-on: ["ubuntu-latest"]
     name: "CI / Labels Validate"
     steps:
       - uses: cloudposse/github-action-release-label-validator@v1
@@ -67,8 +67,8 @@ jobs:
     name: "Release"
     needs: [ci]
     uses: cloudposse/.github/.github/workflows/shared-auto-release.yml@main
-    if: '["ubuntu-latest"]'
+    if: ${{ github.event_name == 'push' }}
     with:
-      runs-on: ${{ inputs.runs-on }}
+      runs-on: '["ubuntu-latest"]'
       publish: true
     secrets: inherit
