@@ -12,6 +12,10 @@ on:
         description: "GitHub API token"
         required: false
 
+permissions:
+  id-token: write
+  contents: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
@@ -30,10 +34,24 @@ jobs:
   ci-readme:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-readme.yml@main
     name: "Readme"
-    if: ${{ github.event_name == 'push' }}
-    with:
-      runs-on: ${{ inputs.runs-on }}
-    secrets: inherit
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: cloudposse-github-actions/readme@v0
+        with:
+          token: ${{ github.token }}
+          readme_enabled: true
+          banner_enabled: true
+          validate_readme: true
+          commit_method: 'commit'
+          commit_push_options: '--force-with-lease'
+#    with:
+#      runs-on: ${{ inputs.runs-on }}
+#    secrets: inherit
 
 #  ci-codeowners:
 #    uses: cloudposse/github-actions-workflows/.github/workflows/ci-codeowners.yml@main
