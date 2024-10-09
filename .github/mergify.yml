@@ -149,7 +149,7 @@ shared:
   # Needs re-run
   needs_rerun: &needs_rerun
     - and:
-      - "label~=autobots-re-run"
+      - "label~=needs-re-run"
 
 # All the rules for the Pull Request
 pull_request_rules:
@@ -179,7 +179,7 @@ pull_request_rules:
     actions:
       label:
         remove:
-          - "autobots-re-run"
+          - "needs-re-run"
 
   - name: "run terratest on automated pull requests that update terraform files"
     conditions:

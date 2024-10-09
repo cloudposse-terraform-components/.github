@@ -50,7 +50,7 @@ jobs:
           validate_readme: true
           commit_method: 'commit'
           commit_push_options: '--force-with-lease'
-          pr_labels: 'autobots-re-run'
+          pr_labels: 'needs-re-run'
         env:
           README_DEPS: docs/targets.md docs/terraform.md
           TERRAFORM_SOURCE_DIR: /src
