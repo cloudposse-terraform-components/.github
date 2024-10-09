@@ -146,6 +146,10 @@ shared:
     - and:
       - "#files=0"
 
+  # Needs re-run
+  needs_rerun: &needs_rerun
+    - "label~=autobots-re-run"
+
 # All the rules for the Pull Request
 pull_request_rules:
   - name: "label automated pull requests"
@@ -166,6 +170,15 @@ pull_request_rules:
       label:
         toggle:
           - "readme"
+
+  - name: "label automated pull requests that update readme"
+    conditions:
+      - and: *is_open
+      - and: *needs_rerun
+    actions:
+      label:
+        remove:
+          - "autobots-re-run"
 
   - name: "run terratest on automated pull requests that update terraform files"
     conditions:
