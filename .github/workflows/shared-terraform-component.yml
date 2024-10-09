@@ -41,7 +41,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: cloudposse-github-actions/readme@v0
+      - uses: cloudposse-github-actions/readme@add-labels-on-commit
         with:
           token: ${{ github.token }}
           readme_enabled: true
@@ -49,6 +49,7 @@ jobs:
           validate_readme: true
           commit_method: 'commit'
           commit_push_options: '--force-with-lease'
+          pr_labels: 'autobots-re-run'
         env:
           README_DEPS: docs/targets.md docs/terraform.md
           TERRAFORM_SOURCE_DIR: /src
