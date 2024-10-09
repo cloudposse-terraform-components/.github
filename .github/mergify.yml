@@ -8,6 +8,7 @@ shared:
       - "author=github-actions[bot]"
       - "author=dependabot[bot]"
       - "author=renovate[bot]"
+      - "author=actions-user"
 
   # Not a bot user
   not_a_bot: &not_a_bot
