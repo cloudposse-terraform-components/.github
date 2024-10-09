@@ -172,7 +172,7 @@ pull_request_rules:
         toggle:
           - "readme"
 
-  - name: "label automated pull requests that update readme"
+  - name: "re run actions by removing the label autobots-re-run"
     conditions:
       - and: *is_open
       - and: *needs_rerun
