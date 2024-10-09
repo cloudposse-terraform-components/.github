@@ -148,7 +148,8 @@ shared:
 
   # Needs re-run
   needs_rerun: &needs_rerun
-    - "label~=autobots-re-run"
+    - and:
+      - "label~=autobots-re-run"
 
 # All the rules for the Pull Request
 pull_request_rules:
