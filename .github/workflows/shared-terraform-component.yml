@@ -33,7 +33,6 @@ jobs:
       runs-on: ${{ inputs.runs-on }}
 
   ci-readme:
-    # uses: cloudposse/github-actions-workflows/.github/workflows/ci-readme.yml@main
     name: "Readme"
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
@@ -54,18 +53,13 @@ jobs:
         env:
           README_DEPS: docs/targets.md docs/terraform.md
           TERRAFORM_SOURCE_DIR: /src
-#    with:
-#      runs-on: ${{ inputs.runs-on }}
-#    secrets: inherit
 
-#  ci-codeowners:
-#    uses: cloudposse/github-actions-workflows/.github/workflows/ci-codeowners.yml@main
-#    name: "CI"
-#    with:
-#      is_fork: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
-#      runs-on: ${{ inputs.runs-on }}
-#    secrets:
-#      github_access_token: ${{ secrets.REPO_ACCESS_TOKEN }}
+  ci-codeowners:
+    uses: cloudposse/github-actions-workflows/.github/workflows/ci-codeowners.yml@main
+    name: "CI"
+    with:
+      is_fork: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
+      runs-on: ${{ inputs.runs-on }}
 
   ci-labels:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
@@ -80,7 +74,7 @@ jobs:
       - run: |
           echo '${{ toJSON(needs) }}'  # easier debug
           ! ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
-    needs: [ ci-terraform, ci-readme, ci-labels ]
+    needs: [ ci-terraform, ci-readme, ci-codeowners, ci-labels ]
 
   auto-release:
     name: "Release"
