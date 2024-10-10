@@ -1,0 +1,95 @@
+name: |-
+  CI - Readme
+  
+  Validate README.yaml, README.md and suggest changes
+  
+  ### Usage 
+  ```yaml
+    name: Validate Readme
+    on:
+      workflow_call:
+  
+    permissions:
+      pull-requests: write
+      id-token: write
+      contents: read
+  
+    jobs:
+      ci-readme:
+        uses: cloudposse/github-actions-workflows/.github/workflows/ci-readme.yml@main
+        with:
+          suggestions: true
+          filter-mode: diff_context
+  ```
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: "Checkout ref"
+        type: string
+        required: false
+        default: ${{ github.ref_name }}
+      repository:
+        description: "Checkout repository"
+        type: string
+        required: false
+        default: ${{ github.repository }}
+      runs-on:
+        description: "Overrides job runs-on setting (json-encoded list)"
+        type: string
+        required: false
+        default: '["ubuntu-latest"]'
+
+jobs:
+  pr:
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    name: "Readme (PR)"
+    environment: release
+    if:  ${{ github.event_name != 'pull_request' }}
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: github-app
+        with:
+          app-id: ${{ vars.BOT_GITHUB_APP_ID }}
+          private-key: ${{ secrets.BOT_GITHUB_APP_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.github-app.outputs.token }}
+
+      - uses: cloudposse-github-actions/readme@add-labels-on-commit
+        with:
+          token: ${{ steps.github-app.outputs.token }}
+          readme_enabled: true
+          banner_enabled: true
+          validate_readme: true
+          commit_method: 'pr'
+          commit_push_options: '--force-with-lease'
+        env:
+          README_DEPS: docs/targets.md docs/terraform.md
+          TERRAFORM_SOURCE_DIR: /src
+
+  branch:
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    name: "Readme (branch)"
+    if:  ${{ github.event_name == 'pull_request' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: cloudposse-github-actions/readme@add-labels-on-commit
+        with:
+          token: ${{ github.token }}
+          readme_enabled: true
+          banner_enabled: true
+          validate_readme: true
+          commit_method: 'commit'
+          commit_push_options: '--force-with-lease'
+          pr_labels: 'needs-re-run'
+        env:
+          README_DEPS: docs/targets.md docs/terraform.md
+          TERRAFORM_SOURCE_DIR: /src
