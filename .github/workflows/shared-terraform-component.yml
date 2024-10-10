@@ -47,7 +47,7 @@ jobs:
           readme_enabled: true
           banner_enabled: true
           validate_readme: true
-          commit_method: 'commit'
+          commit_method: ${{ github.event_name == 'pull_request' && 'commit' || 'pr' }}
           commit_push_options: '--force-with-lease'
           pr_labels: 'needs-re-run'
         env:
