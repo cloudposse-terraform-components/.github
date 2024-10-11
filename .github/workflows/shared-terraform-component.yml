@@ -22,10 +22,9 @@ concurrency:
   cancel-in-progress: true
   
 jobs:
-  ci-terraform:
+  terraform:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yml@main
     if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    name: "Terraform"
     with:
       # Workaround for https://github.com/community/community/discussions/9099
       # We should switch to nofilter once it's fixed
@@ -33,26 +32,23 @@ jobs:
       suggestions: "${{ github.event_name == 'pull_request' }}"
       runs-on: ${{ inputs.runs-on }}
 
-  ci-readme:
+  readme:
     uses: cloudposse-terraform-components/.github/.github/workflows/shared-readme.yml@main
     if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    name: "Readme"
     with:
       runs-on: ${{ inputs.runs-on }}
     secrets: inherit
 
-  ci-codeowners:
+  codeowners:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-codeowners.yml@main
     if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    name: "Codeowners"
     with:
       is_fork: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
       runs-on: ${{ inputs.runs-on }}
 
-  ci-labels:
+  labels:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    name: "Labels Validate"
     steps:
       - uses: cloudposse/github-action-release-label-validator@v1
 
@@ -63,10 +59,9 @@ jobs:
       - run: |
           echo '${{ toJSON(needs) }}'  # easier debug
           ! ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
-    needs: [ ci-terraform, ci-readme, ci-codeowners, ci-labels ]
+    needs: [ terraform, readme, codeowners, labels ]
 
-  auto-release:
-    name: "Release"
+  release:
     needs: [ci]
     uses: cloudposse/.github/.github/workflows/shared-auto-release.yml@main
     if: ${{ github.event_name == 'push' }}
