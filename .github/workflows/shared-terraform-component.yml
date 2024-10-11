@@ -25,7 +25,7 @@ jobs:
   ci-terraform:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yml@main
     if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    name: "CI"
+    name: "Terraform"
     with:
       # Workaround for https://github.com/community/community/discussions/9099
       # We should switch to nofilter once it's fixed
@@ -44,7 +44,7 @@ jobs:
   ci-codeowners:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-codeowners.yml@main
     if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    name: "CI"
+    name: "Codeowners"
     with:
       is_fork: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
       runs-on: ${{ inputs.runs-on }}
@@ -52,7 +52,7 @@ jobs:
   ci-labels:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    name: "CI / Labels Validate"
+    name: "Labels Validate"
     steps:
       - uses: cloudposse/github-action-release-label-validator@v1
 
