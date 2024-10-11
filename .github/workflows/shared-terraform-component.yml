@@ -24,6 +24,7 @@ concurrency:
 jobs:
   ci-terraform:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yml@main
+    if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     name: "CI"
     with:
       # Workaround for https://github.com/community/community/discussions/9099
@@ -34,6 +35,7 @@ jobs:
 
   ci-readme:
     uses: cloudposse-terraform-components/.github/.github/workflows/shared-readme.yml@main
+    if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     name: "Readme"
     with:
       runs-on: ${{ inputs.runs-on }}
@@ -41,6 +43,7 @@ jobs:
 
   ci-codeowners:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-codeowners.yml@main
+    if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     name: "CI"
     with:
       is_fork: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
@@ -48,13 +51,14 @@ jobs:
 
   ci-labels:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
+    if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     name: "CI / Labels Validate"
     steps:
       - uses: cloudposse/github-action-release-label-validator@v1
 
   ci:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
-    if: ${{ always() }}
+    if: ${{ always() && (github.event_name == 'push' || github.event.pull_request.state == 'open') }}
     steps:
       - run: |
           echo '${{ toJSON(needs) }}'  # easier debug
