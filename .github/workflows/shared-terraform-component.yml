@@ -18,9 +18,9 @@ permissions:
   pull-requests: write
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
+  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
+  cancel-in-progress: true
+  
 jobs:
   ci-terraform:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yml@main
