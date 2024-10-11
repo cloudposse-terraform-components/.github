@@ -22,6 +22,8 @@ concurrency:
   cancel-in-progress: true
   
 jobs:
+  # Define context job as a start point to solve problem with event races of concurrent jobs lead to stucked statuses
+  # https://github.com/orgs/community/discussions/141213
   context:
     if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
