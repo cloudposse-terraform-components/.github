@@ -8,6 +8,7 @@ shared:
       - "author=github-actions[bot]"
       - "author=dependabot[bot]"
       - "author=renovate[bot]"
+      - "author=cloudposse-releaser[bot]"
 
   # Not a bot user
   not_a_bot: &not_a_bot
@@ -16,7 +17,8 @@ shared:
       - "-author=github-actions[bot]"
       - "-author=dependabot[bot]"
       - "-author=renovate[bot]"
-
+      - "author=cloudposse-releaser[bot]"
+      
   # Contribution is from an external contributor, not part of the organization
   is_external_contributor: &is_external_contributor
     - and:
@@ -30,7 +32,7 @@ shared:
 
   # Default branches
   is_default_branch: &is_default_branch
-    - and:
+    - or:
       - "base=main"
       - "base=master"
 
