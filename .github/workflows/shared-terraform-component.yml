@@ -75,10 +75,10 @@ jobs:
     needs: [ terraform, readme, codeowners, labels ]
 
   release:
-    needs: [ci]
+    needs: [ci, readme]
     uses: cloudposse/.github/.github/workflows/shared-auto-release.yml@main
     if: ${{ github.event_name == 'push' }}
     with:
       runs-on: ${{ inputs.runs-on }}
-      publish: true
+      publish: ${{ needs.readme.outputs.changes_detected == 'false' }}
     secrets: inherit
