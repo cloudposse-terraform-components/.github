@@ -53,7 +53,7 @@ jobs:
       pr_labels: |
         auto-update
         readme
-        ${{ need.context.outputs.no-release && 'no-release' || '' }}
+        ${{ needs.context.outputs.no-release && 'no-release' || '' }}
     secrets: inherit
 
   codeowners:
