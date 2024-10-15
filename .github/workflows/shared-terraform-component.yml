@@ -30,6 +30,10 @@ jobs:
     steps:
       - uses: cloudposse-github-actions/get-pr@v1
         id: pr
+      - run: |-
+          echo "${{ contains( fromJSON(steps.pr.outputs.json).labels.*.name, 'no-release') }}"
+      - run: |-
+          echo "${{ fromJSON(steps.pr.outputs.json).labels.*.name }}"
     outputs:
       no-release: ${{ contains( fromJSON(steps.pr.outputs.json).labels.*.name, 'no-release') }}
 
