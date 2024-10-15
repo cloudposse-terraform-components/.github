@@ -59,7 +59,7 @@ jobs:
       - uses: cloudposse-github-actions/readme@add-labels-on-commit
         id: readme
         with:
-          token: ${{ steps.github-app.outputs.token }}
+          token: ${{ github.token }}
           readme_enabled: true
           banner_enabled: true
           validate_readme: true
