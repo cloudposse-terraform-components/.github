@@ -41,6 +41,7 @@ on:
         default: '["ubuntu-latest"]'
       pr_labels:
         description: "Whitespace-separated list of labels to apply to Pull Requests (when commit_method: pr or ( commit_method: commit and github context is a PR) )"
+        type: string
         required: false
         default: |
           auto-update
