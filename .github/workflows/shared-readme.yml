@@ -72,6 +72,9 @@ jobs:
           validate_readme: true
           commit_method: 'pr'
           commit_push_options: '--force-with-lease'
+          pr_labels: |
+              auto-update
+              readme
         env:
           README_DEPS: docs/targets.md docs/terraform.md
           TERRAFORM_SOURCE_DIR: /src
