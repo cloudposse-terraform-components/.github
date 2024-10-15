@@ -80,5 +80,5 @@ jobs:
     if: ${{ github.event_name == 'push' }}
     with:
       runs-on: ${{ inputs.runs-on }}
-      publish: ${{ needs.readme.outputs.changes_detected }}
+      publish: ${{ needs.readme.outputs.changes_detected == 'false' }}
     secrets: inherit
