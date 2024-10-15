@@ -28,8 +28,10 @@ jobs:
     if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
-      - run: |-
-          echo "Define context here"
+      - uses: cloudposse-github-actions/get-pr@v1
+        id: pr
+    outputs:
+      no-release: ${{ contains( fromJSON(steps.pr.outputs.json).labels.*.name, 'no-release') }}
 
   terraform:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yml@main
@@ -48,6 +50,10 @@ jobs:
     needs: [context]
     with:
       runs-on: ${{ inputs.runs-on }}
+      pr_labels: |
+        auto-update
+        readme
+        ${{ need.context.outputs.no-release && 'no-release' || '' }}
     secrets: inherit
 
   codeowners:

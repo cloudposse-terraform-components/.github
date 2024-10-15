@@ -15,29 +15,13 @@ concurrency:
 
 jobs:
   readme:
-    runs-on: ${{ fromJSON(inputs.runs-on) }}
-    environment: release
-    steps:
-      - uses: actions/create-github-app-token@v1
-        id: github-app
-        with:
-          app-id: ${{ vars.BOT_GITHUB_APP_ID }}
-          private-key: ${{ secrets.BOT_GITHUB_APP_PRIVATE_KEY }}
-
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ steps.github-app.outputs.token }}
-
-      - uses: cloudposse-github-actions/readme@add-labels-on-commit
-        with:
-          token: ${{ steps.github-app.outputs.token }}
-          readme_enabled: true
-          banner_enabled: true
-          validate_readme: true
-          commit_method: 'pr'
-          commit_push_options: '--force-with-lease'
-        env:
-          README_DEPS: docs/targets.md docs/terraform.md
-          TERRAFORM_SOURCE_DIR: /src
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-readme.yml@main
+    if: ${{ github.event_name == 'push' }}
+    needs: [context]
+    with:
+      runs-on: ${{ inputs.runs-on }}
+      pr_labels: |
+        auto-update
+        readme
+        no-release
+    secrets: inherit

@@ -39,6 +39,13 @@ on:
         type: string
         required: false
         default: '["ubuntu-latest"]'
+      pr_labels:
+        description: "Whitespace-separated list of labels to apply to Pull Requests (when commit_method: pr or ( commit_method: commit and github context is a PR) )"
+        required: false
+        default: |
+          auto-update
+          no-release
+          readme
     outputs:
       changes_detected:
         description: "Changes detected"
@@ -72,9 +79,7 @@ jobs:
           validate_readme: true
           commit_method: 'pr'
           commit_push_options: '--force-with-lease'
-          pr_labels: |
-              auto-update
-              readme
+          pr_labels: ${{ inputs.pr_labels }}
         env:
           README_DEPS: docs/targets.md docs/terraform.md
           TERRAFORM_SOURCE_DIR: /src
