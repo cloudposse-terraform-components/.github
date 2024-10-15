@@ -75,3 +75,6 @@ jobs:
         env:
           README_DEPS: docs/targets.md docs/terraform.md
           TERRAFORM_SOURCE_DIR: /src
+
+      - run: |-
+          echo "${{ steps.readme.outputs.changes_detected }}"
