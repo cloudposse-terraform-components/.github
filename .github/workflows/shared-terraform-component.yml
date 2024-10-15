@@ -30,8 +30,15 @@ jobs:
     steps:
       - uses: cloudposse-github-actions/get-pr@v1
         id: pr
+
+      - name: Get labels
+        if: ${{ steps.pr.outputs.json != '' }}
+        id: labels
+        run: |-
+          echo "no-release=${{ contains( fromJSON(steps.pr.outputs.json).labels.*.name, 'no-release') }}" >> $GITHUB_OUTPUT
+
     outputs:
-      no-release: ${{ contains( fromJSON(steps.pr.outputs.json).labels.*.name, 'no-release') }}
+      no-release: ${{ steps.labels.outputs.no-release }}
 
   terraform:
     uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yml@main
