@@ -39,20 +39,17 @@ on:
         type: string
         required: false
         default: '["ubuntu-latest"]'
-
+    outputs:
+      changes_detected:
+        description: "Changes detected"
+        value: ${{ jobs.build.outputs.changes_detected }}
 jobs:
-  pr:
+  build:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
-    name: "Readme (PR)"
-    environment: release
-    if:  ${{ github.event_name != 'pull_request' }}
+    name: "Readme"
+    outputs:
+      changes_detected: ${{ steps.readme.outputs.changes_detected }}
     steps:
-      - uses: actions/create-github-app-token@v1
-        id: github-app
-        with:
-          app-id: ${{ vars.BOT_GITHUB_APP_ID }}
-          private-key: ${{ secrets.BOT_GITHUB_APP_PRIVATE_KEY }}
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -60,6 +57,7 @@ jobs:
           token: ${{ steps.github-app.outputs.token }}
 
       - uses: cloudposse-github-actions/readme@add-labels-on-commit
+        id: readme
         with:
           token: ${{ steps.github-app.outputs.token }}
           readme_enabled: true
@@ -67,31 +65,6 @@ jobs:
           validate_readme: true
           commit_method: 'pr'
           commit_push_options: '--force-with-lease'
-        env:
-          README_DEPS: docs/targets.md docs/terraform.md
-          TERRAFORM_SOURCE_DIR: /src
-
-  branch:
-    runs-on: ${{ fromJSON(inputs.runs-on) }}
-    name: "Readme (branch)"
-    if:  ${{ github.event_name == 'pull_request' }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          fetch-depth: 0
-
-      - uses: cloudposse-github-actions/readme@add-labels-on-commit
-        with:
-          token: ${{ github.token }}
-          repository_org: ${{ github.event.pull_request.base.repo.owner.login }}
-          readme_enabled: true
-          banner_enabled: true
-          validate_readme: true
-          commit_method: 'commit'
-          commit_push_options: '--force-with-lease'
-          pr_labels: 'needs-re-run'
         env:
           README_DEPS: docs/targets.md docs/terraform.md
           TERRAFORM_SOURCE_DIR: /src
