@@ -32,7 +32,7 @@ jobs:
         id: pr
       - name: "test"
         run: |
-          echo "${{ contains( fromJSON(steps.pr.outputs.json).labels.*.name, 'no-release') }}"
+          echo "${{ steps.pr.outputs.json }}"
       - name: "test 2"
         run: |
           echo "${{ fromJSON(steps.pr.outputs.json).labels.*.name }}"
