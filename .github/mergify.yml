@@ -201,9 +201,6 @@ pull_request_rules:
       - "head~=auto-update/.*"
       - "files~=\\.(md|gif|png|jpg|mp4)$"
     actions:
-      label:
-        add:
-          - "no-release"
       merge:
         method: "squash"
 
