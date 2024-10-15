@@ -207,7 +207,7 @@ jobs:
 
       - name: "Initialize terratest Go project"
         run: |
-          make -C test/src clean init
+          make clean
           rm -rf examples/*/.terraform examples/*/.terraform.lock.hcl
 
       - name: Config
@@ -218,10 +218,10 @@ jobs:
             ${{ contains(needs.context.outputs.base_repo_name, '-github-')
             || contains(needs.context.outputs.labels, 'terraform-github-provider') }}
           USES_OPSGENIE: >-
-            ${{ contains(needs.context.outputs.base_repo_name, 'terraform-opsgenie-')
+            ${{ contains(needs.context.outputs.base_repo_name, '-opsgenie-')
             || contains(needs.context.outputs.labels, 'terraform-opsgenie-provider') }}
           USES_AWS: >-
-            ${{ contains(needs.context.outputs.base_repo_name, 'terraform-aws-')
+            ${{ contains(needs.context.outputs.base_repo_name, '-aws-')
             || contains(needs.context.outputs.labels, 'terraform-aws-provider') }}
           USES_SPOTINST: >-
             ${{ contains(needs.context.outputs.base_repo_name, '-spotinst-')
@@ -306,7 +306,7 @@ jobs:
       - name: "Test `examples/complete` with terratest"
         run: |-
           terraform --version
-          make -C test/src
+          make test
 
       - name: "Update GitHub Status for failure"
         if: ${{ failure() }}
