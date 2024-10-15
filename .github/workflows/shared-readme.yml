@@ -47,6 +47,7 @@ jobs:
   build:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     name: "Readme"
+    environment: release
     outputs:
       changes_detected: ${{ steps.readme.outputs.changes_detected }}
     steps:
