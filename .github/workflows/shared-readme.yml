@@ -42,7 +42,7 @@ on:
     outputs:
       changes_detected:
         description: "Changes detected"
-        value: ${{ jobs.pr.outputs.changes_detected }}
+        value: ${{ jobs.build.outputs.changes_detected }}
 jobs:
   build:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
