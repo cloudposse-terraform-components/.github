@@ -36,6 +36,7 @@ jobs:
         id: labels
         run: |-
           echo "${{ fromJSON(steps.pr.outputs.json).labels.*.name }}"
+          echo "${{ contains( fromJSON(steps.pr.outputs.json).labels.*.name, 'no-release') }}"
           echo "no-release=${{ contains( fromJSON(steps.pr.outputs.json).labels.*.name, 'no-release') }}" >> $GITHUB_OUTPUT
 
     outputs:
