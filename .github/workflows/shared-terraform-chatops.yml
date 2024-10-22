@@ -75,6 +75,10 @@ jobs:
           tail -1 $GITHUB_OUTPUT
 
     outputs:
+      go_mod_path: 'test/src/go.mod'
+      go_sum_path: 'test/src/go.sum'
+      terraform_state_path: 'test/project/state'
+      terraform_state_retention_days: 10
       base: ${{ fromJSON(steps.pr.outputs.json).base.sha }}
       base_repo_owner: ${{ fromJSON(steps.pr.outputs.json).base.repo.owner.login }}
       base_repo_name: ${{ fromJSON(steps.pr.outputs.json).base.repo.name }}
@@ -114,7 +118,39 @@ jobs:
     needs: [context]
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
-      - name: "Update GitHub Status for pending"
+      - name: "Update GitHub Status: fixtures"
+        if: ${{ needs.context.outputs.test_needs_fixtures == 'true' }}
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/fixtures"
+            -description ""
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Update GitHub Status: cleanup"
+        if: ${{ needs.context.outputs.test_needs_fixtures == 'true' }}
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/cleanup"
+            -description ""
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Update GitHub Status: terratest"
         uses: docker://cloudposse/github-status-updater
         with:
           args: >-
@@ -124,13 +160,40 @@ jobs:
             -repo "${{ needs.context.outputs.base_repo_name }}"
             -state pending
             -context "test/terratest"
-            -description "Tests started by @${{ github.actor }}"
+            -description "Test run intiated by @${{ github.actor }}"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: "Update GitHub Status: terratest/terraform"
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/terratest/terraform"
+            -description "Waiting for test setup to finish"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: "Update GitHub Status: terratest/opentofu"
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/terratest/opentofu"
+            -description "Waiting for test setup to finish"
             -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
   fixtures:
-    container: cloudposse/test-harness:latest
     if: ${{ needs.context.outputs.test_needs_fixtures == 'true' }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
@@ -143,6 +206,7 @@ jobs:
     continue-on-error: false
     outputs:
       test_fixture_id: ${{ steps.fixtures.outputs.test_fixture_id }}
+      terraform_state_artifact_id: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - name: "Checkout code for ChatOps"
         uses: actions/checkout@v4
@@ -150,7 +214,7 @@ jobs:
           repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
           ref: ${{ needs.context.outputs.head_sha }}
 
-      - name: "Update GitHub Status for pending"
+      - name: "Update GitHub Status: fixtures"
         uses: docker://cloudposse/github-status-updater
         with:
           args: >-
@@ -160,25 +224,45 @@ jobs:
             -repo "${{ needs.context.outputs.base_repo_name }}"
             -state pending
             -context "test/fixtures"
-            -description "Tests fixtures being created by @${{ github.actor }}"
+            -description "Tests fixtures being created"
             -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: "Determine required opentofu version"
-        shell: bash -x -e -o pipefail {0}
-        run: |
-          PATH_TO_TERRAFORM=$(update-alternatives --list terraform | grep "/tofu")
-          if [ -x "${PATH_TO_TERRAFORM}" ]; then
-            update-alternatives --set terraform ${PATH_TO_TERRAFORM}
-          else
-            echo "Unable to locate executable for opentofu" >&2
-            exit 1
-          fi
+      - name: "Update GitHub Status: cleanup"
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/cleanup"
+            -description "Waiting for tests to finish"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
-          # Pull request target branch
-          BASE_REF: ${{ needs.context.outputs.base }}
-          LABELS: ${{ needs.context.outputs.labels }}
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Install Tofu"
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_wrapper: false
+
+      - name: "Link Terraform to Tofu"
+        run: |
+          ln -sfnT "$(which tofu)" "$(dirname $(which tofu))"/terraform 
+
+      - name: "Install Atmos"
+        uses: cloudposse/github-action-setup-atmos@v2
+        with:
+          install-wrapper: false
+
+      - name: "Install Go"
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "${{ needs.context.outputs.go_mod_path }}"
+          cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
       - name: "Initialize terratest Go project"
         run: |
@@ -250,12 +334,13 @@ jobs:
           make -C test/src create-test-fixtures
 
       - name: "Save Terraform state for fixtures"
+        id: upload
         uses: actions/upload-artifact@v4
         with:
           name: ${{ needs.context.outputs.test_fixture_id }}
-          path: test/project/state
+          path: ${{ needs.context.outputs.terraform_state_path }}
           include-hidden-files: true
-
+          retention-days: ${{ needs.context.outputs.terraform_state_retention_days }}
 
       - name: "Update GitHub Status for failure"
         if: ${{ failure() }}
@@ -315,6 +400,7 @@ jobs:
     if: always()
     outputs:
       test_fixture_id: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixtures.outputs.test_fixture_id) || '' }}
+      terraform_state_artifact_id: ${{ needs.fixtures.outputs.terraform_state_artifact_id }}
     steps:
       - env:
           NEEDS_FIXTURES: "${{ needs.context.outputs.test_needs_fixtures }}"
@@ -327,7 +413,6 @@ jobs:
           printf '\nFinal test_fixture_id="%s"\n\n' "${TEST_FIXTURE_ID}"
 
   terratest:
-    container: cloudposse/test-harness:latest
     if: >- 
       ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixture_id.outputs.test_fixture_id != '') 
       || needs.context.outputs.test_needs_fixtures != 'true' }}
@@ -352,7 +437,7 @@ jobs:
           repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
           ref: ${{ needs.context.outputs.head_sha }}
 
-      - name: "Update GitHub Status for pending"
+      - name: "Update GitHub Status: ${{ matrix.platform }} started"
         uses: docker://cloudposse/github-status-updater
         with:
           args: >-
@@ -362,69 +447,38 @@ jobs:
             -repo "${{ needs.context.outputs.base_repo_name }}"
             -state pending
             -context "test/terratest/${{ matrix.platform }}"
-            -description "Tests started by @${{ github.actor }}"
+            -description "Tests started"
             -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: "Determine required terraform version"
-        if: ${{ matrix.platform == 'terraform' }}
-        shell: bash -x -e -o pipefail {0}
-        run: |
-          # Some legacy support is on 0.11 branches and we determine the Terraform version based on the target branch name
-          VERSION=$(cut -d/ -f1 <<<${BASE_REF})
-          if [[ ${VERSION} != '0.11' ]]; then
-            TF012=0.12.31
-            TF013=$(terraform-0.13 version --json | jq -r .terraform_version)
-            TF014=$(terraform-0.14 version --json | jq -r .terraform_version)
-            TF015=$(terraform-0.15 version --json | jq -r .terraform_version)
-            TF1=$(terraform-1 version --json | jq -r .terraform_version)
-            # vert exits non-zero if any of the versions are not acceptable, so `|| [[ -n "$VERSION" ]]` for a real error check
-            FULL_VERSION=$(vert -s "$(terraform-config-inspect --json src | jq -r '.required_core[]')" "$TF012" "$TF013" "$TF014" "$TF015" "$TF1" | head -1) || [[ -n "$VERSION" ]]
-            VERSION=${FULL_VERSION:0:4}
-            echo Full version to use is ${FULL_VERSION}, setting VERSION to ${VERSION}
-          fi
-          
-          # Match lables like `terraform/0.12` or nothing (to prevent non-zero exit code)
-          # Use [0-9] because \d is not standard part of egrep
-          OVERRIDE_VERSION=$(grep -Eo '(terraform/[0-9]+\.[x0-9]+|)' <<<${LABELS} | cut -d/ -f2)
-          
-          if [ -n "${OVERRIDE_VERSION}" ]; then
-            VERSION=${OVERRIDE_VERSION}
-            echo "Terraform ${VERSION} is required based on labels..."
-          else
-            echo "Terraform ${VERSION} is required for ${BASE_REF}..."
-          fi
-          
-          [[ $VERSION =~ ^1\. ]] && VERSION=1
-          
-          PATH_TO_TERRAFORM=$(update-alternatives --list terraform | grep "/${VERSION}")
-          if [ -x "${PATH_TO_TERRAFORM}" ]; then
-            update-alternatives --set terraform ${PATH_TO_TERRAFORM}
-          else
-            echo "Unable to locate executable for terraform ${VERSION}" >&2
-            exit 1
-          fi
-        env:
-          # Pull request target branch
-          BASE_REF: ${{ needs.context.outputs.base }}
-          LABELS: ${{ needs.context.outputs.labels }}
-
-      - name: "Determine required opentofu version"
+      - name: "Install Tofu"
         if: ${{ matrix.platform == 'opentofu' }}
-        shell: bash -x -e -o pipefail {0}
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_wrapper: false
+
+      - name: "Link Terraform to Tofu"
+        if: ${{ matrix.platform == 'opentofu' }}
         run: |
-          PATH_TO_TERRAFORM=$(update-alternatives --list terraform | grep "/tofu")
-          if [ -x "${PATH_TO_TERRAFORM}" ]; then
-            update-alternatives --set terraform ${PATH_TO_TERRAFORM}
-          else
-            echo "Unable to locate executable for opentofu" >&2
-            exit 1
-          fi
-        env:
-          # Pull request target branch
-          BASE_REF: ${{ needs.context.outputs.base }}
-          LABELS: ${{ needs.context.outputs.labels }}
+          ln -sfnT "$(which tofu)" "$(dirname $(which tofu))"/terraform 
+
+      - name: "Install Terraform"
+        if: ${{ matrix.platform == 'terraform' }}
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      - name: "Install Atmos"
+        uses: cloudposse/github-action-setup-atmos@v2
+        with:
+          install-wrapper: false
+
+      - name: "Install Go"
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "${{ needs.context.outputs.go_mod_path }}"
+          cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
       - name: "Initialize terratest Go project"
         run: |
@@ -528,7 +582,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ needs.context.outputs.test_fixture_id }}
-          path: test/project/state
+          path: ${{ needs.context.outputs.terraform_state_path }}
+
 
       - name: "Test component"
         run: |-
@@ -583,7 +638,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
   cleanup:
-    container: cloudposse/test-harness:latest
     if: ${{ needs.context.outputs.test_needs_fixtures == 'true' && always() }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
@@ -601,7 +655,7 @@ jobs:
           repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
           ref: ${{ needs.context.outputs.head_sha }}
 
-      - name: "Update GitHub Status for pending"
+      - name: "Update GitHub Status: cleanup started"
         uses: docker://cloudposse/github-status-updater
         with:
           args: >-
@@ -611,25 +665,30 @@ jobs:
             -repo "${{ needs.context.outputs.base_repo_name }}"
             -state pending
             -context "test/cleanup"
-            -description "Tests fixtures being destroyed by @${{ github.actor }}"
+            -description "Tests fixtures being destroyed"
             -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: "Determine required opentofu version"
-        shell: bash -x -e -o pipefail {0}
+      - name: "Install Tofu"
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_wrapper: false
+
+      - name: "Link Terraform to Tofu"
         run: |
-          PATH_TO_TERRAFORM=$(update-alternatives --list terraform | grep "/tofu")
-          if [ -x "${PATH_TO_TERRAFORM}" ]; then
-            update-alternatives --set terraform ${PATH_TO_TERRAFORM}
-          else
-            echo "Unable to locate executable for opentofu" >&2
-            exit 1
-          fi
-        env:
-          # Pull request target branch
-          BASE_REF: ${{ needs.context.outputs.base }}
-          LABELS: ${{ needs.context.outputs.labels }}
+          ln -sfnT "$(which tofu)" "$(dirname $(which tofu))"/terraform 
+
+      - name: "Install Atmos"
+        uses: cloudposse/github-action-setup-atmos@v2
+        with:
+          install-wrapper: false
+
+      - name: "Install Go"
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "${{ needs.context.outputs.go_mod_path }}"
+          cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
       - name: "Initialize terratest Go project"
         run: |
@@ -639,7 +698,8 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: ${{ needs.context.outputs.test_fixture_id }}
-          path: test/project/state
+          path: ${{ needs.context.outputs.terraform_state_path }}
+
 
       - name: "Inject secrets"
         env:
@@ -706,7 +766,28 @@ jobs:
           terraform --version
           make -C test/src destroy-test-fixtures
 
-      # TODO Delete artifacts
+      # We need repo write permissions to delete artifacts, which we don't have and don't want to have.
+      #  - name: Delete Artifact
+      #    uses: actions/github-script@v7
+      #    if: needs.fixture_id.outputs.terraform_state_artifact_id != ''
+      #    with:
+      #      script: |
+      #        const owner = context.repo.owner;
+      #        const repo = context.repo.repo;
+      #        const artifact_id = "${{ needs.fixture_id.outputs.terraform_state_artifact_id }}";
+      #        const response = await github.rest.actions.deleteArtifact({
+      #          owner,
+      #          repo,
+      #          artifact_id
+      #        });
+      #
+      #        if (response.status !== 204) {
+      #          console.log('Deletion failed or encountered an issue, status:', response.status);
+      #          // Check if there is an error message in the response body and log it
+      #          if (response.data && response.data.message) {
+      #            console.log('Error message:', response.data.message);
+      #          }
+      #        }
 
       - name: "Update GitHub Status for failure"
         if: ${{ failure() }}
@@ -755,9 +836,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-  finalize:
+  results:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
-    needs: [terratest, context, cleanup]
+    needs: [terratest, context]
     if: ${{ always() && needs.context.result != 'skipped' }}
     steps:
       - shell: bash
@@ -776,7 +857,7 @@ jobs:
               exit 1
           fi
 
-      - name: "Update GitHub Status for pending"
+      - name: "Update GitHub Status: finished"
         uses: docker://cloudposse/github-status-updater
         with:
           args: >-
@@ -786,7 +867,7 @@ jobs:
             -repo "${{ needs.context.outputs.base_repo_name }}"
             -state ${{ steps.status.outputs.result }}
             -context "test/terratest"
-            -description "Tests started by @${{ github.actor }}"
+            -description "Test run finished"
             -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           GITHUB_TOKEN: ${{ github.token }}
