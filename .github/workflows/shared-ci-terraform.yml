@@ -144,19 +144,12 @@ jobs:
             modules/account-map
 
       - run: |-
-          pwd
-          ls -l ./
-          ls -l ../
           mv terraform-aws-components/modules/account-map ./account-map
-          ls -l ./
-          ls -l ../
+          rm -rf terraform-aws-components
 
       - uses: hashicorp/setup-terraform@v3
 
       - run: |-
-          pwd
-          ls -l ./
-          ls -l ../
           terraform init
         working-directory: ${{ matrix.tfdir }}
 
