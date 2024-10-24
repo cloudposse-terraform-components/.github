@@ -141,13 +141,13 @@ jobs:
 
       - name: cache tflint plugins
         id: cache-plugins
-        uses: actions/cache@v4
+        uses: actions/cache@v3.3.3
         with:
           path: ${{ env.TFLINT_PLUGIN_DIR }}
           key: tflint-plugins-${{ env.TFLINT_CACHE_VER }}
 
       - name: tflint
-        uses: reviewdog/action-tflint@v1.22.0
+        uses: reviewdog/action-tflint@v1.23.2
         with:
           reporter: ${{ inputs.suggestions && 'github-pr-annotations' || 'local' }}
           fail_on_error: ${{ inputs.suggestions }}
