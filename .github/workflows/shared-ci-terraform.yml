@@ -142,7 +142,12 @@ jobs:
             modules/account-map
 
       - run: |-
+          pwd
+          ls -l ./
+          ls -l ../
           mv terraform-aws-components/modules/account-map ./account-map
+          ls -l ./
+          ls -l ../
 
       - uses: actions/checkout@v4
 
