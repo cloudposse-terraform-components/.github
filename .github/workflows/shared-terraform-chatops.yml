@@ -56,8 +56,29 @@ jobs:
             properites.data.forEach((element) =>
               core.setOutput(element.property_name, element.value)              
             );
+      - id: test_fixture_id
+        if: ${{ steps.properties.outputs.test-needs-fixtures == 'true' }}
+        # Generate a test fixture ID.
+        # The first three characters are random letters, to avoid collisions
+        # and to ensure the ID is not interpreted as a number.
+        # The rest of the ID is the last 7 digits of the current timestamp in seconds,
+        # for uniqueness and to make it possible to identify the time of the test run.
+
+        # The LC_ALL=C is to ensure that the `tr` command interprets bytes as ASCII and
+        # not UTF-8, which can have invalid byte sequences. The `2>/dev/null` is to suppress
+        # the "broken pipe" error message from `tr` when `head` closes its input.
+        # The `|| true` is to ensure that the command does not fail if `tr` fails.
+        run: >
+          printf "test_fixture_id=%s\n" 
+          $(date "+%s" | sed "s/^.../$({ LC_ALL=C tr -dc 'g-z' < /dev/urandom || true; } 2>/dev/null | head -c 3)/") 
+          >> $GITHUB_OUTPUT || true; 
+          tail -1 $GITHUB_OUTPUT
 
     outputs:
+      go_mod_path: 'test/src/go.mod'
+      go_sum_path: 'test/src/go.sum'
+      terraform_state_path: 'test/project/state'
+      terraform_state_retention_days: 10
       base: ${{ fromJSON(steps.pr.outputs.json).base.sha }}
       base_repo_owner: ${{ fromJSON(steps.pr.outputs.json).base.repo.owner.login }}
       base_repo_name: ${{ fromJSON(steps.pr.outputs.json).base.repo.name }}
@@ -74,13 +95,16 @@ jobs:
       merged_at: ${{ steps.pr.outputs.merged_at }}
       closed_at: ${{ steps.pr.outputs.closed_at }}
       labels: ${{ steps.pr.outputs.labels }}
-      terratest_aws_role: ${{ steps.properties.outputs.test-aws-role || 'arn:aws:iam::799847381734:role/cptest-test-ue2-sandbox-gha-iam-terratest' }}
-      terratest_skip_concurrency: ${{ steps.properties.outputs.test-skip-concurrency }}
+      test_aws_role: ${{ steps.properties.outputs.test-aws-role || 'arn:aws:iam::799847381734:role/cptest-test-gbl-sandbox-gha-iam-terratest' }}
+      test_skip_concurrency: ${{ steps.properties.outputs.test-skip-concurrency }}
+      test_needs_aws: ${{ steps.properties.outputs.test-needs-aws }}
+      test_needs_fixtures: ${{ steps.properties.outputs.test-needs-fixtures }}
+      test_fixture_id: ${{ (steps.properties.outputs.test-needs-fixtures == 'true' && steps.test_fixture_id.outputs.test_fixture_id) || 'none' }}
 
   ack:
     if: github.event.comment.id != ''
     needs: [context]
-    runs-on: ${{ fromJSON(inputs.runs-on) }}    
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
       - name: "Add reaction"
         uses: peter-evans/create-or-update-comment@v4
@@ -92,9 +116,41 @@ jobs:
 
   pending:
     needs: [context]
-    runs-on: ${{ fromJSON(inputs.runs-on) }}    
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
-      - name: "Update GitHub Status for pending"
+      - name: "Update GitHub Status: fixtures"
+        if: ${{ needs.context.outputs.test_needs_fixtures == 'true' }}
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/fixtures"
+            -description ""
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Update GitHub Status: cleanup"
+        if: ${{ needs.context.outputs.test_needs_fixtures == 'true' }}
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/cleanup"
+            -description ""
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Update GitHub Status: terratest"
         uses: docker://cloudposse/github-status-updater
         with:
           args: >-
@@ -104,34 +160,11 @@ jobs:
             -repo "${{ needs.context.outputs.base_repo_name }}"
             -state pending
             -context "test/terratest"
-            -description "Tests started by @${{ github.actor }}"
+            -description "Test run intiated by @${{ github.actor }}"
             -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           GITHUB_TOKEN: ${{ github.token }}
-
-  terratest:
-    container: cloudposse/test-harness:latest
-    runs-on: ${{ fromJSON(inputs.runs-on) }}
-    environment: terratest
-    needs: [context, pending]
-    env:
-      MAKE_INCLUDES: Makefile
-      AWS_REGION: us-east-2
-      AWS_ROLE_TO_ASSUME: ${{ needs.context.outputs.terratest_aws_role }}
-    continue-on-error: false
-    strategy:
-      max-parallel: ${{ needs.context.outputs.terratest_skip_concurrency == 'true' && 1 || 10 }}
-      fail-fast: false # Don't fail fast to avoid locking TF State
-      matrix:
-        platform: [terraform, opentofu]
-    steps:
-      - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
-          ref: ${{ needs.context.outputs.head_sha }}
-
-      - name: "Update GitHub Status for pending"
+      - name: "Update GitHub Status: terratest/terraform"
         uses: docker://cloudposse/github-status-updater
         with:
           args: >-
@@ -140,118 +173,109 @@ jobs:
             -owner "${{ needs.context.outputs.base_repo_owner }}"
             -repo "${{ needs.context.outputs.base_repo_name }}"
             -state pending
-            -context "test/terratest/${{ matrix.platform }}"
-            -description "Tests started by @${{ github.actor }}"
+            -context "test/terratest/terraform"
+            -description "Waiting for test setup to finish"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: "Update GitHub Status: terratest/opentofu"
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/terratest/opentofu"
+            -description "Waiting for test setup to finish"
             -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: "Determine required terraform version"
-        if: ${{ matrix.platform == 'terraform' }}
-        shell: bash -x -e -o pipefail {0}
-        run: |
-          # Some legacy support is on 0.11 branches and we determine the Terraform version based on the target branch name
-          VERSION=$(cut -d/ -f1 <<<${BASE_REF})
-          if [[ ${VERSION} != '0.11' ]]; then
-            TF012=0.12.31
-            TF013=$(terraform-0.13 version --json | jq -r .terraform_version)
-            TF014=$(terraform-0.14 version --json | jq -r .terraform_version)
-            TF015=$(terraform-0.15 version --json | jq -r .terraform_version)
-            TF1=$(terraform-1 version --json | jq -r .terraform_version)
-            # vert exits non-zero if any of the versions are not acceptable, so `|| [[ -n "$VERSION" ]]` for a real error check
-            FULL_VERSION=$(vert -s "$(terraform-config-inspect --json src | jq -r '.required_core[]')" "$TF012" "$TF013" "$TF014" "$TF015" "$TF1" | head -1) || [[ -n "$VERSION" ]]
-            VERSION=${FULL_VERSION:0:4}
-            echo Full version to use is ${FULL_VERSION}, setting VERSION to ${VERSION}
-          fi
-          
-          # Match lables like `terraform/0.12` or nothing (to prevent non-zero exit code)
-          # Use [0-9] because \d is not standard part of egrep
-          OVERRIDE_VERSION=$(grep -Eo '(terraform/[0-9]+\.[x0-9]+|)' <<<${LABELS} | cut -d/ -f2)
-          
-          if [ -n "${OVERRIDE_VERSION}" ]; then
-            VERSION=${OVERRIDE_VERSION}
-            echo "Terraform ${VERSION} is required based on labels..."
-          else
-            echo "Terraform ${VERSION} is required for ${BASE_REF}..."
-          fi
-          
-          [[ $VERSION =~ ^1\. ]] && VERSION=1
-          
-          PATH_TO_TERRAFORM=$(update-alternatives --list terraform | grep "/${VERSION}")
-          if [ -x "${PATH_TO_TERRAFORM}" ]; then
-            update-alternatives --set terraform ${PATH_TO_TERRAFORM}
-          else
-            echo "Unable to locate executable for terraform ${VERSION}" >&2
-            exit 1
-          fi
-        env:
-          # Pull request target branch
-          BASE_REF: ${{ needs.context.outputs.base }}
-          LABELS: ${{ needs.context.outputs.labels }}
+  fixtures:
+    if: ${{ needs.context.outputs.test_needs_fixtures == 'true' }}
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    environment: terratest
+    needs: [context, pending]
+    env:
+      MAKE_INCLUDES: Makefile
+      AWS_REGION: us-east-2
+      AWS_ROLE_TO_ASSUME: ${{ needs.context.outputs.test_aws_role }}
+      TEST_FIXTURE_ID: ${{ needs.context.outputs.test_fixture_id }}
+    continue-on-error: false
+    outputs:
+      test_fixture_id: ${{ steps.fixtures.outputs.test_fixture_id }}
+      terraform_state_artifact_id: ${{ steps.upload.outputs.artifact-id }}
+    steps:
+      - name: "Checkout code for ChatOps"
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
+          ref: ${{ needs.context.outputs.head_sha }}
 
-      - name: "Determine required opentofu version"
-        if: ${{ matrix.platform == 'opentofu' }}
-        shell: bash -x -e -o pipefail {0}
-        run: |
-          PATH_TO_TERRAFORM=$(update-alternatives --list terraform | grep "/tofu")
-          if [ -x "${PATH_TO_TERRAFORM}" ]; then
-            update-alternatives --set terraform ${PATH_TO_TERRAFORM}
-          else
-            echo "Unable to locate executable for opentofu" >&2
-            exit 1
-          fi
+      - name: "Update GitHub Status: fixtures"
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/fixtures"
+            -description "Tests fixtures being created"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
-          # Pull request target branch
-          BASE_REF: ${{ needs.context.outputs.base }}
-          LABELS: ${{ needs.context.outputs.labels }}
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Update GitHub Status: cleanup"
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/cleanup"
+            -description "Waiting for tests to finish"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Install Tofu"
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_wrapper: false
+
+      - name: "Link Terraform to Tofu"
+        run: |
+          ln -sfnT "$(which tofu)" "$(dirname $(which tofu))"/terraform 
+
+      - name: "Install Atmos"
+        uses: cloudposse/github-action-setup-atmos@v2
+        with:
+          install-wrapper: false
+
+      - name: "Install Go"
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "${{ needs.context.outputs.go_mod_path }}"
+          cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
       - name: "Initialize terratest Go project"
         run: |
-          make clean
-          rm -rf examples/*/.terraform examples/*/.terraform.lock.hcl
-
-      - name: Config
-        shell: bash
-        id: config
-        env:
-          USES_GITHUB:   >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-github-')
-            || contains(needs.context.outputs.labels, 'terraform-github-provider') }}
-          USES_OPSGENIE: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-opsgenie-')
-            || contains(needs.context.outputs.labels, 'terraform-opsgenie-provider') }}
-          USES_AWS: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-aws-')
-            || contains(needs.context.outputs.labels, 'terraform-aws-provider') }}
-          USES_SPOTINST: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-spotinst-')
-            || contains(needs.context.outputs.labels, 'terraform-spotinst-provider') }}
-          USES_DATADOG: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-datadog-')
-            ||  contains(needs.context.outputs.labels, 'terraform-datadog-provider') }}
-          USES_TFE: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-tfe-')
-            ||  contains(needs.context.outputs.labels, 'terraform-tfe-provider') }}
-          USES_CLOUDFLARE: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-cloudflare-')
-            ||  contains(needs.context.outputs.labels, 'terraform-cloudflare-provider') }}
-        run: |-
-          echo "uses_github=${USES_GITHUB}" >> $GITHUB_OUTPUT
-          echo "uses_opsgenie=${USES_OPSGENIE}" >> $GITHUB_OUTPUT
-          echo "uses_aws=${USES_AWS}" >> $GITHUB_OUTPUT
-          echo "uses_spotinst=${USES_SPOTINST}" >> $GITHUB_OUTPUT
-          echo "uses_datadog=${USES_DATADOG}" >> $GITHUB_OUTPUT
-          echo "uses_tfe=${USES_TFE}" >> $GITHUB_OUTPUT
-          echo "uses_cloudflare=${USES_CLOUDFLARE}" >> $GITHUB_OUTPUT
+          make -C test/src clean
 
       - name: "Inject secrets"
         env:
-          USES_GITHUB: ${{ steps.config.outputs.uses_github }}
-          USES_OPSGENIE: ${{ steps.config.outputs.uses_opsgenie }}
-          USES_SPOTINST: ${{ steps.config.outputs.uses_spotinst }}
-          USES_DATADOG: ${{ steps.config.outputs.uses_datadog }}
-          USES_TFE: ${{ steps.config.outputs.uses_tfe }}
-          USES_CLOUDFLARE: ${{ steps.config.outputs.uses_cloudflare }}
+          USES_GITHUB: ${{ needs.context.outputs.uses_github }}
+          USES_OPSGENIE: ${{ needs.context.outputs.uses_opsgenie }}
+          USES_SPOTINST: ${{ needs.context.outputs.uses_spotinst }}
+          USES_DATADOG: ${{ needs.context.outputs.uses_datadog }}
+          USES_TFE: ${{ needs.context.outputs.uses_tfe }}
+          USES_CLOUDFLARE: ${{ needs.context.outputs.uses_cloudflare }}
           OPSGENIE_API_KEY: ${{ secrets.OPSGENIE_API_KEY }}
           DD_API_KEY: ${{ secrets.DD_API_KEY }}
           DD_APP_KEY: ${{ secrets.DD_APP_KEY }}
@@ -292,9 +316,9 @@ jobs:
           fi
 
       - name: Configure AWS Credentials
-        if: ${{ steps.config.outputs.uses_aws == 'true' || 
-                steps.config.outputs.uses_datadog == 'true' || 
-                steps.config.outputs.uses_spotinst == 'true' }}
+        if: ${{ needs.context.outputs.test_needs_aws == 'true' ||
+          needs.context.outputs.uses_datadog == 'true' ||
+          needs.context.outputs.uses_spotinst == 'true' }}
         uses: aws-actions/configure-aws-credentials@v4
         id: aws
         with:
@@ -303,10 +327,268 @@ jobs:
           role-session-name: "terratest"
           mask-aws-account-id: "no"
 
-      - name: "Test `examples/complete` with terratest"
+      - name: "Create fixtures"
+        id: fixtures
         run: |-
           terraform --version
-          make test
+          make -C test/src create-test-fixtures
+
+      - name: "Save Terraform state for fixtures"
+        id: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ needs.context.outputs.test_fixture_id }}
+          path: ${{ needs.context.outputs.terraform_state_path }}
+          include-hidden-files: true
+          retention-days: ${{ needs.context.outputs.terraform_state_retention_days }}
+
+      - name: "Update GitHub Status for failure"
+        if: ${{ failure() }}
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state failure
+            -context "test/fixtures"
+            -description "Creating test fixtures failed"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Update GitHub Status for this success"
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state success
+            -context "test/fixtures"
+            -description "Successfully created test fixtures"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Update GitHub Status for cancelled"
+        if: ${{ cancelled() }}
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state error
+            -context "test/fixtures"
+            -description "Creating test fixtures cancelled"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+  # This is kind of a hack.
+  # We need to handle the case where the fixtures job is skipped,
+  # and distinguish it from the case where the fixtures job fails.
+  # If it is skipped, we proceed, but if it fails, we stop.
+  # We determine failure by checking for a valid test_fixture_id output from the fixtures job.
+  fixture_id:
+    needs: [context, fixtures]
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    if: always()
+    outputs:
+      test_fixture_id: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixtures.outputs.test_fixture_id) || '' }}
+      terraform_state_artifact_id: ${{ needs.fixtures.outputs.terraform_state_artifact_id }}
+    steps:
+      - env:
+          NEEDS_FIXTURES: "${{ needs.context.outputs.test_needs_fixtures }}"
+          OUTPUT_FIXTURE_ID: "${{ needs.fixtures.outputs.test_fixture_id }}"
+          TEST_FIXTURE_ID: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixtures.outputs.test_fixture_id) || '' }}
+        run: |
+          printf '\ntest_needs_fixtures is "%s"\n' "${NEEDS_FIXTURES}"
+          printf '\nfixtures.outputs.test_fixture_id is "%s"\n' "${OUTPUT_FIXTURE_ID}"
+          
+          printf '\nFinal test_fixture_id="%s"\n\n' "${TEST_FIXTURE_ID}"
+
+  terratest:
+    if: >- 
+      ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixture_id.outputs.test_fixture_id != '') 
+      || needs.context.outputs.test_needs_fixtures != 'true' }}
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    environment: terratest
+    needs: [context, pending, fixture_id]
+    env:
+      MAKE_INCLUDES: Makefile
+      AWS_REGION: us-east-2
+      AWS_ROLE_TO_ASSUME: ${{ needs.context.outputs.test_aws_role }}
+      TEST_FIXTURE_ID: ${{ needs.fixture_id.outputs.test_fixture_id }}
+    continue-on-error: false
+    strategy:
+      max-parallel: ${{ needs.context.outputs.test_skip_concurrency == 'true' && 1 || 10 }}
+      fail-fast: false # Don't fail fast to avoid locking TF State
+      matrix:
+        platform: [terraform, opentofu]
+    steps:
+      - name: "Checkout code for ChatOps"
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
+          ref: ${{ needs.context.outputs.head_sha }}
+
+      - name: "Update GitHub Status: ${{ matrix.platform }} started"
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/terratest/${{ matrix.platform }}"
+            -description "Tests started"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Install Tofu"
+        if: ${{ matrix.platform == 'opentofu' }}
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_wrapper: false
+
+      - name: "Link Terraform to Tofu"
+        if: ${{ matrix.platform == 'opentofu' }}
+        run: |
+          ln -sfnT "$(which tofu)" "$(dirname $(which tofu))"/terraform 
+
+      - name: "Install Terraform"
+        if: ${{ matrix.platform == 'terraform' }}
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.5.7
+
+      - name: "Install Atmos"
+        uses: cloudposse/github-action-setup-atmos@v2
+        with:
+          install-wrapper: false
+
+      - name: "Install Go"
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "${{ needs.context.outputs.go_mod_path }}"
+          cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
+
+      - name: "Initialize terratest Go project"
+        run: |
+          make -C test/src clean deps
+
+      - name: Config
+        shell: bash
+        id: config
+        env:
+          USES_GITHUB:   >-
+            ${{ contains(needs.context.outputs.base_repo_name, '-github-')
+            || contains(needs.context.outputs.labels, 'terraform-github-provider') }}
+          USES_OPSGENIE: >-
+            ${{ contains(needs.context.outputs.base_repo_name, '-opsgenie-')
+            || contains(needs.context.outputs.labels, 'terraform-opsgenie-provider') }}
+          USES_AWS: >-
+            ${{ contains(needs.context.outputs.base_repo_name, '-aws-')
+            || contains(needs.context.outputs.labels, 'terraform-aws-provider') }}
+          USES_SPOTINST: >-
+            ${{ contains(needs.context.outputs.base_repo_name, '-spotinst-')
+            || contains(needs.context.outputs.labels, 'terraform-spotinst-provider') }}
+          USES_DATADOG: >-
+            ${{ contains(needs.context.outputs.base_repo_name, '-datadog-')
+            ||  contains(needs.context.outputs.labels, 'terraform-datadog-provider') }}
+          USES_TFE: >-
+            ${{ contains(needs.context.outputs.base_repo_name, '-tfe-')
+            ||  contains(needs.context.outputs.labels, 'terraform-tfe-provider') }}
+          USES_CLOUDFLARE: >-
+            ${{ contains(needs.context.outputs.base_repo_name, '-cloudflare-')
+            ||  contains(needs.context.outputs.labels, 'terraform-cloudflare-provider') }}
+        run: |-
+          echo "uses_github=${USES_GITHUB}" >> $GITHUB_OUTPUT
+          echo "uses_opsgenie=${USES_OPSGENIE}" >> $GITHUB_OUTPUT
+          echo "test_needs_aws=${USES_AWS}" >> $GITHUB_OUTPUT
+          echo "uses_spotinst=${USES_SPOTINST}" >> $GITHUB_OUTPUT
+          echo "uses_datadog=${USES_DATADOG}" >> $GITHUB_OUTPUT
+          echo "uses_tfe=${USES_TFE}" >> $GITHUB_OUTPUT
+          echo "uses_cloudflare=${USES_CLOUDFLARE}" >> $GITHUB_OUTPUT
+
+      - name: "Inject secrets"
+        env:
+          USES_GITHUB: ${{ needs.context.outputs.uses_github }}
+          USES_OPSGENIE: ${{ needs.context.outputs.uses_opsgenie }}
+          USES_SPOTINST: ${{ needs.context.outputs.uses_spotinst }}
+          USES_DATADOG: ${{ needs.context.outputs.uses_datadog }}
+          USES_TFE: ${{ needs.context.outputs.uses_tfe }}
+          USES_CLOUDFLARE: ${{ needs.context.outputs.uses_cloudflare }}
+          OPSGENIE_API_KEY: ${{ secrets.OPSGENIE_API_KEY }}
+          DD_API_KEY: ${{ secrets.DD_API_KEY }}
+          DD_APP_KEY: ${{ secrets.DD_APP_KEY }}
+          SPOTINST_TOKEN: ${{ secrets.SPOTINST_TOKEN }}
+          SPOTINST_ACCOUNT: ${{ secrets.SPOTINST_ACCOUNT }}
+          TFE_TOKEN: ${{ secrets.TFE_TOKEN }}
+          CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
+          CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if [[ "$USES_DATADOG" == "true" ]]; then
+            printf "%s=%s\n"  DD_API_KEY "$DD_API_KEY" >> "$GITHUB_ENV"
+            printf "%s=%s\n"  DD_APP_KEY "$DD_APP_KEY" >> "$GITHUB_ENV"
+            echo exported Datadog
+          fi
+          if [[ "$USES_GITHUB" == "true" ]]; then
+            printf "%s=%s\n"  GITHUB_TOKEN     "$GITHUB_TOKEN"     >> "$GITHUB_ENV"
+            echo exported GitHub
+          fi
+          if [[ "$USES_OPSGENIE" == "true" ]]; then
+            printf "%s=%s\n"  OPSGENIE_API_KEY "$OPSGENIE_API_KEY" >> "$GITHUB_ENV"
+            echo exported Opsgenie
+          fi
+          if [[ "$USES_SPOTINST" == "true" ]]; then
+            printf "%s=%s\n"  SPOTINST_TOKEN   "$SPOTINST_TOKEN"   >> "$GITHUB_ENV"
+            printf "%s=%s\n"  SPOTINST_ACCOUNT "$SPOTINST_ACCOUNT" >> "$GITHUB_ENV"
+            echo exported Spotinst
+          fi
+          if [[ "$USES_TFE" == "true" ]]; then
+            printf "%s=%s\n"  TFE_TOKEN   "$TFE_TOKEN"   >> "$GITHUB_ENV"
+            echo exported Terraform Cloud
+          fi
+          if [[ "$USES_CLOUDFLARE" == "true" ]]; then
+            printf "%s=%s\n"  CLOUDFLARE_EMAIL   "$CLOUDFLARE_EMAIL"   >> "$GITHUB_ENV"
+            printf "%s=%s\n"  CLOUDFLARE_API_KEY "$CLOUDFLARE_API_KEY" >> "$GITHUB_ENV"
+            echo exported CloudFlare
+          fi
+
+      - name: Configure AWS Credentials
+        if: ${{ needs.context.outputs.test_needs_aws == 'true' ||
+          needs.context.outputs.uses_datadog == 'true' ||
+          needs.context.outputs.uses_spotinst == 'true' }}
+        uses: aws-actions/configure-aws-credentials@v4
+        id: aws
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
+          role-session-name: "terratest"
+          mask-aws-account-id: "no"
+
+      - name: "Download Terraform state for fixtures"
+        if: ${{ needs.context.outputs.test_needs_fixtures == 'true' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.context.outputs.test_fixture_id }}
+          path: ${{ needs.context.outputs.terraform_state_path }}
+
+
+      - name: "Test component"
+        run: |-
+          terraform --version
+          make -C test/src test
 
       - name: "Update GitHub Status for failure"
         if: ${{ failure() }}
@@ -355,7 +637,206 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-  finalize:
+  cleanup:
+    if: ${{ needs.context.outputs.test_needs_fixtures == 'true' && always() }}
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    environment: terratest
+    needs: [context, terratest, fixture_id]
+    env:
+      MAKE_INCLUDES: Makefile
+      AWS_REGION: us-east-2
+      AWS_ROLE_TO_ASSUME: ${{ needs.context.outputs.test_aws_role }}
+      TEST_FIXTURE_ID: ${{ needs.context.outputs.test_fixture_id }}
+    continue-on-error: true
+    steps:
+      - name: "Checkout code for ChatOps"
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
+          ref: ${{ needs.context.outputs.head_sha }}
+
+      - name: "Update GitHub Status: cleanup started"
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state pending
+            -context "test/cleanup"
+            -description "Tests fixtures being destroyed"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Install Tofu"
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_wrapper: false
+
+      - name: "Link Terraform to Tofu"
+        run: |
+          ln -sfnT "$(which tofu)" "$(dirname $(which tofu))"/terraform 
+
+      - name: "Install Atmos"
+        uses: cloudposse/github-action-setup-atmos@v2
+        with:
+          install-wrapper: false
+
+      - name: "Install Go"
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: "${{ needs.context.outputs.go_mod_path }}"
+          cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
+
+      - name: "Initialize terratest Go project"
+        run: |
+          make -C test/src clean deps
+
+      - name: "Download Terraform state for fixtures"
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.context.outputs.test_fixture_id }}
+          path: ${{ needs.context.outputs.terraform_state_path }}
+
+
+      - name: "Inject secrets"
+        env:
+          USES_GITHUB: ${{ needs.context.outputs.uses_github }}
+          USES_OPSGENIE: ${{ needs.context.outputs.uses_opsgenie }}
+          USES_SPOTINST: ${{ needs.context.outputs.uses_spotinst }}
+          USES_DATADOG: ${{ needs.context.outputs.uses_datadog }}
+          USES_TFE: ${{ needs.context.outputs.uses_tfe }}
+          USES_CLOUDFLARE: ${{ needs.context.outputs.uses_cloudflare }}
+          OPSGENIE_API_KEY: ${{ secrets.OPSGENIE_API_KEY }}
+          DD_API_KEY: ${{ secrets.DD_API_KEY }}
+          DD_APP_KEY: ${{ secrets.DD_APP_KEY }}
+          SPOTINST_TOKEN: ${{ secrets.SPOTINST_TOKEN }}
+          SPOTINST_ACCOUNT: ${{ secrets.SPOTINST_ACCOUNT }}
+          TFE_TOKEN: ${{ secrets.TFE_TOKEN }}
+          CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
+          CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          if [[ "$USES_DATADOG" == "true" ]]; then
+            printf "%s=%s\n"  DD_API_KEY "$DD_API_KEY" >> "$GITHUB_ENV"
+            printf "%s=%s\n"  DD_APP_KEY "$DD_APP_KEY" >> "$GITHUB_ENV"
+            echo exported Datadog
+          fi
+          if [[ "$USES_GITHUB" == "true" ]]; then
+            printf "%s=%s\n"  GITHUB_TOKEN     "$GITHUB_TOKEN"     >> "$GITHUB_ENV"
+            echo exported GitHub
+          fi
+          if [[ "$USES_OPSGENIE" == "true" ]]; then
+            printf "%s=%s\n"  OPSGENIE_API_KEY "$OPSGENIE_API_KEY" >> "$GITHUB_ENV"
+            echo exported Opsgenie
+          fi
+          if [[ "$USES_SPOTINST" == "true" ]]; then
+            printf "%s=%s\n"  SPOTINST_TOKEN   "$SPOTINST_TOKEN"   >> "$GITHUB_ENV"
+            printf "%s=%s\n"  SPOTINST_ACCOUNT "$SPOTINST_ACCOUNT" >> "$GITHUB_ENV"
+            echo exported Spotinst
+          fi
+          if [[ "$USES_TFE" == "true" ]]; then
+            printf "%s=%s\n"  TFE_TOKEN   "$TFE_TOKEN"   >> "$GITHUB_ENV"
+            echo exported Terraform Cloud
+          fi
+          if [[ "$USES_CLOUDFLARE" == "true" ]]; then
+            printf "%s=%s\n"  CLOUDFLARE_EMAIL   "$CLOUDFLARE_EMAIL"   >> "$GITHUB_ENV"
+            printf "%s=%s\n"  CLOUDFLARE_API_KEY "$CLOUDFLARE_API_KEY" >> "$GITHUB_ENV"
+            echo exported CloudFlare
+          fi
+
+      - name: Configure AWS Credentials
+        if: ${{ needs.context.outputs.test_needs_aws == 'true' ||
+          needs.context.outputs.uses_datadog == 'true' ||
+          needs.context.outputs.uses_spotinst == 'true' }}
+        uses: aws-actions/configure-aws-credentials@v4
+        id: aws
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
+          role-session-name: "terratest"
+          mask-aws-account-id: "no"
+
+      - name: "Destroy fixtures"
+        id: fixtures
+        run: |-
+          terraform --version
+          make -C test/src destroy-test-fixtures
+
+      # We need repo write permissions to delete artifacts, which we don't have and don't want to have.
+      #  - name: Delete Artifact
+      #    uses: actions/github-script@v7
+      #    if: needs.fixture_id.outputs.terraform_state_artifact_id != ''
+      #    with:
+      #      script: |
+      #        const owner = context.repo.owner;
+      #        const repo = context.repo.repo;
+      #        const artifact_id = "${{ needs.fixture_id.outputs.terraform_state_artifact_id }}";
+      #        const response = await github.rest.actions.deleteArtifact({
+      #          owner,
+      #          repo,
+      #          artifact_id
+      #        });
+      #
+      #        if (response.status !== 204) {
+      #          console.log('Deletion failed or encountered an issue, status:', response.status);
+      #          // Check if there is an error message in the response body and log it
+      #          if (response.data && response.data.message) {
+      #            console.log('Error message:', response.data.message);
+      #          }
+      #        }
+
+      - name: "Update GitHub Status for failure"
+        if: ${{ failure() }}
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state failure
+            -context "test/cleanup"
+            -description "Destroying test fixtures failed"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Update GitHub Status for this success"
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state success
+            -context "test/cleanup"
+            -description "Successfully destroyed test fixtures"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: "Update GitHub Status for cancelled"
+        if: ${{ cancelled() }}
+        uses: docker://cloudposse/github-status-updater
+        with:
+          args: >-
+            -action update_state
+            -ref "${{ needs.context.outputs.head_sha }}"
+            -owner "${{ needs.context.outputs.base_repo_owner }}"
+            -repo "${{ needs.context.outputs.base_repo_name }}"
+            -state error
+            -context "test/cleanup"
+            -description "Destroying test fixtures cancelled"
+            -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+  results:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     needs: [terratest, context]
     if: ${{ always() && needs.context.result != 'skipped' }}
@@ -376,7 +857,7 @@ jobs:
               exit 1
           fi
 
-      - name: "Update GitHub Status for pending"
+      - name: "Update GitHub Status: finished"
         uses: docker://cloudposse/github-status-updater
         with:
           args: >-
@@ -386,7 +867,7 @@ jobs:
             -repo "${{ needs.context.outputs.base_repo_name }}"
             -state ${{ steps.status.outputs.result }}
             -context "test/terratest"
-            -description "Tests started by @${{ github.actor }}"
+            -description "Test run finished"
             -url "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
         env:
           GITHUB_TOKEN: ${{ github.token }}

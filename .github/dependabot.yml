@@ -33,6 +33,9 @@ updates:
   ignore:
     - dependency-name: "*"
       update-types: ["version-update:semver-major"]
+    - dependency-name: "mszostok/codeowners-validator"
+      versions:
+        - "<=0.7.4"
 
 - package-ecosystem: npm
   open-pull-requests-limit: 3
