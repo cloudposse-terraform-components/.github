@@ -133,6 +133,18 @@ jobs:
       TFLINT_CACHE_VER: 1 # Increment this to force a cache refresh
     steps:
       - uses: actions/checkout@v4
+        with:
+          repository: cloudposse/terraform-aws-components
+          ref: 1.521.0
+          path: terraform-aws-components
+          fetch-depth: 0
+          sparse-checkout: |
+            modules/account-map
+
+      - run: |-
+          ls -l terraform-aws-components/modules/account-map
+
+      - uses: actions/checkout@v4
 
       - uses: hashicorp/setup-terraform@v3
 
