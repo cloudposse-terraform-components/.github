@@ -139,7 +139,7 @@ jobs:
           repository: cloudposse/terraform-aws-components
           ref: 1.521.0
           path: terraform-aws-components
-          fetch-depth: 0
+          fetch-depth: 1
           sparse-checkout: |
             modules/account-map
 
