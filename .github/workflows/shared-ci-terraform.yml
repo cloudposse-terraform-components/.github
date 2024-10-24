@@ -143,13 +143,16 @@ jobs:
 
       - run: |-
           mv terraform-aws-components/modules/account-map ./account-map
-          ls -l ./account-map
 
       - uses: actions/checkout@v4
 
       - uses: hashicorp/setup-terraform@v3
 
-      - run: terraform init
+      - run: |-
+          pwd
+          ls -l ./
+          ls -l ../
+          terraform init
         working-directory: ${{ matrix.tfdir }}
 
       - name: cache tflint plugins
