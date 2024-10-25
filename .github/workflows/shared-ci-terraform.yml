@@ -133,6 +133,8 @@ jobs:
       TFLINT_CACHE_VER: 1 # Increment this to force a cache refresh
     steps:
       - uses: actions/checkout@v4
+        with:
+          path: target
 
       - uses: actions/checkout@v4
         with:
@@ -144,14 +146,15 @@ jobs:
             modules/account-map
 
       - run: |-
-          mv terraform-aws-components/modules/account-map ./account-map
+          cp -r terraform-aws-components/modules/account-map ./account-map
+          cp -r terraform-aws-components/modules/account-map ./target/account-map
           rm -rf terraform-aws-components
 
       - uses: hashicorp/setup-terraform@v3
 
       - run: |-
           terraform init
-        working-directory: ${{ matrix.tfdir }}
+        working-directory: ./target/${{ matrix.tfdir }}
 
       - name: cache tflint plugins
         id: cache-plugins
@@ -167,6 +170,6 @@ jobs:
           fail_on_error: ${{ inputs.suggestions }}
           tflint_rulesets: ${{ env.TFLINT_PLUGINS }}
           tflint_init: true
-          working_directory: ${{ matrix.tfdir }}
+          working_directory: ./target/${{ matrix.tfdir }}
           filter_mode: ${{ inputs.filter-mode }}
           tflint_version: "v0.49.0"
