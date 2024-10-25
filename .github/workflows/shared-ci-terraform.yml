@@ -146,6 +146,8 @@ jobs:
             modules/account-map
 
       - run: |-
+          # Copy the account-map module twice to support both cases referencing the module
+          # ../account-map and ../../account-map
           cp -r terraform-aws-components/modules/account-map ./account-map
           cp -r terraform-aws-components/modules/account-map ./target/account-map
           rm -rf terraform-aws-components
