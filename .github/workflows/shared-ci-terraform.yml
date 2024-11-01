@@ -150,7 +150,7 @@ jobs:
           # ../account-map and ../../account-map
           cp -r terraform-aws-components/modules/account-map ./account-map
           cp -r terraform-aws-components/modules/account-map ./target/account-map
-          [ -n "$(ls -A ./src/*.tf 2>/dev/null )" ] || cp -r terraform-aws-components/modules/account-map ./src/account-map
+          [ -n "$(ls -A ./src/*.tf 2>/dev/null )" ] || cp -r terraform-aws-components/modules/account-map ./target/src/account-map
           rm -rf terraform-aws-components
 
       - uses: hashicorp/setup-terraform@v3
