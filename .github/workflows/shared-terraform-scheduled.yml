@@ -16,7 +16,6 @@ concurrency:
 jobs:
   readme:
     uses: cloudposse-terraform-components/.github/.github/workflows/shared-readme.yml@main
-    if: ${{ github.event_name == 'push' }}
     with:
       runs-on: ${{ inputs.runs-on }}
       pr_labels: |
