@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-redshift
+cloudposse-terraform-components/aws-rds
+cloudposse-terraform-components/aws-philips-labs-github-runners
+cloudposse-terraform-components/aws-opsgenie-team
+cloudposse-terraform-components/aws-network-firewall
+cloudposse-terraform-components/aws-mwaa
+cloudposse-terraform-components/aws-mq-broker
+cloudposse-terraform-components/aws-managed-prometheus-workspace
+cloudposse-terraform-components/aws-managed-grafana-workspace
+cloudposse-terraform-components/aws-lakeformation
+cloudposse-terraform-components/aws-kinesis-stream
+cloudposse-terraform-components/aws-iam-service-linked-roles
+cloudposse-terraform-components/aws-iam-role
+cloudposse-terraform-components/aws-glue-schema
+cloudposse-terraform-components/aws-glue-job
+cloudposse-terraform-components/aws-glue-crawler

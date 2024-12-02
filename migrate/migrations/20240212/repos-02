@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-glue-connection
+cloudposse-terraform-components/aws-glue-catalog-table
+cloudposse-terraform-components/aws-global-accelerator-endpoint-group
+cloudposse-terraform-components/aws-global-accelerator
+cloudposse-terraform-components/aws-github-runners
+cloudposse-terraform-components/aws-github-action-token-rotator
+cloudposse-terraform-components/aws-elasticsearch
+cloudposse-terraform-components/aws-elasticache-redis
+cloudposse-terraform-components/aws-eks-tailscale
+cloudposse-terraform-components/aws-eks-storage-class
+cloudposse-terraform-components/aws-eks-redis-operator
+cloudposse-terraform-components/aws-eks-redis
+cloudposse-terraform-components/aws-eks-karpenter-controller
+cloudposse-terraform-components/aws-eks-idp-roles
+cloudposse-terraform-components/aws-eks-github-actions-runner
+cloudposse-terraform-components/aws-eks-echo-server

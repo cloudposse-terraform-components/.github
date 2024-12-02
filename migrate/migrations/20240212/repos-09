@@ -1,0 +1,15 @@
+cloudposse-terraform-components/aws-config
+cloudposse-terraform-components/aws-auth0-tenant
+cloudposse-terraform-components/aws-auth0-connection
+cloudposse-terraform-components/aws-auth0-app
+cloudposse-terraform-components/aws-aurora-postgres-resources
+cloudposse-terraform-components/aws-aurora-mysql-resources
+cloudposse-terraform-components/aws-aurora-mysql
+cloudposse-terraform-components/aws-athena
+cloudposse-terraform-components/aws-api-gateway-rest-api
+cloudposse-terraform-components/aws-api-gateway-account-settings
+cloudposse-terraform-components/aws-amplify
+cloudposse-terraform-components/aws-alb
+cloudposse-terraform-components/aws-acm
+cloudposse-terraform-components/aws-account-quotas
+cloudposse-terraform-components/aws-alb-experimental
