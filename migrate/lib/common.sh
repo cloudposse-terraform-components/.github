@@ -86,20 +86,10 @@ function template_file() {
 }
 
 function repo_type() {
-    if [ -f "main.tf" ]; then
-        export REPO_TYPE="terraform-module"
-    elif [[ "${XARGS_REPO_NAME}" =~ "terraform-provider" ]]; then
-        export REPO_TYPE="terraform-provider"
-    elif [[ "${XARGS_REPO_NAME}" =~ "terraform-" ]]; then
-        export REPO_TYPE="terraform-module"
+    if [[ "${XARGS_REPO_NAME}" =~ "aws-" ]]; then
+        export REPO_TYPE="terraform-component"
     elif [ "${XARGS_REPO_NAME}" == "test" ]; then
         export REPO_TYPE="test"
-    elif [ -f "action.yml" ]; then
-        export REPO_TYPE="github-action"
-    elif [ -f "Dockerfile" ]; then
-        export REPO_TYPE="docker"
-    elif [ -f "package.json" ]; then
-        export REPO_TYPE="node"
     else
         export REPO_TYPE="default"
     fi

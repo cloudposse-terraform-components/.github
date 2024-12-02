@@ -6,13 +6,10 @@ function install_mergify() {
     mkdir -p $(dirname $config)
 
     case "${REPO_TYPE}" in
-        "terraform-provider")
+        "terraform-component")
             rm -f $config
             ;;
-        "terraform-module")
-            rm -f $config
-            ;;
-        "github-action")
+        "test")
             rm -f $config
             ;;
     esac
