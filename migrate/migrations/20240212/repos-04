@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-account
+cloudposse-terraform-components/aws-access-analyzer
+cloudposse-terraform-components/aws-waf
+cloudposse-terraform-components/aws-tgw-spoke
+cloudposse-terraform-components/aws-tgw-hub
+cloudposse-terraform-components/aws-strongdm
+cloudposse-terraform-components/aws-sso-saml-provider
+cloudposse-terraform-components/aws-sqs-queue
+cloudposse-terraform-components/aws-eks-spacelift-worker-pool
+cloudposse-terraform-components/aws-eks-spacelift-worker-pool-controller
+cloudposse-terraform-components/aws-spacelift-admin-stack
+cloudposse-terraform-components/aws-site-to-site-vpn
+cloudposse-terraform-components/aws-sftp
+cloudposse-terraform-components/aws-security-hub
+cloudposse-terraform-components/aws-runs-on
+cloudposse-terraform-components/aws-route53-resolver-dns-firewall
