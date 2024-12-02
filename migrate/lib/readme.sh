@@ -39,7 +39,7 @@ function generate_introduction() {
   local description=$(cat README.yaml *.tf | \
     mods --no-cache --quiet --word-wrap=2048 --raw -f \
       'Act as an expert technical documentation writer with experience writing technical documentation for Open Source projects. \
-      Write a thorough explanation for a chapter of a REAMDE that explains what this module does in a spartan conversational tone written by an experienced DevOps engineer.\
+      Write a thorough explanation for a chapter of a README that explains what this module does in a spartan conversational tone written by an experienced DevOps engineer.\
       Focus on what it is and does. Use concrete terms of what it does, not aspirations and endeavors. \
       It can be as long as necessary. \
       Add a section called "Key Features" which very succinctly highlights to top features of the module, but do not include the examples or features of the examples that do not directly relate to the module. \
