@@ -7,12 +7,10 @@
 
 This is organization hosts a registry of [Terraform components](https://atmos.tools/core-concepts/components/) for provisioning infrastructure used by the Cloud Posse [reference architectures](https://docs.cloudposse.com). They work really well with [Atmos](https://atmos.tools), our open-source tool for managing infrastructure as code with Terraform.
 
-When you design cloud architectures with Atmos, you will first break them apart into pieces called components. Then, you will implement Terraform "root modules" for each of those components. Finally, compose your components in any way you like using stacks, without the need to write any code or messy templates for code generation.
-
 > [!TIP]
 > ## 👽 Use Atmos with Terraform
 > Cloud Posse uses [`atmos`](https://atmos.tools) to easily orchestrate multiple environments using Terraform. <br/>
-> Works with [Github Actions](https://atmos.tools/integrations/github-actions/), [Atlantis](https://atmos.tools/integrations/atlantis), or [Spacelift](https://atmos.tools/integrations/spacelift).
+> When you design cloud architectures with Atmos, you will first break them apart into pieces called components. Then, you will implement Terraform "root modules" for each of those components. Finally, compose your components in any way you like using stacks, without the need to write any code or messy templates for code generation.
 >
 > <details>
 > <summary><strong>Watch demo of using Atmos with Terraform</strong></summary>
