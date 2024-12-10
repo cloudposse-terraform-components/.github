@@ -99,7 +99,6 @@ update:
 
 For the full documentation on how to use the Component Updater GitHub Action, please see the [Atmos Integrations](https://atmos.tools/integrations/github-actions/component-updater) documentation.
 
-
 ## Related Projects
 
 Check out these related projects.
@@ -107,7 +106,6 @@ Check out these related projects.
 - [Cloud Posse Terraform Modules](https://docs.cloudposse.com/modules/) - Our collection of reusable Terraform modules used by our [reference architectures](https://docs.cloudposse.com).
 - [Atmos](https://atmos.tools) - Atmos is like docker-compose but for your infrastructure
 
-
 ## References
 
 For additional context, refer to some of these links.
@@ -115,50 +113,9 @@ For additional context, refer to some of these links.
 - [Cloud Posse Documentation](https://docs.cloudposse.com) - Complete documentation for the Cloud Posse solution
 - [Reference Architectures](https://cloudposse.com/) - Launch effortlessly with our turnkey reference architectures, built either by your team or ours.
 
-> [!TIP]
-> #### Use Terraform Reference Architectures for AWS
->
-> Use Cloud Posse's ready-to-go [terraform architecture blueprints](https://cloudposse.com/reference-architecture/) for AWS to get up and running quickly.
->
-> ✅ We build it together with your team.<br/>
-> ✅ Your team owns everything.<br/>
-> ✅ 100% Open Source and backed by fanatical support.<br/>
->
-> <a href="https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-components&utm_content=commercial_support"><img alt="Request Quote" src="https://img.shields.io/badge/request%20quote-success.svg?style=for-the-badge"/></a>
-> <details><summary>📚 <strong>Learn More</strong></summary>
->
-> <br/>
->
-> Cloud Posse is the leading [**DevOps Accelerator**](https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-components&utm_content=commercial_support) for funded startups and enterprises.
->
-> *Your team can operate like a pro today.*
->
-> Ensure that your team succeeds by using Cloud Posse's proven process and turnkey blueprints. Plus, we stick around until you succeed.
-> #### Day-0:  Your Foundation for Success
-> - **Reference Architecture.** You'll get everything you need from the ground up built using 100% infrastructure as code.
-> - **Deployment Strategy.** Adopt a proven deployment strategy with GitHub Actions, enabling automated, repeatable, and reliable software releases.
-> - **Site Reliability Engineering.** Gain total visibility into your applications and services with Datadog, ensuring high availability and performance.
-> - **Security Baseline.** Establish a secure environment from the start, with built-in governance, accountability, and comprehensive audit logs, safeguarding your operations.
-> - **GitOps.** Empower your team to manage infrastructure changes confidently and efficiently through Pull Requests, leveraging the full power of GitHub Actions.
->
-> <a href="https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-components&utm_content=commercial_support"><img alt="Request Quote" src="https://img.shields.io/badge/request%20quote-success.svg?style=for-the-badge"/></a>
->
-> #### Day-2: Your Operational Mastery
-> - **Training.** Equip your team with the knowledge and skills to confidently manage the infrastructure, ensuring long-term success and self-sufficiency.
-> - **Support.** Benefit from a seamless communication over Slack with our experts, ensuring you have the support you need, whenever you need it.
-> - **Troubleshooting.** Access expert assistance to quickly resolve any operational challenges, minimizing downtime and maintaining business continuity.
-> - **Code Reviews.** Enhance your team’s code quality with our expert feedback, fostering continuous improvement and collaboration.
-> - **Bug Fixes.** Rely on our team to troubleshoot and resolve any issues, ensuring your systems run smoothly.
-> - **Migration Assistance.** Accelerate your migration process with our dedicated support, minimizing disruption and speeding up time-to-value.
-> - **Customer Workshops.** Engage with our team in weekly workshops, gaining insights and strategies to continuously improve and innovate.
->
-> <a href="https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse/terraform-aws-components&utm_content=commercial_support"><img alt="Request Quote" src="https://img.shields.io/badge/request%20quote-success.svg?style=for-the-badge"/></a>
-> </details>
-
 ## ✨ Contributing
 
-This project is under active development, and we encourage contributions from our community.
-
+This components in this organization are under active development, and we encourage contributions from our community.
 
 ## References
 
@@ -166,16 +123,6 @@ For additional context, refer to some of these links.
 
 - [Cloud Posse Documentation](https://docs.cloudposse.com) - Complete documentation for the Cloud Posse solution
 - [Reference Architectures](https://cloudposse.com/) - Launch effortlessly with our turnkey reference architectures, built either by your team or ours.
-
-
-## ✨ Contributing
-
-This project is under active development, and we encourage contributions from our community.
-Many thanks to our outstanding contributors:
-
-<a href="https://github.com/cloudposse-terraform-components/.github/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=cloudposse-terraform-components/.github&max=24" />
-</a>
 
 ### 🐛 Bug Reports & Feature Requests
 
@@ -200,41 +147,8 @@ Dropped straight into your Inbox every week — and usually a 5-minute read.
 [Join us every Wednesday via Zoom](https://cloudposse.com/office-hours?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content=office_hours) for your weekly dose of insider DevOps trends, AWS news and Terraform insights, all sourced from our SweetOps community, plus a _live Q&A_ that you can’t find anywhere else.
 It's **FREE** for everyone!
 
-## About
 
-This project is maintained by <a href="https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content=">Cloud Posse, LLC</a>.
-<a href="https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content="><img src="https://cloudposse.com/logo-300x69.svg" align="right" /></a>
-
-We are a [**DevOps Accelerator**](https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content=commercial_support) for funded startups and enterprises.
-Use our ready-to-go terraform architecture blueprints for AWS to get up and running quickly.
-We build it with you. You own everything. Your team wins. Plus, we stick around until you succeed.
-
-<a href="https://cpco.io/commercial-support?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content=commercial_support"><img alt="Learn More" src="https://img.shields.io/badge/learn%20more-success.svg?style=for-the-badge"/></a>
-
-*Your team can operate like a pro today.*
-
-Ensure that your team succeeds by using our proven process and turnkey blueprints. Plus, we stick around until you succeed.
-
-<details>
-  <summary>📚 <strong>See What's Included</strong></summary>
-
-- **Reference Architecture.** You'll get everything you need from the ground up built using 100% infrastructure as code.
-- **Deployment Strategy.** You'll have a battle-tested deployment strategy using GitHub Actions that's automated and repeatable.
-- **Site Reliability Engineering.** You'll have total visibility into your apps and microservices.
-- **Security Baseline.** You'll have built-in governance with accountability and audit logs for all changes.
-- **GitOps.** You'll be able to operate your infrastructure via Pull Requests.
-- **Training.** You'll receive hands-on training so your team can operate what we build.
-- **Questions.** You'll have a direct line of communication between our teams via a Shared Slack channel.
-- **Troubleshooting.** You'll get help to triage when things aren't working.
-- **Code Reviews.** You'll receive constructive feedback on Pull Requests.
-- **Bug Fixes.** We'll rapidly work with you to fix any bugs in our projects.
-</details>
-
-<a href="https://cloudposse.com/readme/commercial-support/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content=readme_commercial_support_link"><img src="https://cloudposse.com/readme/commercial-support/img"/></a>
-
-
-
-> [!IMPORTANT]
+> [!TIP]
 > ### We're a DevOps Accelerator for AWS Infrastructure
 >
 > Skip the consultants and the DIY headaches.
