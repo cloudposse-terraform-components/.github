@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
-# cloudposse-terraform-components <a href="https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content="><img align="right" src="https://cloudposse.com/logo-300x69.svg" width="150" /></a>
-<a href="https://github.com/cloudposse/terraform-aws-components/releases/latest"><img src="https://img.shields.io/github/release/cloudposse/terraform-aws-components.svg" alt="Latest Release"/></a><a href="https://slack.cloudposse.com"><img src="https://slack.cloudposse.com/badge.svg" alt="Slack Community"/></a>
+# .github <a href="https://cpco.io/homepage?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content="><img align="right" src="https://cloudposse.com/logo-300x69.svg" width="150" /></a>
+<a href="https://github.com/cloudposse-terraform-components/.github/commits/main/"><img src="https://img.shields.io/github/last-commit/cloudposse-terraform-components/.github/main?style=for-the-badge" alt="Last Update"/></a><a href="https://cloudposse.com/slack"><img src="https://slack.cloudposse.com/for-the-badge.svg" alt="Slack Community"/></a>
 <!-- markdownlint-restore -->
 
 <!--
@@ -24,7 +24,21 @@
 
 -->
 
-This is a collection of reusable Terraform components for provisioning infrastructure used by the Cloud Posse [reference architectures](https://cloudposse.com).
+This repository fulfills several unique functions functions for the Cloud Posse Terraform Components GitHub Organization.
+
+1. It can contain special org-level files that provide functionality for our organization on GitHub. These files include:
+    - **[`profile/README.md`](profile/README.md)** - the profile README for the Cloud Posse GitHub organization
+    - **[`CONTRIBUTING.md`](CONTRIBUTING.md)** - how to get started contributing to our projects
+    - **[`SECURITY.md`](SECURITY.md)** - our security policy and how to report vulnerabilities
+    - **[`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)** - our code of conduct covering our community and projects
+    - **[`SUPPORT.md`](SUPPORT.md)** - where to get support for our projects
+2. It can also act as a source for defaults of some repo-level files that might be found in a new GitHub repo's `.github` folder.
+   In the event that a new repo is initialized without these files, the repo will behave on github.com as if the default copies of these files were present in the repo.
+   These files include:
+    - **[`.github/CODEOWNERS`](.github/CODEOWNERS)** - governs required approvals for pull requests
+    - **[`FUNDING.yml`](FUNDING.yml)** - how to support the project financially
+    - **[`.github/ISSUE_TEMPLATE/*`](.github/ISSUE_TEMPLATE/)** - issue templates for the project
+    - **[`.github/PULL_REQUEST_TEMPLATE.md`](.github/PULL_REQUEST_TEMPLATE.md)** - pull request template for the project
 
 
 ---
@@ -39,61 +53,20 @@ This is a collection of reusable Terraform components for provisioning infrastru
 <a href="https://cloudposse.com/readme/header/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content=readme_header_link"><img src="https://cloudposse.com/readme/header/img"/></a>
 
 
-## Introduction
-
-In this repo you'll find real-world examples of how we've implemented various common patterns using our [terraform modules](https://cpco.io/terraform-modules) for our customers.
-
-The [component library](https://docs.cloudposse.com/components/) captures the business logic, opinions, best practices and non-functional requirements.
-
-It's from this library that other developers in your organization will pick and choose from anytime they need to deploy some new capability.
-
-These components make a lot of assumptions about how we've configured our environments. That said, they can still serve as an excellent reference for others.
-
-## Using `pre-commit` Hooks
-
-This repository uses [pre-commit](https://pre-commit.com/) and [pre-commit-terraform](https://github.com/antonbabenko/pre-commit-terraform) to enforce consistent Terraform code and documentation. This is accomplished by triggering hooks during `git commit` to block commits that don't pass checks (E.g. format, and module documentation). You can find the hooks that are being executed in the [`.pre-commit-config.yaml`](.pre-commit-config.yaml) file.
-
-You can install [pre-commit](https://pre-commit.com/) and this repo's pre-commit hooks on a Mac machine by running the following commands:
-
-```bash
-brew install pre-commit gawk terraform-docs coreutils
-pre-commit install --install-hooks
-```
-
-Then run the following command to rebuild the docs for all Terraform components:
-
-```bash
-make rebuild-docs
-```
-
-
-
-## Usage
-
-
-
-Please take a look at each [component's README](https://docs.cloudposse.com/components/) for usage.
 
 
 
 
 
 
+## Examples
 
-## Related Projects
-
-Check out these related projects.
-
-- [Cloud Posse Terraform Modules](https://docs.cloudposse.com/modules/) - Our collection of reusable Terraform modules used by our reference architectures.
-- [Atmos](https://atmos.tools) - Atmos is like docker-compose but for your infrastructure
+To add all repository bootstrapping files to a new repo:
+  1. Copy the `.github/workflows/auto-format.yml` file from this repository to the `.github/workflows` folder of the destination repository.
+  2. Execute the `Auto-format` GitHub Action in the destination repository.
 
 
-## References
 
-For additional context, refer to some of these links.
-
-- [Cloud Posse Documentation](https://docs.cloudposse.com) - Complete documentation for the Cloud Posse solution
-- [Reference Architectures](https://cloudposse.com/) - Launch effortlessly with our turnkey reference architectures, built either by your team or ours.
 
 
 ## ✨ Contributing
@@ -203,8 +176,10 @@ under the License.
 ## Trademarks
 
 All other trademarks referenced herein are the property of their respective owners.
----
-Copyright © 2017-2024 [Cloud Posse, LLC](https://cpco.io/copyright)
+## Copyrights
+
+Copyright © 2022-2024 [Cloud Posse, LLC](https://cloudposse.com)
+
 
 
 <a href="https://cloudposse.com/readme/footer/link?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content=readme_footer_link"><img alt="README footer" src="https://cloudposse.com/readme/footer/img"/></a>
