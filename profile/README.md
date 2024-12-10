@@ -18,10 +18,13 @@ This is organization hosts a registry of [Terraform components](https://atmos.to
 
 ## Helpful resources
 
-- **[Component Documentation](https://atmos.tools/core-concepts/components/)** - Learn what components are and why to use them.
-- **[Component Library Documentation](https://docs.cloudposse.com/components/)** - Read the documentation for all of our components
-- **[Component Best Practices](https://atmos.tools/best-practices/components)** - Review the best practices for components
-- **[Terraform Best Practices](https://docs.cloudposse.com/best-practices/terraform/)** - Understand Cloud Posse's opinionated best practices for Terraform
+<img src="https://api.iconify.design/bxs/right-arrow.svg?color=%238A2BE2&width=14"/> **[Component Documentation](https://atmos.tools/core-concepts/components/)** - Learn what components are and why to use them.
+
+<img src="https://api.iconify.design/bxs/right-arrow.svg?color=%238A2BE2&width=14"/> **[Component Library Documentation](https://docs.cloudposse.com/components/)** - Read the documentation for all of our components
+
+<img src="https://api.iconify.design/bxs/right-arrow.svg?color=%238A2BE2&width=14"/> **[Component Best Practices](https://atmos.tools/best-practices/components)** - Review the best practices for components
+
+<img src="https://api.iconify.design/bxs/right-arrow.svg?color=%238A2BE2&width=14"/> **[Terraform Best Practices](https://docs.cloudposse.com/best-practices/terraform/)** - Understand Cloud Posse's opinionated best practices for Terraform
 
 <details>
 <summary>Learn More</summary>
