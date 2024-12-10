@@ -18,9 +18,10 @@ This is organization hosts a registry of [Terraform components](https://atmos.to
 
 ## Helpful resources
 
-* [Component Library Documentation](https://docs.cloudposse.com/components/)
-* [Component Best Practices](https://atmos.tools/best-practices/components)
-* [Terraform Best Practices](https://docs.cloudposse.com/best-practices/terraform/)
+- **[Component Documentation](https://atmos.tools/core-concepts/components/)** - Learn what components are and why to use them.
+- **[Component Library Documentation](https://docs.cloudposse.com/components/)** - Read the documentation for all of our components
+- **[Component Best Practices](https://atmos.tools/best-practices/components)** - Review the best practices for components
+- **[Terraform Best Practices](https://docs.cloudposse.com/best-practices/terraform/)** - Understand Cloud Posse's opinionated best practices for Terraform
 
 <details>
 <summary>Learn More</summary>
