@@ -8,15 +8,13 @@
 This is organization hosts a registry of [Terraform components](https://atmos.tools/core-concepts/components/) for provisioning infrastructure used by the Cloud Posse [reference architectures](https://docs.cloudposse.com). They work really well with [Atmos](https://atmos.tools), our open-source tool for managing infrastructure as code with Terraform.
 
 > [!TIP]
-> ## 👽 Use Atmos with Terraform
+> ## 👽 Check out the Demo of Atmos with Terraform
 > Cloud Posse uses [`atmos`](https://atmos.tools) to easily orchestrate multiple environments using Terraform. <br/>
+>
 > When you design cloud architectures with Atmos, you will first break them apart into pieces called components. Then, you will implement Terraform "root modules" for each of those components. Finally, compose your components in any way you like using stacks, without the need to write any code or messy templates for code generation.
 >
-> <details>
-> <summary><strong>Watch demo of using Atmos with Terraform</strong></summary>
 > <img src="https://github.com/cloudposse/atmos/blob/main/docs/demo.gif?raw=true"/><br/>
 > <i>Example of running <a href="https://atmos.tools"><code>atmos</code></a> to manage infrastructure from our <a href="https://atmos.tools/quick-start/">Quick Start</a> tutorial.</i>
-> </details>
 
 ## Helpful resources
 
@@ -24,15 +22,8 @@ This is organization hosts a registry of [Terraform components](https://atmos.to
 * [Component Best Practices](https://atmos.tools/best-practices/components)
 * [Terraform Best Practices](https://docs.cloudposse.com/best-practices/terraform/)
 
-
 <details>
 <summary>Learn More</summary>
-
-* captures the business logic, opinions, best practices and non-functional requirements for an organization.
-
-It's from this library that other developers in your organization will pick and choose from whenever they need to deploy some new capability.
-
-These components make a lot of assumptions (aka ["convention over configuration"](https://en.wikipedia.org/wiki/Convention_over_configuration)) about how we've configured our environments in our [reference architecture](https://docs.cloudposse.com). They serve as an excellent reference on how to build, organize and distribute enterprise-grade infrastructure with Terraform that can be used with [Atmos](https://atmos.tools).
 
 ## Usage
 
