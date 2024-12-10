@@ -5,8 +5,7 @@
   <a href="https://cloudposse.com/quiz/" title="Request Quote"><img src="https://img.shields.io/badge/Request_Quote-success.svg?style=for-the-badge" alt="Request Quote"></a>
 </p>
 
-
-This is organization hosts a registry of [Terraform components](https://atmos.tools/core-concepts/components/) for provisioning infrastructure used by the Cloud Posse [reference architectures](https://cloudposse.com). They work really well with [Atmos](https://atmos.tools), our open-source tool for managing infrastructure as code with Terraform.
+This is organization hosts a registry of [Terraform components](https://atmos.tools/core-concepts/components/) for provisioning infrastructure used by the Cloud Posse [reference architectures](https://docs.cloudposse.com). They work really well with [Atmos](https://atmos.tools), our open-source tool for managing infrastructure as code with Terraform.
 
 > [!TIP]
 > #### 👽 Use Atmos with Terraform
@@ -32,8 +31,7 @@ It's from this library that other developers in your organization will pick and 
 capability.
 
 These components make a lot of assumptions (aka ["convention over configuration"](https://en.wikipedia.org/wiki/Convention_over_configuration)) about how we've configured our environments.
-That said, they still serve as an excellent reference for others on how to build, organize and distribute enterprise-grade infrastructure
-with Terraform that can be used with [Atmos](https://atmos.tools).
+That said, they still serve as an excellent reference for others on how to build, organize and distribute enterprise-grade infrastructure with Terraform that can be used with [Atmos](https://atmos.tools).
 
 ## Usage
 
@@ -101,43 +99,12 @@ update:
 
 For the full documentation on how to use the Component Updater GitHub Action, please see the [Atmos Integrations](https://atmos.tools/integrations/github-actions/component-updater) documentation.
 
-## Using `pre-commit` Hooks
-
-This repository uses [pre-commit](https://pre-commit.com/) and [pre-commit-terraform](https://github.com/antonbabenko/pre-commit-terraform) to enforce consistent Terraform code and documentation. This is accomplished by triggering hooks during `git commit` to block commits that don't pass checks (E.g. format, and module documentation). You can find the hooks that are being executed in the [`.pre-commit-config.yaml`](.pre-commit-config.yaml) file.
-
-You can install [pre-commit](https://pre-commit.com/) and this repo's pre-commit hooks on a Mac machine by running the following commands:
-
-```bash
-brew install pre-commit gawk terraform-docs coreutils
-pre-commit install --install-hooks
-```
-
-Then run the following command to rebuild the docs for all Terraform components:
-
-```bash
-make rebuild-docs
-```
-
-> [!IMPORTANT]
-> ## Deprecated Components
-> Terraform components which are no longer actively maintained are kept in the [`deprecated/`](deprecated/) folder.
->
-> Many of these deprecated components are used in our older reference architectures.
->
-> We intend to eventually delete, but are leaving them for now in the repo.
-
-> [!IMPORTANT]
-> In Cloud Posse's examples, we avoid pinning modules to specific versions to prevent discrepancies between the documentation
-> and the latest released versions. However, for your own projects, we strongly advise pinning each module to the exact version
-> you're using. This practice ensures the stability of your infrastructure. Additionally, we recommend implementing a systematic
-> approach for updating versions to avoid unexpected changes.
-
 
 ## Related Projects
 
 Check out these related projects.
 
-- [Cloud Posse Terraform Modules](https://docs.cloudposse.com/modules/) - Our collection of reusable Terraform modules used by our reference architectures.
+- [Cloud Posse Terraform Modules](https://docs.cloudposse.com/modules/) - Our collection of reusable Terraform modules used by our [reference architectures](https://docs.cloudposse.com).
 - [Atmos](https://atmos.tools) - Atmos is like docker-compose but for your infrastructure
 
 
@@ -147,8 +114,6 @@ For additional context, refer to some of these links.
 
 - [Cloud Posse Documentation](https://docs.cloudposse.com) - Complete documentation for the Cloud Posse solution
 - [Reference Architectures](https://cloudposse.com/) - Launch effortlessly with our turnkey reference architectures, built either by your team or ours.
-
-
 
 > [!TIP]
 > #### Use Terraform Reference Architectures for AWS
@@ -220,16 +185,6 @@ Please use the [issue tracker](https://github.com/cloudposse-terraform-component
 
 If you are interested in being a contributor and want to get involved in developing this project or help out with Cloud Posse's other projects, we would love to hear from you!
 Hit us up in [Slack](https://cpco.io/slack?utm_source=github&utm_medium=readme&utm_campaign=cloudposse-terraform-components/.github&utm_content=slack), in the `#cloudposse` channel.
-
-In general, PRs are welcome. We follow the typical "fork-and-pull" Git workflow.
- 1. Review our [Code of Conduct](https://github.com/cloudposse-terraform-components/.github/?tab=coc-ov-file#code-of-conduct) and [Contributor Guidelines](https://github.com/cloudposse/.github/blob/main/CONTRIBUTING.md).
- 2. **Fork** the repo on GitHub
- 3. **Clone** the project to your own machine
- 4. **Commit** changes to your own branch
- 5. **Push** your work back up to your fork
- 6. Submit a **Pull Request** so that we can review your changes
-
-**NOTE:** Be sure to merge the latest changes from "upstream" before making a pull request!
 
 ### 🌎 Slack Community
 
