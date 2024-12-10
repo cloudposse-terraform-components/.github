@@ -1,4 +1,4 @@
-[![Banner](https://github.com/cloudposse/.github/blob/main/profile/banner/image.png?raw=true)](https://cpco.io/homepage)
+[![Banner](https://github.com/cloudposse-terraform-components/.github/blob/main/profile/banner/image.png?raw=true)](https://cpco.io/homepage)
 <p align="right">
   <a href="https://cloudposse.com/slack" title="Slack Community"><img src="https://slack.cloudposse.com/for-the-badge.svg" alt="Slack Community"></a>
   <a href="https://cloudposse.com/office-hours/" title="Office Hours"><img src="https://img.shields.io/badge/Office_Hours-2891E8.svg?style=for-the-badge" alt="Office Hours"></a>
@@ -7,8 +7,10 @@
 
 This is organization hosts a registry of [Terraform components](https://atmos.tools/core-concepts/components/) for provisioning infrastructure used by the Cloud Posse [reference architectures](https://docs.cloudposse.com). They work really well with [Atmos](https://atmos.tools), our open-source tool for managing infrastructure as code with Terraform.
 
+When you design cloud architectures with Atmos, you will first break them apart into pieces called components. Then, you will implement Terraform "root modules" for each of those components. Finally, compose your components in any way you like using stacks, without the need to write any code or messy templates for code generation.
+
 > [!TIP]
-> #### 👽 Use Atmos with Terraform
+> ## 👽 Use Atmos with Terraform
 > Cloud Posse uses [`atmos`](https://atmos.tools) to easily orchestrate multiple environments using Terraform. <br/>
 > Works with [Github Actions](https://atmos.tools/integrations/github-actions/), [Atlantis](https://atmos.tools/integrations/atlantis), or [Spacelift](https://atmos.tools/integrations/spacelift).
 >
@@ -16,37 +18,29 @@ This is organization hosts a registry of [Terraform components](https://atmos.to
 > <summary><strong>Watch demo of using Atmos with Terraform</strong></summary>
 > <img src="https://github.com/cloudposse/atmos/blob/main/docs/demo.gif?raw=true"/><br/>
 > <i>Example of running <a href="https://atmos.tools"><code>atmos</code></a> to manage infrastructure from our <a href="https://atmos.tools/quick-start/">Quick Start</a> tutorial.</i>
-> </detalis>
+> </details>
 
-## Introduction
+## Helpful resources
 
-In this organization you'll find real-world examples of how we've implemented Terraform "root" modules as native [Atmos Components](https://atmos.tools/core-concepts/components/) for our customers. These Components
-leverage our hundreds of free and open-source [terraform "child" modules](https://cpco.io/terraform-modules).
+* [Component Library Documentation](https://docs.cloudposse.com/components/)
+* [Component Best Practices](https://atmos.tools/best-practices/components)
+* [Terraform Best Practices](https://docs.cloudposse.com/best-practices/terraform/)
 
-The [component library](https://docs.cloudposse.com/components/) captures the business logic, opinions, best practices and non-functional requirements for an organization.
+
+<details>
+<summary>Learn More</summary>
+
+* captures the business logic, opinions, best practices and non-functional requirements for an organization.
 
 It's from this library that other developers in your organization will pick and choose from whenever they need to deploy some new capability.
 
-These components make a lot of assumptions (aka ["convention over configuration"](https://en.wikipedia.org/wiki/Convention_over_configuration)) about how we've configured our environments.
-That said, they still serve as an excellent reference for others on how to build, organize and distribute enterprise-grade infrastructure with Terraform that can be used with [Atmos](https://atmos.tools).
+These components make a lot of assumptions (aka ["convention over configuration"](https://en.wikipedia.org/wiki/Convention_over_configuration)) about how we've configured our environments in our [reference architecture](https://docs.cloudposse.com). They serve as an excellent reference on how to build, organize and distribute enterprise-grade infrastructure with Terraform that can be used with [Atmos](https://atmos.tools).
 
 ## Usage
 
 Please take a look at each [component's README](https://docs.cloudposse.com/components/) for specific usage.
 
-> [!TIP]
-> ## 👽 Use Atmos with Terraform
-> To orchestrate multiple environments with ease using Terraform, Cloud Posse recommends using [Atmos](https://atmos.tools),
-> our open-source tool for Terraform automation.
->
-> <details>
-> <summary><strong>Watch demo of using Atmos with Terraform</strong></summary>
-> <img src="https://github.com/cloudposse/atmos/blob/main/docs/demo.gif?raw=true"/><br/>
-> <strong>Example of running <a href="https://atmos.tools"><code>atmos</code></a> to manage infrastructure from our <a href="https://atmos.tools/quick-start/">Quick Start</a> tutorial.</strong>
-> </detalis>
-
-Generally, you can use these components in [Atmos](https://atmos.tools/core-concepts/components/) by adding something like the following
-code into your [stack manifest](https://atmos.tools/core-concepts/stacks/):
+Generally, you can use these components in [Atmos](https://atmos.tools/core-concepts/components/) by adding something like the following code into your [stack manifest](https://atmos.tools/core-concepts/stacks/):
 
 ```yaml
 components:                      # List of components to include in the stack
@@ -145,62 +139,7 @@ Dropped straight into your Inbox every week — and usually a 5-minute read.
 It's **FREE** for everyone!
 
 
-> [!TIP]
-> ### We're a DevOps Accelerator for AWS Infrastructure
->
-> Skip the consultants and the DIY headaches.
->
-> Use our ready-to-go [terraform architecture blueprints](https://cloudposse.com/) for AWS to get up and running quickly.
->
-> ✅ Production-ready AWS infrastructure in weeks, not months<br/>
-> ✅ Backed by our fanatical support<br/>
-> ✅ So good, we offer a money-back guarantee<br/>
->
-> [![Request Quote](https://img.shields.io/badge/Request_Quote-success.svg?style=for-the-badge)](https://cloudposse.com/quiz/)
->
-> Just browsing? Kickstart your journey with [Atmos](https://atmos.tools), dive into discussions on [Slack](https://cloudposse.com/slack), and gain insights on our weekly [office hours](https://cloudposse.com/office-hours). Discover how Cloud Posse's open-source solutions can elevate your organization.
->
-> <details>
->   <summary><strong>💡 Learn More about Cloud Posse</strong></summary>
->
-> ### Our Approach
->
-> *After you work with Cloud Posse, your team will know what they're doing.*
->
-> You will have a plan in place to handle deploying every new service your company builds. You will have peace of mind knowing that everything is defined with infrastructure as code and confident in your ability to deliver. Your team will have learned to fish and become autonomous. And guess what? We are here to pull you out if you ever get stuck in the mud.
->
-> [![Request Quote](https://img.shields.io/badge/Request_Quote-success.svg?style=for-the-badge)](https://cloudposse.com/quiz/)
-> * [Case Studies](https://cloudposse.com/case-studies/)
-> * [Foundational Infrastructure](https://cloudposse.com/reference-architecture/foundational-infrastructure/)
-> * [Foundational Platform](https://cloudposse.com/reference-architecture/foundational-platform/)
-> * [Foundational Release Engineering](https://cloudposse.com/reference-architecture/foundational-release-engineering/)
-> * [Foundational SRE](https://cloudposse.com/reference-architecture/foundational-sre/)
-> * [Foundational Security & Compliance](https://cloudposse.com/reference-architecture/foundational-security-and-compliance/)
->
-> ### How it Works
-> *Use the industry's most robust AWS reference architecture for terraform to solve your most challenging problems of compliance and observability.*
->
-> Our plan ensures you have a platform built for scale and we'll guide you along the way so you can make informed decisions. After you graduate from our accelerator, we offer long-term support to help you grow.
->
-> [![Request Quote](https://img.shields.io/badge/Request_Quote-success.svg?style=for-the-badge)](https://cloudposse.com/quiz/)
->
-> * [Reference Architecture](https://cloudposse.com/reference-architecture/)
-> * [Our Toolchain](https://cloudposse.com/toolchain/)
-> * [Getting Started](https://cloudposse.com/get-started/)
-> * [FAQs](https://cloudposse.com/faq/)
->
-> ### What We Do
->
-> *Your team can operate like a pro today.*
->
-> Ensure that your team succeeds by using our proven process and turnkey blueprints. Plus, we stick around until you succeed.
->
-> [![Request Quote](https://img.shields.io/badge/Request_Quote-success.svg?style=for-the-badge)](https://cloudposse.com/quiz/)
->
-> * [What is a DevOps Accelerator](https://cloudposse.com/devops-accelerator/)
-> * [The Big Picture](https://cloudposse.com/big-picture/)
-> </details>
-
+</details>
 
 [![README Footer][readme_footer_img]][readme_footer_link]
 [![Beacon][beacon]][website]
