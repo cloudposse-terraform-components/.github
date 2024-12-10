@@ -5,8 +5,6 @@ github_repo: "cloudposse-terraform-components/.github"
 
 # Short description of this project
 description: |-
-  _Actively being developed, January 2023_
-
   This is a collection of reusable Terraform components for provisioning infrastructure used by the Cloud Posse [reference architectures](https://cloudposse.com).
 
 introduction: |-
@@ -79,11 +77,11 @@ references:
     url: "https://cloudposse.com/"
 
 related:
-- name: "Cloud Posse Terraform Modules"
-  description: Our collection of reusable Terraform modules used by our reference architectures.
-  url: "https://docs.cloudposse.com/modules/"
-- name: "Atmos"
-  description: "Atmos is like docker-compose but for your infrastructure"
-  url: "https://atmos.tools"
+  - name: "Cloud Posse Terraform Modules"
+    description: Our collection of reusable Terraform modules used by our reference architectures.
+    url: "https://docs.cloudposse.com/modules/"
+  - name: "Atmos"
+    description: "Atmos is like docker-compose but for your infrastructure"
+    url: "https://atmos.tools"
 
 contributors: [] # If included generates contribs

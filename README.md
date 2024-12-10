@@ -24,8 +24,6 @@
 
 -->
 
-_Actively being developed, January 2023_
-
 This is a collection of reusable Terraform components for provisioning infrastructure used by the Cloud Posse [reference architectures](https://cloudposse.com).
 
 
@@ -179,6 +177,8 @@ Ensure that your team succeeds by using our proven process and turnkey blueprint
 <summary>Preamble to the Apache License, Version 2.0</summary>
 <br/>
 <br/>
+
+
 
 ```text
 Licensed to the Apache Software Foundation (ASF) under one
