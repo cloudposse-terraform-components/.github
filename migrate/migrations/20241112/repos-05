@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-msk
+cloudposse-terraform-components/aws-memorydb
+cloudposse-terraform-components/aws-managed-grafana-data-source-managed-prometheus
+cloudposse-terraform-components/aws-managed-grafana-data-source-loki
+cloudposse-terraform-components/aws-managed-grafana-dashboard
+cloudposse-terraform-components/aws-managed-grafana-api-key
+cloudposse-terraform-components/aws-macie
+cloudposse-terraform-components/aws-lambda
+cloudposse-terraform-components/aws-kms
+cloudposse-terraform-components/aws-ipam
+cloudposse-terraform-components/aws-guardduty
+cloudposse-terraform-components/aws-glue-workflow
+cloudposse-terraform-components/aws-glue-trigger
+cloudposse-terraform-components/aws-glue-registry
+cloudposse-terraform-components/aws-glue-iam
+cloudposse-terraform-components/aws-glue-catalog-database

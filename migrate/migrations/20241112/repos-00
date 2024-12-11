@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-zscaler
+cloudposse-terraform-components/aws-vpc-peering
+cloudposse-terraform-components/aws-vpc-flow-logs-bucket
+cloudposse-terraform-components/aws-vpc
+cloudposse-terraform-components/aws-tgw-hub-connector
+cloudposse-terraform-components/aws-tfstate-backend
+cloudposse-terraform-components/aws-ssm-parameters
+cloudposse-terraform-components/aws-spacelift-worker-pool-asg
+cloudposse-terraform-components/aws-spacelift-spaces
+cloudposse-terraform-components/aws-spa-s3-cloudfront
+cloudposse-terraform-components/aws-sns-topic
+cloudposse-terraform-components/aws-snowflake-database
+cloudposse-terraform-components/aws-snowflake-account
+cloudposse-terraform-components/aws-ses
+cloudposse-terraform-components/aws-s3-bucket
+cloudposse-terraform-components/aws-redshift-serverless

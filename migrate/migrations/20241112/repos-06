@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-github-webhook
+cloudposse-terraform-components/aws-github-oidc-role
+cloudposse-terraform-components/aws-github-oidc-provider
+cloudposse-terraform-components/aws-eventbridge
+cloudposse-terraform-components/aws-eks-reloader
+cloudposse-terraform-components/aws-eks-promtail
+cloudposse-terraform-components/aws-eks-prometheus-scraper
+cloudposse-terraform-components/aws-eks-metrics-server
+cloudposse-terraform-components/aws-eks-loki
+cloudposse-terraform-components/aws-eks-keda
+cloudposse-terraform-components/aws-eks-karpenter-node-pool
+cloudposse-terraform-components/aws-eks-external-secrets-operator
+cloudposse-terraform-components/aws-eks-external-dns
+cloudposse-terraform-components/aws-eks-datadog-agent
+cloudposse-terraform-components/aws-eks-cluster
+cloudposse-terraform-components/aws-eks-node-termination-handler

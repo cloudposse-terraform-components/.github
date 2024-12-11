@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-datadog-synthetics-private-location
+cloudposse-terraform-components/aws-datadog-synthetics
+cloudposse-terraform-components/aws-datadog-private-location-ecs
+cloudposse-terraform-components/aws-datadog-logs-archive
+cloudposse-terraform-components/aws-datadog-lambda-forwarder
+cloudposse-terraform-components/aws-datadog-credentials
+cloudposse-terraform-components/aws-cognito
+cloudposse-terraform-components/aws-cloudmap-namespace
+cloudposse-terraform-components/aws-team-roles
+cloudposse-terraform-components/aws-teams
+cloudposse-terraform-components/aws-ssosync
+cloudposse-terraform-components/aws-saml
+cloudposse-terraform-components/aws-identity-center
+cloudposse-terraform-components/aws-shield
+cloudposse-terraform-components/aws-inspector2
+cloudposse-terraform-components/aws-inspector

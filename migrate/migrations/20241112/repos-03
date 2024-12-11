@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-eks-cert-manager
+cloudposse-terraform-components/aws-efs
+cloudposse-terraform-components/aws-ecr
+cloudposse-terraform-components/aws-dns-primary
+cloudposse-terraform-components/aws-dns-delegated
+cloudposse-terraform-components/aws-datadog-monitor
+cloudposse-terraform-components/aws-datadog-integration
+cloudposse-terraform-components/aws-config-bucket
+cloudposse-terraform-components/aws-cloudwatch-logs
+cloudposse-terraform-components/aws-cloudtrail-bucket
+cloudposse-terraform-components/aws-cloudtrail
+cloudposse-terraform-components/aws-bastion
+cloudposse-terraform-components/aws-backup
+cloudposse-terraform-components/aws-aurora-postgres
+cloudposse-terraform-components/aws-account-settings
+cloudposse-terraform-components/aws-account-map

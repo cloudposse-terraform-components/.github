@@ -51,7 +51,7 @@ git reset --hard origin/${default_branch}
 git config --local core.excludesFile ${MIGRATE_PATH}/.gitignore
 
 # Clone the `build-harness` to a centralized location so we don't have to do it for every migration
-if [ ! -d "${MIGRATE_PATH}/tmp/build-harness" ]; then
+if [ ! -d "$(dirname ${curdir})/build-harness" ]; then
     git clone https://github.com/cloudposse/build-harness.git "$(dirname ${curdir})/build-harness"
 fi
 
