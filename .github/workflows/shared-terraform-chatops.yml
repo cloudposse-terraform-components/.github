@@ -414,8 +414,7 @@ jobs:
 
   terratest:
     if: >- 
-      ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixture_id.outputs.test_fixture_id != '') 
-      || needs.context.outputs.test_needs_fixtures != 'true' }}
+      ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixture_id.outputs.test_fixture_id != '') }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
     needs: [context, pending, fixture_id]
