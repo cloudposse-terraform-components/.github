@@ -13,10 +13,8 @@ tags:
 ---
 
 {{ if $deprecated }}
-
 # (deprecated) Component: `{{ $shortName }}`
 {{ else }}
-
 # Component: `{{ $shortName }}`
 {{ end }}
 {{- if $deprecated -}}<img src="https://img.shields.io/badge/lifecycle-deprecated-critical?style=for-the-badge" alt="Deprecated"/>{{- end -}}
