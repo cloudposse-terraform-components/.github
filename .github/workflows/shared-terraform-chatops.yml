@@ -395,17 +395,17 @@ jobs:
   # If it is skipped, we proceed, but if it fails, we stop.
   # We determine failure by checking for a valid test_fixture_id output from the fixtures job.
   fixture_id:
-    needs: [context]
+    needs: [context, fixtures]
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     if: always()
-    # outputs:
-      # test_fixture_id: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixtures.outputs.test_fixture_id) || '' }}
-      # terraform_state_artifact_id: ${{ needs.fixtures.outputs.terraform_state_artifact_id }}
+    outputs:
+      test_fixture_id: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixtures.outputs.test_fixture_id) || '' }}
+      terraform_state_artifact_id: ${{ needs.fixtures.outputs.terraform_state_artifact_id }}
     steps:
       - env:
           NEEDS_FIXTURES: "${{ needs.context.outputs.test_needs_fixtures }}"
-          # OUTPUT_FIXTURE_ID: "${{ needs.fixtures.outputs.test_fixture_id }}"
-          # TEST_FIXTURE_ID: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixtures.outputs.test_fixture_id) || '' }}
+          OUTPUT_FIXTURE_ID: "${{ needs.fixtures.outputs.test_fixture_id }}"
+          TEST_FIXTURE_ID: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixtures.outputs.test_fixture_id) || '' }}
         run: |
           printf '\ntest_needs_fixtures is "%s"\n' "${NEEDS_FIXTURES}"
           printf '\nfixtures.outputs.test_fixture_id is "%s"\n' "${OUTPUT_FIXTURE_ID}"
