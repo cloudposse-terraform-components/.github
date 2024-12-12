@@ -1,6 +1,7 @@
 {{- defineDatasource "config" .Env.README_YAML -}}
 {{- defineDatasource "includes" (env.Getenv "README_INCLUDES" | default "./") -}}
 {{- $deprecated := has (ds "config") "deprecated" }}
+{{- $logo := "https://cloudposse.com/logo-300x69.svg" -}}
 {{- $utm_link := printf "%%s?utm_source=%s&utm_medium=%s&utm_campaign=%s&utm_content=%s" "github" "readme" (ds "config").github_repo "%s" -}}
 {{- $homepage := printf $utm_link "https://cpco.io/homepage" "" -}}
 
@@ -50,3 +51,5 @@
 {{ (ds "config").examples }}
 {{ end }}
 {{ end }}
+
+[<img src="{{ $logo }}" height="32" align="right"/>]({{ $$homepage }})
