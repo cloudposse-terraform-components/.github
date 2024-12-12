@@ -10,4 +10,4 @@ make readme/build README_TEMPLATE_REPO_PATH=README.md.simple.gotmpl README_FILE=
 git add src/README.md
 
 # Merge the PR
-# auto_merge
+auto_merge
