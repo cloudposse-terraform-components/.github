@@ -74,9 +74,7 @@
 {{ (ds "config").examples }}
 {{ end }}
 
-{{ if has (ds "config") "include" }}
-{{ range $file := (datasource "config").include -}}
-{{ (include "includes" $file) }}
-{{- end }}
-{{- end }}
-{{- end}}
+<!-- prettier-ignore-start -->
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+<!-- prettier-ignore-end -->
