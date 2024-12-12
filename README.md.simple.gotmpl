@@ -33,30 +33,30 @@ tags:
 {{ (ds "config").description }}
 {{- end }}
 
-{{ if has (ds "config") "introduction" }}
+{{- if has (ds "config") "introduction" }}
 ## Introduction
 
 {{ (ds "config").introduction }}
-{{ end }}
+{{- end }}
 
-{{ if has (ds "config") "usage" }}
+{{- if has (ds "config") "usage" }}
 ## Usage
 
 {{ (ds "config").usage }}
-{{ end }}
+{{- end }}
 
-{{ if not $deprecated -}}
-{{ if has (ds "config") "quickstart" -}}
+{{- if not $deprecated -}}
+{{- if has (ds "config") "quickstart" -}}
 ## Quick Start
 
 {{ (ds "config").quickstart -}}
-{{ end }}
+{{- end }}
 
 {{- if has (ds "config") "examples" }}
 ## Examples
 
 {{ (ds "config").examples }}
-{{ end }}
-{{ end }}
+{{- end }}
+{{- end }}
 
 [<img src="{{ $logo }}" height="32" align="right"/>]({{ $homepage }})
