@@ -4,11 +4,12 @@
 {{- $logo := "https://cloudposse.com/logo-300x69.svg" -}}
 {{- $utm_link := printf "%%s?utm_source=%s&utm_medium=%s&utm_campaign=%s&utm_content=%s" "github" "readme" (ds "config").github_repo "%s" -}}
 {{- $homepage := printf $utm_link "https://cpco.io/homepage" "" -}}
+{{- $shortName := (index ((ds "config").name | strings.SplitN "-" 3) 2) -}}
 
 {{- if $deprecated -}}
-# (deprecated) Component: `{{(ds "config").name}}`
+# (deprecated) Component: `{{ $shortName }}`
 {{- else }}
-# Component: `{{(ds "config").name}}`
+# Component: `{{ $shortName }}`
 {{ end }}
 {{- if $deprecated -}}<img src="https://img.shields.io/badge/lifecycle-deprecated-critical?style=for-the-badge" alt="Deprecated"/>{{- end -}}
 {{- if $deprecated }}
