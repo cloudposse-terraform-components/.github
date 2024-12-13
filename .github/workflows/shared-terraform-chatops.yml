@@ -413,9 +413,7 @@ jobs:
           printf '\nFinal test_fixture_id="%s"\n\n' "${TEST_FIXTURE_ID}"
 
   terratest:
-    if: >- 
-      ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixture_id.outputs.test_fixture_id != '') 
-      || needs.context.outputs.test_needs_fixtures != 'true' }}
+    if: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixture_id.outputs.test_fixture_id != '') || needs.context.outputs.test_needs_fixtures != 'true' }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
     needs: [context, pending, fixture_id]
