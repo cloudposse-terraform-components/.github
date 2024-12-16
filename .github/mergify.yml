@@ -192,6 +192,17 @@ pull_request_rules:
       comment:
         message: "/terratest"
 
+  - name: "approve automated PRs that only update the markdown files, images or videos"
+    conditions:
+      - and: *is_open
+      - and: *is_default_branch
+      - and: *is_a_bot
+      - "head~=auto-update/.*"
+      - "files~=\\.(md|gif|png|jpg|mp4)$"
+    actions:
+      review:
+        type: APPROVE
+
   - name: "merge automated PRs that only update the markdown files, images or videos"
     conditions:
       - and: *is_open
