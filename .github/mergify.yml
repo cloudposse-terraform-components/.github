@@ -200,8 +200,13 @@ pull_request_rules:
       - "head~=auto-update/.*"
       - "files~=\\.(md|gif|png|jpg|mp4)$"
     actions:
+      post_check:
+        # Skip terratest if the PR only updates markdown files
+        neutral_conditions:
+          - test/terratest
       review:
         type: APPROVE
+        message: Automatically approving auto readme updates
 
   - name: "merge automated PRs that only update the markdown files, images or videos"
     conditions:
