@@ -559,3 +559,12 @@ pull_request_rules:
   #        {% if check_status == "failure" %}
   #        Your pull request needs to be updated before it can be merged.
   #        {% endif %}
+
+merge_protections:
+  - name: Require terratest
+    description: This rule require terratest status
+    if:
+      - files ~= \.(?!md|gif|png|jpg|mp4).*
+      - base = main
+    success_conditions:
+      - check-success = test/terratest
