@@ -176,7 +176,6 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
   fixtures:
-    if: ${{ needs.context.outputs.test_needs_fixtures == 'true' }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
     needs: [context, pending]
@@ -364,31 +363,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-  # This is kind of a hack.
-  # We need to handle the case where the fixtures job is skipped,
-  # and distinguish it from the case where the fixtures job fails.
-  # If it is skipped, we proceed, but if it fails, we stop.
-  # We determine failure by checking for a valid test_fixture_id output from the fixtures job.
-  fixture_id:
-    needs: [context, fixtures]
-    runs-on: ${{ fromJSON(inputs.runs-on) }}
-    if: always()
-    outputs:
-      test_fixture_id: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixtures.outputs.test_fixture_id) || '' }}
-      terraform_state_artifact_id: ${{ needs.fixtures.outputs.terraform_state_artifact_id }}
-    steps:
-      - env:
-          NEEDS_FIXTURES: "${{ needs.context.outputs.test_needs_fixtures }}"
-          OUTPUT_FIXTURE_ID: "${{ needs.fixtures.outputs.test_fixture_id }}"
-          TEST_FIXTURE_ID: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixtures.outputs.test_fixture_id) || '' }}
-        run: |
-          printf '\ntest_needs_fixtures is "%s"\n' "${NEEDS_FIXTURES}"
-          printf '\nfixtures.outputs.test_fixture_id is "%s"\n' "${OUTPUT_FIXTURE_ID}"
-          
-          printf '\nFinal test_fixture_id="%s"\n\n' "${TEST_FIXTURE_ID}"
-
   terratest:
-    if: ${{ (needs.context.outputs.test_needs_fixtures == 'true' && needs.fixture_id.outputs.test_fixture_id != '') || needs.context.outputs.test_needs_fixtures != 'true' }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
     needs: [context, pending, fixture_id]
@@ -396,7 +371,6 @@ jobs:
       MAKE_INCLUDES: Makefile
       AWS_REGION: us-east-2
       AWS_ROLE_TO_ASSUME: ${{ needs.context.outputs.test_aws_role }}
-      TEST_FIXTURE_ID: ${{ needs.fixture_id.outputs.test_fixture_id }}
     continue-on-error: false
     strategy:
       max-parallel: ${{ needs.context.outputs.test_skip_concurrency == 'true' && 1 || 10 }}
@@ -551,10 +525,9 @@ jobs:
           mask-aws-account-id: "no"
 
       - name: "Download Terraform state for fixtures"
-        if: ${{ needs.context.outputs.test_needs_fixtures == 'true' }}
         uses: actions/download-artifact@v4
         with:
-          name: ${{ needs.context.outputs.test_fixture_id }}
+          name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
 
 
@@ -611,7 +584,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
   cleanup:
-    if: ${{ needs.context.outputs.test_needs_fixtures == 'true' && always() }}
+    if: ${{ always() }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
     needs: [context, terratest, fixture_id]
