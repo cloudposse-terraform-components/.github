@@ -235,6 +235,7 @@ jobs:
         uses: cloudposse/github-action-setup-atmos@v2
         with:
           install-wrapper: false
+          version: 1.129.0
 
       - name: "Install Go"
         uses: actions/setup-go@v5
@@ -304,7 +305,6 @@ jobs:
       - name: "Create fixtures"
         id: fixtures
         run: |-
-          atmos version
           terraform --version
           pwd
           cd test
