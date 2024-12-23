@@ -305,7 +305,11 @@ jobs:
         id: fixtures
         run: |-
           terraform --version
-          go test -v ./test -cth.skip-tmp-dir -cth.skip-tests 
+          pwd
+          cd test
+          go test -v -cth.skip-tmp-dir -cth.skip-tests
+          cd -
+          pwd
 
       - name: "Save Terraform state for fixtures"
         id: upload
