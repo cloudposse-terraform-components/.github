@@ -82,6 +82,7 @@ jobs:
       test_skip_concurrency: ${{ steps.properties.outputs.test-skip-concurrency }}
       test_needs_aws: ${{ steps.properties.outputs.test-needs-aws }}
       test_needs_fixtures: ${{ steps.properties.outputs.test-needs-fixtures }}
+      atmos_version: 1.129.0
 
   ack:
     if: github.event.comment.id != ''
@@ -235,7 +236,7 @@ jobs:
         uses: cloudposse/github-action-setup-atmos@v2
         with:
           install-wrapper: false
-          version: 1.129.0
+          atmos-version: ${{ needs.context.outputs.atmos_version }}
 
       - name: "Install Go"
         uses: actions/setup-go@v5
@@ -425,6 +426,7 @@ jobs:
         uses: cloudposse/github-action-setup-atmos@v2
         with:
           install-wrapper: false
+          atmos-version: ${{ needs.context.outputs.atmos_version }}
 
       - name: "Install Go"
         uses: actions/setup-go@v5
@@ -633,6 +635,7 @@ jobs:
         uses: cloudposse/github-action-setup-atmos@v2
         with:
           install-wrapper: false
+          atmos-version: ${{ needs.context.outputs.atmos_version }}
 
       - name: "Install Go"
         uses: actions/setup-go@v5
