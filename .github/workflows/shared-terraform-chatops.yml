@@ -56,28 +56,11 @@ jobs:
             properites.data.forEach((element) =>
               core.setOutput(element.property_name, element.value)              
             );
-      - id: test_fixture_id
-        if: ${{ steps.properties.outputs.test-needs-fixtures == 'true' }}
-        # Generate a test fixture ID.
-        # The first three characters are random letters, to avoid collisions
-        # and to ensure the ID is not interpreted as a number.
-        # The rest of the ID is the last 7 digits of the current timestamp in seconds,
-        # for uniqueness and to make it possible to identify the time of the test run.
-
-        # The LC_ALL=C is to ensure that the `tr` command interprets bytes as ASCII and
-        # not UTF-8, which can have invalid byte sequences. The `2>/dev/null` is to suppress
-        # the "broken pipe" error message from `tr` when `head` closes its input.
-        # The `|| true` is to ensure that the command does not fail if `tr` fails.
-        run: >
-          printf "test_fixture_id=%s\n" 
-          $(date "+%s" | sed "s/^.../$({ LC_ALL=C tr -dc 'g-z' < /dev/urandom || true; } 2>/dev/null | head -c 3)/") 
-          >> $GITHUB_OUTPUT || true; 
-          tail -1 $GITHUB_OUTPUT
 
     outputs:
       go_mod_path: 'test/src/go.mod'
       go_sum_path: 'test/src/go.sum'
-      terraform_state_path: 'test/project/state'
+      terraform_state_path: 'state'
       terraform_state_retention_days: 10
       base: ${{ fromJSON(steps.pr.outputs.json).base.sha }}
       base_repo_owner: ${{ fromJSON(steps.pr.outputs.json).base.repo.owner.login }}
@@ -99,7 +82,6 @@ jobs:
       test_skip_concurrency: ${{ steps.properties.outputs.test-skip-concurrency }}
       test_needs_aws: ${{ steps.properties.outputs.test-needs-aws }}
       test_needs_fixtures: ${{ steps.properties.outputs.test-needs-fixtures }}
-      test_fixture_id: ${{ (steps.properties.outputs.test-needs-fixtures == 'true' && steps.test_fixture_id.outputs.test_fixture_id) || 'none' }}
 
   ack:
     if: github.event.comment.id != ''
@@ -199,13 +181,10 @@ jobs:
     environment: terratest
     needs: [context, pending]
     env:
-      MAKE_INCLUDES: Makefile
       AWS_REGION: us-east-2
       AWS_ROLE_TO_ASSUME: ${{ needs.context.outputs.test_aws_role }}
-      TEST_FIXTURE_ID: ${{ needs.context.outputs.test_fixture_id }}
     continue-on-error: false
     outputs:
-      test_fixture_id: ${{ steps.fixtures.outputs.test_fixture_id }}
       terraform_state_artifact_id: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - name: "Checkout code for ChatOps"
@@ -263,10 +242,6 @@ jobs:
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
-
-      - name: "Initialize terratest Go project"
-        run: |
-          make -C test/src clean
 
       - name: "Inject secrets"
         env:
@@ -331,13 +306,13 @@ jobs:
         id: fixtures
         run: |-
           terraform --version
-          make -C test/src create-test-fixtures
+          go test -v ./test -cth.skip-tmp-dir -cth.skip-tests 
 
       - name: "Save Terraform state for fixtures"
         id: upload
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ needs.context.outputs.test_fixture_id }}
+          name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
           include-hidden-files: true
           retention-days: ${{ needs.context.outputs.terraform_state_retention_days }}
