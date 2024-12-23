@@ -304,6 +304,7 @@ jobs:
       - name: "Create fixtures"
         id: fixtures
         run: |-
+          atmos version
           terraform --version
           pwd
           cd test
