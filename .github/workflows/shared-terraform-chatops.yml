@@ -366,7 +366,7 @@ jobs:
   terratest:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
-    needs: [context, pending, fixture_id]
+    needs: [context, pending]
     env:
       MAKE_INCLUDES: Makefile
       AWS_REGION: us-east-2
@@ -587,12 +587,11 @@ jobs:
     if: ${{ always() }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
-    needs: [context, terratest, fixture_id]
+    needs: [context, terratest]
     env:
       MAKE_INCLUDES: Makefile
       AWS_REGION: us-east-2
       AWS_ROLE_TO_ASSUME: ${{ needs.context.outputs.test_aws_role }}
-      TEST_FIXTURE_ID: ${{ needs.context.outputs.test_fixture_id }}
     continue-on-error: true
     steps:
       - name: "Checkout code for ChatOps"
@@ -643,7 +642,7 @@ jobs:
       - name: "Download Terraform state for fixtures"
         uses: actions/download-artifact@v4
         with:
-          name: ${{ needs.context.outputs.test_fixture_id }}
+          name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
 
 
