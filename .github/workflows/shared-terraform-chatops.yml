@@ -58,8 +58,8 @@ jobs:
             );
 
     outputs:
-      go_mod_path: 'test/src/go.mod'
-      go_sum_path: 'test/src/go.sum'
+      go_mod_path: 'test/go.mod'
+      go_sum_path: 'test/go.sum'
       terraform_state_path: 'state'
       terraform_state_retention_days: 10
       base: ${{ fromJSON(steps.pr.outputs.json).base.sha }}
@@ -366,7 +366,7 @@ jobs:
   terratest:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
-    needs: [context, pending]
+    needs: [context, pending, fixtures]
     env:
       MAKE_INCLUDES: Makefile
       AWS_REGION: us-east-2
