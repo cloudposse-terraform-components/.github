@@ -307,11 +307,10 @@ jobs:
         id: fixtures
         run: |-
           terraform --version
-          pwd
           cd test
           go test -v -cth.skip-tmp-dir -cth.skip-tests
           cd -
-          pwd
+          ls -la 
 
       - name: "Save Terraform state for fixtures"
         id: upload
@@ -372,7 +371,7 @@ jobs:
   terratest:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     environment: terratest
-    needs: [context, pending, fixtures]
+    needs: [context, fixtures]
     env:
       MAKE_INCLUDES: Makefile
       AWS_REGION: us-east-2
@@ -433,10 +432,6 @@ jobs:
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
-
-      - name: "Initialize terratest Go project"
-        run: |
-          make -C test/src clean deps
 
       - name: Config
         shell: bash
@@ -537,11 +532,12 @@ jobs:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
 
-
       - name: "Test component"
         run: |-
           terraform --version
-          make -C test/src test
+          cd test
+          go test -v -cth.skip-tmp-dir -cth.skip-deploy-deps
+          cd -          
 
       - name: "Update GitHub Status for failure"
         if: ${{ failure() }}
@@ -643,10 +639,6 @@ jobs:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
-      - name: "Initialize terratest Go project"
-        run: |
-          make -C test/src clean deps
-
       - name: "Download Terraform state for fixtures"
         uses: actions/download-artifact@v4
         with:
@@ -717,7 +709,9 @@ jobs:
         id: fixtures
         run: |-
           terraform --version
-          make -C test/src destroy-test-fixtures
+          cd test
+          go test -v -cth.skip-tmp-dir -cth.skip-tests
+          cd -          
 
       # We need repo write permissions to delete artifacts, which we don't have and don't want to have.
       #  - name: Delete Artifact
