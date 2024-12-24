@@ -310,7 +310,7 @@ jobs:
           cd test
           go test -v -cth.skip-tmp-dir -cth.skip-tests
           cd -
-          ls -la 
+          touch state/.artifact.keep 
 
       - name: "Save Terraform state for fixtures"
         id: upload
