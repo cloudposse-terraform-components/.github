@@ -308,7 +308,7 @@ jobs:
         run: |-
           terraform --version
           cd test
-          go test -v -cth.skip-tmp-dir -cth.skip-tests
+          go test -v -cth.skip-tmp-dir -cth.skip-deploy-cut -cth.skip-destroy-deps
           cd -
           touch state/.artifact.keep 
 
@@ -536,7 +536,7 @@ jobs:
         run: |-
           terraform --version
           cd test
-          go test -v -cth.skip-tmp-dir -cth.skip-deploy-deps
+          go test -v -cth.skip-tmp-dir -cth.skip-deploy-deps -cth.skip-destroy-deps
           cd -          
 
       - name: "Update GitHub Status for failure"
@@ -710,7 +710,7 @@ jobs:
         run: |-
           terraform --version
           cd test
-          go test -v -cth.skip-tmp-dir -cth.skip-tests
+          go test -v -cth.skip-tmp-dir -cth.skip-deploy-cut
           cd -          
 
       # We need repo write permissions to delete artifacts, which we don't have and don't want to have.
