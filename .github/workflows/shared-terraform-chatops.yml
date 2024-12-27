@@ -308,7 +308,7 @@ jobs:
         run: |-
           terraform --version
           cd test
-          go test -v -cth.skip-tmp-dir -cth.skip-deploy-cut -cth.skip-destroy-deps
+          go test -v -cth.skip-tmp-dir -cth.skip-tests -cth.skip-destroy-deps
           cd -
           touch state/.artifact.keep 
 
@@ -710,7 +710,7 @@ jobs:
         run: |-
           terraform --version
           cd test
-          go test -v -cth.skip-tmp-dir -cth.skip-deploy-cut
+          go test -v -cth.skip-tmp-dir -cth.skip-tests
           cd -          
 
       # We need repo write permissions to delete artifacts, which we don't have and don't want to have.
