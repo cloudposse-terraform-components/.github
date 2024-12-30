@@ -533,11 +533,10 @@ jobs:
           path: ${{ needs.context.outputs.terraform_state_path }}
 
       - name: "Test component"
-        run: |-
-          terraform --version
-          cd test
-          go test -v -skip-setup -skip-teardown
-          cd -          
+        uses: robherley/go-test-action@v0
+        with:
+          moduleDirectory: test
+          testArguments: -v -skip-setup -skip-teardown      
 
       - name: "Update GitHub Status for failure"
         if: ${{ failure() }}
