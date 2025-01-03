@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-sso-saml-provider
+cloudposse-terraform-components/aws-network-firewall
+cloudposse-terraform-components/aws-tgw-spoke
+cloudposse-terraform-components/aws-eks-metrics-server
+cloudposse-terraform-components/aws-vpc-peering
+cloudposse-terraform-components/aws-ipam
+cloudposse-terraform-components/aws-rds
+cloudposse-terraform-components/aws-kinesis-stream
+cloudposse-terraform-components/aws-site-to-site-vpn
+cloudposse-terraform-components/aws-snowflake-account
+cloudposse-terraform-components/aws-vpc-flow-logs-bucket
+cloudposse-terraform-components/aws-datadog-lambda-forwarder
+cloudposse-terraform-components/aws-philips-labs-github-runners
+cloudposse-terraform-components/aws-ec2-instance
+cloudposse-terraform-components/aws-datadog-integration
+cloudposse-terraform-components/aws-datadog-logs-archive

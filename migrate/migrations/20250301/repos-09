@@ -1,0 +1,15 @@
+cloudposse-terraform-components/aws-aurora-mysql
+cloudposse-terraform-components/aws-cloudmap-namespace
+cloudposse-terraform-components/aws-spacelift-worker-pool-asg
+cloudposse-terraform-components/aws-elasticsearch
+cloudposse-terraform-components/aws-eks-alb-controller-ingress-class
+cloudposse-terraform-components/aws-sqs-queue
+cloudposse-terraform-components/aws-global-accelerator
+cloudposse-terraform-components/aws-teams
+cloudposse-terraform-components/aws-eks-github-actions-runner
+cloudposse-terraform-components/aws-github-action-token-rotator
+cloudposse-terraform-components/aws-ssosync
+cloudposse-terraform-components/aws-shield
+cloudposse-terraform-components/aws-github-webhook
+cloudposse-terraform-components/aws-security-hub
+cloudposse-terraform-components/aws-alb-experimental

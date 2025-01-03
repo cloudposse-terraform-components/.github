@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-account-quotas
+cloudposse-terraform-components/aws-redshift-serverless
+cloudposse-terraform-components/aws-sftp
+cloudposse-terraform-components/aws-managed-grafana-dashboard
+cloudposse-terraform-components/aws-ec2-client-vpn
+cloudposse-terraform-components/aws-tgw-hub
+cloudposse-terraform-components/aws-eks-tailscale
+cloudposse-terraform-components/aws-amplify
+cloudposse-terraform-components/aws-spacelift-admin-stack
+cloudposse-terraform-components/aws-eks-promtail
+cloudposse-terraform-components/aws-eks-spacelift-worker-pool-controller
+cloudposse-terraform-components/aws-saml
+cloudposse-terraform-components/aws-mwaa
+cloudposse-terraform-components/aws-ecr
+cloudposse-terraform-components/aws-memorydb
+cloudposse-terraform-components/aws-kms
