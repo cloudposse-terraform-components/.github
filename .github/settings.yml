@@ -186,7 +186,7 @@ labels:
 # * `triage` - Recommended for contributors who need to proactively manage issues and pull requests without write access.
 #
 # See https://docs.github.com/en/rest/reference/teams#add-or-update-team-repository-permissions for available options
-collaborators:
+teams:
   - name: approvers
     permission: push
   - name: admins
