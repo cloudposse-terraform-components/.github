@@ -1,7 +1,7 @@
 ## what
 - Format terraform
-- Addeed Codeownership
+- Added .editconfig
 
 ## why
 - Fix code style
-- Support codeownership
+- Support edit config
