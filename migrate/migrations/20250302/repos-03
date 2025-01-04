@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-eks-external-dns
+cloudposse-terraform-components/aws-dms-endpoint
+cloudposse-terraform-components/aws-cloudwatch-logs
+cloudposse-terraform-components/aws-github-runners
+cloudposse-terraform-components/aws-aurora-postgres-resources
+cloudposse-terraform-components/aws-glue-job
+cloudposse-terraform-components/aws-tfstate-backend
+cloudposse-terraform-components/aws-eventbridge
+cloudposse-terraform-components/aws-msk
+cloudposse-terraform-components/aws-route53-resolver-dns-firewall
+cloudposse-terraform-components/aws-aurora-postgres
+cloudposse-terraform-components/aws-glue-workflow
+cloudposse-terraform-components/aws-dynamodb
+cloudposse-terraform-components/aws-access-analyzer
+cloudposse-terraform-components/aws-iam-role
+cloudposse-terraform-components/aws-eks-keda

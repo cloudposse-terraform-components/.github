@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-identity-center
+cloudposse-terraform-components/aws-datadog-synthetics-private-location
+cloudposse-terraform-components/aws-eks-alb-controller
+cloudposse-terraform-components/aws-argocd-github-repo
+cloudposse-terraform-components/aws-glue-connection
+cloudposse-terraform-components/aws-eks-echo-server
+cloudposse-terraform-components/aws-eks-alb-controller-ingress-group
+cloudposse-terraform-components/aws-dms-replication-instance
+cloudposse-terraform-components/aws-snowflake-database
+cloudposse-terraform-components/aws-auth0-tenant
+cloudposse-terraform-components/aws-glue-trigger
+cloudposse-terraform-components/aws-api-gateway-account-settings
+cloudposse-terraform-components/aws-account-settings
+cloudposse-terraform-components/aws-team-roles
+cloudposse-terraform-components/aws-inspector2
+cloudposse-terraform-components/aws-kms
