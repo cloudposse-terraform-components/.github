@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-managed-grafana-data-source-managed-prometheus
+cloudposse-terraform-components/aws-github-oidc-provider
+cloudposse-terraform-components/aws-athena
+cloudposse-terraform-components/aws-eks-idp-roles
+cloudposse-terraform-components/aws-dns-primary
+cloudposse-terraform-components/aws-eks-storage-class
+cloudposse-terraform-components/aws-datadog-monitor
+cloudposse-terraform-components/aws-waf
+cloudposse-terraform-components/aws-spacelift-spaces
+cloudposse-terraform-components/aws-eks-spacelift-worker-pool
+cloudposse-terraform-components/aws-ecs
+cloudposse-terraform-components/aws-glue-catalog-database
+cloudposse-terraform-components/aws-eks-datadog-agent
+cloudposse-terraform-components/aws-eks-reloader
+cloudposse-terraform-components/aws-iam-service-linked-roles
+cloudposse-terraform-components/aws-eks-redis-operator

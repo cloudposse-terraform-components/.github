@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-managed-grafana-api-key
+cloudposse-terraform-components/aws-elasticache-redis
+cloudposse-terraform-components/aws-ecs-service
+cloudposse-terraform-components/aws-eks-redis
+cloudposse-terraform-components/aws-glue-registry
+cloudposse-terraform-components/aws-auth0-app
+cloudposse-terraform-components/aws-ssm-parameters
+cloudposse-terraform-components/aws-redshift
+cloudposse-terraform-components/aws-managed-prometheus-workspace
+cloudposse-terraform-components/aws-global-accelerator-endpoint-group
+cloudposse-terraform-components/aws-eks-karpenter-node-pool
+cloudposse-terraform-components/aws-eks-loki
+cloudposse-terraform-components/aws-github-oidc-role
+cloudposse-terraform-components/aws-account-map
+cloudposse-terraform-components/aws-cloudtrail-bucket
+cloudposse-terraform-components/aws-eks-cert-manager
