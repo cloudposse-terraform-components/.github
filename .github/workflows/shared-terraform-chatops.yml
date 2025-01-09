@@ -308,7 +308,7 @@ jobs:
         run: |-
           terraform --version
           cd test
-          go test -v -skip-tests -skip-teardown
+          go test -v -timeout 1h -skip-tests -skip-teardown
           cd -
           touch state/.artifact.keep 
 
@@ -536,7 +536,7 @@ jobs:
         uses: robherley/go-test-action@v0
         with:
           moduleDirectory: test
-          testArguments: -v -skip-setup -skip-teardown      
+          testArguments: -v -timeout 1h -skip-setup -skip-teardown      
 
       - name: "Update GitHub Status for failure"
         if: ${{ failure() }}
@@ -709,7 +709,7 @@ jobs:
         run: |-
           terraform --version
           cd test
-          go test -v -skip-setup -skip-tests
+          go test -v -timeout 1h -skip-setup -skip-tests
           cd -          
 
       # We need repo write permissions to delete artifacts, which we don't have and don't want to have.
