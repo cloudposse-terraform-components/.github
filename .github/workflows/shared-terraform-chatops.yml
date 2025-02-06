@@ -308,7 +308,8 @@ jobs:
         run: |-
           terraform --version
           cd test
-          go test -v -timeout 1h -skip-tests -skip-teardown
+          # go test -v -timeout 1h -skip-tests -skip-teardown
+          # go test -v -timeout 1h --state-dir=${{ needs.context.outputs.terraform_state_path }}
           cd -
           touch state/.artifact.keep 
 
@@ -536,7 +537,8 @@ jobs:
         uses: robherley/go-test-action@v0
         with:
           moduleDirectory: test
-          testArguments: -v -timeout 1h -skip-setup -skip-teardown      
+          testArguments: -v -timeout 1h --state-dir=${{ needs.context.outputs.terraform_state_path }}
+          # -skip-setup -skip-teardown
 
       - name: "Update GitHub Status for failure"
         if: ${{ failure() }}
@@ -709,7 +711,8 @@ jobs:
         run: |-
           terraform --version
           cd test
-          go test -v -timeout 1h -skip-setup -skip-tests
+          # go test -v -timeout 1h -skip-setup -skip-tests
+          # go test -v -timeout 1h --state-dir=${{ needs.context.outputs.terraform_state_path }}
           cd -          
 
       # We need repo write permissions to delete artifacts, which we don't have and don't want to have.
