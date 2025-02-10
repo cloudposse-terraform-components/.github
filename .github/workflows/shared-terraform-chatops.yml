@@ -538,7 +538,7 @@ jobs:
         uses: robherley/go-test-action@v0
         with:
           moduleDirectory: test
-          testArguments: -v -timeout 1h --state-dir=${{ needs.context.outputs.terraform_state_path }}          
+          testArguments: -v -timeout 1h
           # testArguments: -v -timeout 1h --skip-deploy-dependencies --skip-destroy-dependencies --state-dir=${{ needs.context.outputs.terraform_state_path }}
           # -skip-setup -skip-teardown
 
