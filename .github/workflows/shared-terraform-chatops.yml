@@ -311,7 +311,7 @@ jobs:
           touch ${{ needs.context.outputs.terraform_state_path }}/.artifact.keep           
           cd test
           # go test -v -timeout 1h -skip-tests -skip-teardown
-          go test -v -timeout 1h  --only-deploy-dependencies --skip-destroy-dependencies --state-dir=${{ needs.context.outputs.terraform_state_path }}
+          # go test -v -timeout 1h  --only-deploy-dependencies --skip-destroy-dependencies --state-dir=${{ needs.context.outputs.terraform_state_path }}
           cd -
 
       - name: "Save Terraform state for fixtures"
@@ -538,7 +538,8 @@ jobs:
         uses: robherley/go-test-action@v0
         with:
           moduleDirectory: test
-          testArguments: -v -timeout 1h --skip-deploy-dependencies --skip-destroy-dependencies --state-dir=${{ needs.context.outputs.terraform_state_path }}
+          testArguments: -v -timeout 1h --state-dir=${{ needs.context.outputs.terraform_state_path }}          
+          # testArguments: -v -timeout 1h --skip-deploy-dependencies --skip-destroy-dependencies --state-dir=${{ needs.context.outputs.terraform_state_path }}
           # -skip-setup -skip-teardown
 
       - name: "Update GitHub Status for failure"
@@ -713,7 +714,7 @@ jobs:
           terraform --version
           cd test
           # go test -v -timeout 1h -skip-setup -skip-tests
-          go test -v -timeout 1h --only-deploy-dependencies --state-dir=${{ needs.context.outputs.terraform_state_path }}
+          # go test -v -timeout 1h --only-deploy-dependencies --state-dir=${{ needs.context.outputs.terraform_state_path }}
           cd -          
 
       # We need repo write permissions to delete artifacts, which we don't have and don't want to have.
