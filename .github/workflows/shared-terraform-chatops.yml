@@ -82,7 +82,7 @@ jobs:
       test_skip_concurrency: ${{ steps.properties.outputs.test-skip-concurrency }}
       test_needs_aws: ${{ steps.properties.outputs.test-needs-aws }}
       test_needs_fixtures: ${{ steps.properties.outputs.test-needs-fixtures }}
-      atmos_version: 1.129.0
+      # atmos_version: 1.129.0
 
   ack:
     if: github.event.comment.id != ''
