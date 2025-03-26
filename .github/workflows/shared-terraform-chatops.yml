@@ -569,7 +569,7 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const issueNumber = context.payload.pull_request.number;
+            const issueNumber = ${{ needs.context.outputs.number }};
             const comments = await github.issues.listComments({
               ...context.repo,
               issue_number: issueNumber,
