@@ -564,6 +564,28 @@ jobs:
           # testArguments: -v -timeout 1h --skip-deploy-dependencies --skip-destroy-dependencies --state-dir=${{ needs.context.outputs.terraform_state_path }}
           # -skip-setup -skip-teardown
 
+      - name: "Comment on PR if tests skipped"
+        if: ${{ steps.skip-tests.outputs.result == 'true' }}
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const issueNumber = context.payload.pull_request.number;
+            const comments = await github.issues.listComments({
+              ...context.repo,
+              issue_number: issueNumber,
+            });
+
+            const commentBody = "There is no actual tests for this component. So we set terratest statues to success without running any tests.";
+            const commentExists = comments.data.some(comment => comment.body === commentBody);
+
+            if (!commentExists) {
+              await github.issues.createComment({
+                ...context.repo,
+                issue_number: issueNumber,
+                body: commentBody,
+              });
+            }
+
       - name: "Update GitHub Status for failure"
         if: ${{ failure() }}
         uses: docker://cloudposse/github-status-updater
