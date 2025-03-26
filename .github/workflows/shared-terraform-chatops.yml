@@ -56,6 +56,7 @@ jobs:
             properites.data.forEach((element) =>
               core.setOutput(element.property_name, element.value)              
             );
+      
 
     outputs:
       go_mod_path: 'test/go.mod'
@@ -232,6 +233,15 @@ jobs:
         run: |
           ln -sfnT "$(which tofu)" "$(dirname $(which tofu))"/terraform 
 
+      - name: "Check if test/run.sh exists"
+        id: skip-tests
+        run: |-
+          if [ -f "test/run.sh" ]; then
+            echo "result=true" >> $GITHUB_OUTPUT
+          else
+            echo "result=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: "Install Atmos"
         uses: cloudposse/github-action-setup-atmos@v2
         with:
@@ -240,6 +250,7 @@ jobs:
 
       - name: "Install Go"
         uses: actions/setup-go@v5
+        if: ${{ steps.skip-tests.outputs.result == 'false' }}
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
@@ -304,7 +315,7 @@ jobs:
           mask-aws-account-id: "no"
 
       - name: "Create fixtures"
-        id: fixtures
+        id: fixtures  
         run: |-
           terraform --version
           mkdir -p ${{ needs.context.outputs.terraform_state_path }}
@@ -429,8 +440,18 @@ jobs:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
 
+      - name: "Check if test/run.sh exists"
+        id: skip-tests
+        run: |-
+          if [ -f "test/run.sh" ]; then
+            echo "result=true" >> $GITHUB_OUTPUT
+          else
+            echo "result=false" >> $GITHUB_OUTPUT
+          fi  
+
       - name: "Install Go"
         uses: actions/setup-go@v5
+        if: ${{ steps.skip-tests.outputs.result == 'false' }}
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
@@ -535,6 +556,7 @@ jobs:
           path: ${{ needs.context.outputs.terraform_state_path }}
 
       - name: "Test component"
+        if: ${{ steps.skip-tests.outputs.result == 'false' }}          
         uses: robherley/go-test-action@v0
         with:
           moduleDirectory: test
@@ -636,8 +658,18 @@ jobs:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
 
+      - name: "Check if test/run.sh exists"
+        id: skip-tests
+        run: |-
+          if [ -f "test/run.sh" ]; then
+            echo "result=true" >> $GITHUB_OUTPUT
+          else
+            echo "result=false" >> $GITHUB_OUTPUT
+          fi  
+
       - name: "Install Go"
         uses: actions/setup-go@v5
+        if: ${{ steps.skip-tests.outputs.result == 'false' }}
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
