@@ -576,7 +576,7 @@ jobs:
               issue_number: issueNumber,
             });
 
-            const commentBody = "There is no actual tests for this component. So we set terratest statuses to success without running any tests.";
+            const commentBody = "There are no real tests for this component. So we set terratest statuses to successful execution without running any tests";
             const commentExists = comments.data.some(comment => comment.body === commentBody);
 
             if (!commentExists) {
