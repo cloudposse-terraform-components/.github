@@ -255,6 +255,14 @@ jobs:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
+      - uses: actions/create-github-app-token@v1
+        if: ${{ needs.context.outputs.uses_github == 'true' }}
+        id: github-app
+        with:
+          app-id: ${{ vars.BOT_GITHUB_APP_ID }}
+          private-key: ${{ secrets.BOT_GITHUB_APP_PRIVATE_KEY }}
+          owner: 'cloudposse-tests'
+
       - name: "Inject secrets"
         env:
           USES_GITHUB: ${{ needs.context.outputs.uses_github }}
@@ -271,8 +279,7 @@ jobs:
           TFE_TOKEN: ${{ secrets.TFE_TOKEN }}
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
           CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
-          GITHUB_TOKEN: ${{ github.token }}
-        shell: bash
+          GITHUB_TOKEN: ${{ steps.github-app.outputs.token }}
         run: |
           if [[ "$USES_DATADOG" == "true" ]]; then
             printf "%s=%s\n"  DD_API_KEY "$DD_API_KEY" >> "$GITHUB_ENV"
@@ -456,40 +463,14 @@ jobs:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
-      - name: Config
-        shell: bash
-        id: config
-        env:
-          USES_GITHUB:   >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-github-')
-            || contains(needs.context.outputs.labels, 'terraform-github-provider') }}
-          USES_OPSGENIE: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-opsgenie-')
-            || contains(needs.context.outputs.labels, 'terraform-opsgenie-provider') }}
-          USES_AWS: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-aws-')
-            || contains(needs.context.outputs.labels, 'terraform-aws-provider') }}
-          USES_SPOTINST: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-spotinst-')
-            || contains(needs.context.outputs.labels, 'terraform-spotinst-provider') }}
-          USES_DATADOG: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-datadog-')
-            ||  contains(needs.context.outputs.labels, 'terraform-datadog-provider') }}
-          USES_TFE: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-tfe-')
-            ||  contains(needs.context.outputs.labels, 'terraform-tfe-provider') }}
-          USES_CLOUDFLARE: >-
-            ${{ contains(needs.context.outputs.base_repo_name, '-cloudflare-')
-            ||  contains(needs.context.outputs.labels, 'terraform-cloudflare-provider') }}
-        run: |-
-          echo "uses_github=${USES_GITHUB}" >> $GITHUB_OUTPUT
-          echo "uses_opsgenie=${USES_OPSGENIE}" >> $GITHUB_OUTPUT
-          echo "test_needs_aws=${USES_AWS}" >> $GITHUB_OUTPUT
-          echo "uses_spotinst=${USES_SPOTINST}" >> $GITHUB_OUTPUT
-          echo "uses_datadog=${USES_DATADOG}" >> $GITHUB_OUTPUT
-          echo "uses_tfe=${USES_TFE}" >> $GITHUB_OUTPUT
-          echo "uses_cloudflare=${USES_CLOUDFLARE}" >> $GITHUB_OUTPUT
-
+      - uses: actions/create-github-app-token@v1
+        if: ${{ needs.context.outputs.uses_github == 'true' }}
+        id: github-app
+        with:
+          app-id: ${{ vars.BOT_GITHUB_APP_ID }}
+          private-key: ${{ secrets.BOT_GITHUB_APP_PRIVATE_KEY }}
+          owner: 'cloudposse-tests'
+  
       - name: "Inject secrets"
         env:
           USES_GITHUB: ${{ needs.context.outputs.uses_github }}
@@ -506,7 +487,7 @@ jobs:
           TFE_TOKEN: ${{ secrets.TFE_TOKEN }}
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
           CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ steps.github-app.outputs.token }}
         shell: bash
         run: |
           if [[ "$USES_DATADOG" == "true" ]]; then
@@ -704,7 +685,14 @@ jobs:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
 
-
+      - uses: actions/create-github-app-token@v1
+        if: ${{ needs.context.outputs.uses_github == 'true' }}
+        id: github-app
+        with:
+          app-id: ${{ vars.BOT_GITHUB_APP_ID }}
+          private-key: ${{ secrets.BOT_GITHUB_APP_PRIVATE_KEY }}
+          owner: 'cloudposse-tests'
+  
       - name: "Inject secrets"
         env:
           USES_GITHUB: ${{ needs.context.outputs.uses_github }}
@@ -721,7 +709,7 @@ jobs:
           TFE_TOKEN: ${{ secrets.TFE_TOKEN }}
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
           CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
-          GITHUB_TOKEN: ${{ github.token }}
+          GITHUB_TOKEN: ${{ steps.github-app.outputs.token }}
         shell: bash
         run: |
           if [[ "$USES_DATADOG" == "true" ]]; then
