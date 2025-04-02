@@ -194,9 +194,9 @@ teams:
   - name: bots
     permission: admin
   - name: engineering
-    permission: write
+    permission: push
   - name: contributors
-    permission: write
+    permission: push
   - name: security
     permission: pull
 

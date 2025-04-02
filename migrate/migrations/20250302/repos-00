@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-managed-grafana-workspace
+cloudposse-terraform-components/aws-lambda
+cloudposse-terraform-components/aws-bastion
+cloudposse-terraform-components/aws-spa-s3-cloudfront
+cloudposse-terraform-components/aws-sns-topic
+cloudposse-terraform-components/aws-vpc
+cloudposse-terraform-components/aws-lakeformation
+cloudposse-terraform-components/aws-macie
+cloudposse-terraform-components/aws-config-bucket
+cloudposse-terraform-components/aws-dns-delegated
+cloudposse-terraform-components/aws-ses
+cloudposse-terraform-components/aws-managed-grafana-data-source-loki
+cloudposse-terraform-components/aws-eks-cluster
+cloudposse-terraform-components/aws-datadog-private-location-ecs
+cloudposse-terraform-components/aws-config
+cloudposse-terraform-components/aws-acm

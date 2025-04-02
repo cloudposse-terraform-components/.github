@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-guardduty
+cloudposse-terraform-components/aws-eks-external-secrets-operator
+cloudposse-terraform-components/aws-eks-argocd
+cloudposse-terraform-components/aws-backup
+cloudposse-terraform-components/aws-tgw-hub-connector
+cloudposse-terraform-components/aws-mq-broker
+cloudposse-terraform-components/aws-alb
+cloudposse-terraform-components/aws-glue-schema
+cloudposse-terraform-components/aws-strongdm
+cloudposse-terraform-components/aws-eks-prometheus-scraper
+cloudposse-terraform-components/aws-runs-on
+cloudposse-terraform-components/aws-api-gateway-rest-api
+cloudposse-terraform-components/aws-dms-iam
+cloudposse-terraform-components/aws-glue-iam
+cloudposse-terraform-components/aws-zscaler
+cloudposse-terraform-components/aws-datadog-logs-archive
