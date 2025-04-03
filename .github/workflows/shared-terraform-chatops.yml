@@ -57,13 +57,6 @@ jobs:
               core.setOutput(element.property_name, element.value)              
             );
       
-
-    outputs:
-      go_mod_path: 'test/go.mod'
-      go_sum_path: 'test/go.sum'
-      terraform_state_path: 'state'
-      terraform_state_retention_days: 10
-      base: ${{ fromJSON(steps.pr.outputs.json).base.sha }}
       base_repo_owner: ${{ fromJSON(steps.pr.outputs.json).base.repo.owner.login }}
       base_repo_name: ${{ fromJSON(steps.pr.outputs.json).base.repo.name }}
       head_sha: ${{ fromJSON(steps.pr.outputs.json).head.sha }}
@@ -84,13 +77,27 @@ jobs:
       test_needs_aws: ${{ steps.properties.outputs.test-needs-aws }}
       test_needs_fixtures: ${{ steps.properties.outputs.test-needs-fixtures }}
       atmos_version: 1.129.0
-      uses_github: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-github-') || contains(steps.pr.outputs.labels, 'terraform-github-provider') }}
-      uses_opsgenie: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-opsgenie-') || contains(steps.pr.outputs.labels, 'terraform-opsgenie-provider') }}
-      uses_aws: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-aws-') || contains(steps.pr.outputs.labels, 'terraform-aws-provider') }}
-      uses_spotinst: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-spotinst-') || contains(steps.pr.outputs.labels, 'terraform-spotinst-provider') }}
-      uses_datadog: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-datadog-') || contains(steps.pr.outputs.labels, 'terraform-datadog-provider') }}
-      uses_tfe: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-tfe-') || contains(steps.pr.outputs.labels, 'terraform-tfe-provider') }}
-      uses_cloudflare: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-cloudflare-') || contains(steps.pr.outputs.labels, 'terraform-cloudflare-provider') }}
+      uses_github: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-github-') || 
+        contains(steps.pr.outputs.labels, 'terraform-github-provider') || 
+        contains(steps.properties.outputs.providers, 'github') }}
+      uses_opsgenie: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-opsgenie-') || 
+        contains(steps.pr.outputs.labels, 'terraform-opsgenie-provider') || 
+        contains(steps.properties.outputs.providers, 'opsgenie') }}
+      uses_aws: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-aws-') || 
+        contains(steps.pr.outputs.labels, 'terraform-aws-provider') || 
+        contains(steps.properties.outputs.providers, 'aws') }}
+      uses_spotinst: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-spotinst-') || 
+        contains(steps.pr.outputs.labels, 'terraform-spotinst-provider') || 
+        contains(steps.properties.outputs.providers, 'spotinst') }}
+      uses_datadog: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-datadog-') || 
+        contains(steps.pr.outputs.labels, 'terraform-datadog-provider') || 
+        contains(steps.properties.outputs.providers, 'datadog') }}
+      uses_tfe: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-tfe-') || 
+        contains(steps.pr.outputs.labels, 'terraform-tfe-provider') || 
+        contains(steps.properties.outputs.providers, 'tfe') }}
+      uses_cloudflare: ${{ contains(fromJSON(steps.pr.outputs.json).base.repo.name, '-cloudflare-') || 
+        contains(steps.pr.outputs.labels, 'terraform-cloudflare-provider') || 
+        contains(steps.properties.outputs.providers, 'cloudflare') }}
 
 
   ack:
