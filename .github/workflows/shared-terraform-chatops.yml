@@ -56,7 +56,12 @@ jobs:
             properites.data.forEach((element) =>
               core.setOutput(element.property_name, element.value)              
             );
-      
+    outputs:
+      go_mod_path: 'test/go.mod'
+      go_sum_path: 'test/go.sum'
+      terraform_state_path: 'state'
+      terraform_state_retention_days: 10
+      base: ${{ fromJSON(steps.pr.outputs.json).base.sha }}
       base_repo_owner: ${{ fromJSON(steps.pr.outputs.json).base.repo.owner.login }}
       base_repo_name: ${{ fromJSON(steps.pr.outputs.json).base.repo.name }}
       head_sha: ${{ fromJSON(steps.pr.outputs.json).head.sha }}
