@@ -27,7 +27,9 @@ docs:
       base-dir: .
       input:
         - "./README.yaml"
-      template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/blob/main/README.md.gotmpl"
+      # TODO point to main
+      # template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/blob/main/templates/README.md.gotmpl"
+      template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/e872f070f473a43c2540b6b1c604b085b7445759/templates/README.md.gotmpl"
       output: "README.md"
       terraform:
         source: src/
@@ -45,8 +47,9 @@ docs:
       base-dir: src/
       input:
         - "./README.yaml"
-      # TODO make this template
-      template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/blob/main/README.md.gotmpl"
+      # TODO point to main
+      # template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/blob/main/templates/README.md.simple.gotmpl"
+      template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/e872f070f473a43c2540b6b1c604b085b7445759/templates/README.md.simple.gotmpl"
       output: "README.md"
       terraform:
         source: src/
