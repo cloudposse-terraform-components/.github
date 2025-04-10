@@ -17,18 +17,13 @@ stacks:
   name_pattern: "{stage}"
 
 logs:
-  file: "/dev/stderr"
+  file: "/dev/stdout"
   level: Info
 
 docs:
   generate:
-    # Generate README for the root directory
     readme:
       base-dir: .
-      input:
-        - "./README.yaml"
-      # TODO point to main
-      # template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/blob/main/templates/README.md.gotmpl"
       template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/e872f070f473a43c2540b6b1c604b085b7445759/templates/README.md.gotmpl"
       output: "README.md"
       terraform:
@@ -41,22 +36,50 @@ docs:
         sort_by: "name"
         hide_empty: false
         indent_level: 2
+      input:
+        - name: "template"
+          github_repo: "cloudposse-terraform-components/template"
+          description: |-
+            This is a template for creating new components.
+          usage: |-
+            **Stack Level**: Regional
 
-  # Generate README for the defined component
-  component:
-    base-dir: src/
-    input: []
-    # TODO point to main
-    # template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/blob/main/templates/README.md.simple.gotmpl"
-    template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/e872f070f473a43c2540b6b1c604b085b7445759/templates/README.md.simple.gotmpl"
-    output: "README.md"
-    terraform:
-      source: src/
-      enabled: false
-      format: "markdown"
-      show_providers: false
-      show_inputs: true
-      show_outputs: true
-      sort_by: "name"
-      hide_empty: false
-      indent_level: 2
+            Here's an example snippet for how to use this component.
+
+            ```yaml
+            components:
+              terraform:
+                template:
+                  vars:
+                    enabled: true
+            ```
+          include:
+            - "docs/terraform.md"
+          tags:
+            - terraform
+            - terraform-modules
+            - aws
+            - components
+            - terraform-components
+          categories:
+            - terraform-components
+          license: "APACHE2"
+          badges:
+            - name: "Slack Community"
+              image: "https://slack.cloudposse.com/for-the-badge.svg"
+              url: "https://slack.cloudposse.com"
+          references:
+            - name: "Cloud Posse Documentation"
+              description: "Complete documentation for the Cloud Posse solution"
+              url: "https://docs.cloudposse.com"
+            - name: "Reference Architectures"
+              description: "Launch effortlessly with our turnkey reference architectures, built either by your team or ours."
+              url: "https://cloudposse.com/"
+          related:
+          - name: "Cloud Posse Terraform Modules"
+            description: Our collection of reusable Terraform modules used by our reference architectures.
+            url: "https://docs.cloudposse.com/modules/"
+          - name: "Atmos"
+            description: "Atmos is like docker-compose but for your infrastructure"
+            url: "https://atmos.tools"
+          contributors: []
