@@ -17,7 +17,7 @@ shared:
       - "-author=github-actions[bot]"
       - "-author=dependabot[bot]"
       - "-author=renovate[bot]"
-      - "author=cloudposse-releaser[bot]"
+      - "-author=cloudposse-releaser[bot]"
       
   # Contribution is from an external contributor, not part of the organization
   is_external_contributor: &is_external_contributor
@@ -187,7 +187,8 @@ pull_request_rules:
     conditions:
       - and: *is_open
       - and: *is_a_bot
-      - and: *is_terraform
+      - and: *not_in_conflict
+      - and: *not_wip
     actions:
       comment:
         message: "/terratest"
