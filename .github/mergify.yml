@@ -205,7 +205,7 @@ pull_request_rules:
         - "title~=chore\\(deps\\):\\sbump.*\\sin\\s\\/test$"
     actions:
       label:
-        remove:
+        add:
           - "no-release"
 
   - name: "approve automated PRs that only update the markdown files, images or videos"
