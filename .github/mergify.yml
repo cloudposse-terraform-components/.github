@@ -193,6 +193,21 @@ pull_request_rules:
       comment:
         message: "/terratest"
 
+  - name: "add no-release for go deps updates"
+    conditions:
+      - and: *is_open
+      - and: *is_a_bot
+      - and: *not_in_conflict
+      - and: *not_wip
+      - and: 
+        - "files~=test/(go\\.mod|go\\.sum)$"
+        - "head~=dependabot/.*"
+        - "title~=chore\\(deps\\):\\sbump.*\\sin\\s\\/test$"
+    actions:
+      label:
+        remove:
+          - "no-release"
+
   - name: "approve automated PRs that only update the markdown files, images or videos"
     conditions:
       - and: *is_open
