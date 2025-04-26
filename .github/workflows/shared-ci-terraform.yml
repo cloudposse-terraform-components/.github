@@ -16,7 +16,7 @@ name: |-
   
     jobs:
       ci-terraform:
-        uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yml@main
+        uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yaml@main
         with:
           suggestions: true
           filter-mode: diff_context
