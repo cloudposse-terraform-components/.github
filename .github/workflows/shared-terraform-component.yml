@@ -90,6 +90,14 @@ jobs:
           ! ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
     needs: [ terraform, readme, codeowners, labels ]
 
+  queue:
+    if: ${{ github.event.pull_request.state == 'open' && startsWith(github.head_ref, 'mergify/merge-queue/') }}
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terratest.yml@merge-queue
+    needs: [ci]
+    with:
+      pr_number: ${{ github.event.pull_request.number }}
+      runs-on: ${{ inputs.runs-on }}
+
   release:
     needs: [ci, readme]
     uses: cloudposse/.github/.github/workflows/shared-auto-release.yml@main
