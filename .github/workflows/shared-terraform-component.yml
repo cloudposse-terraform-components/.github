@@ -43,7 +43,7 @@ jobs:
       no-release: ${{ steps.labels.outputs.no-release }}
 
   terraform:
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-ci-terraform.yaml@merge-queue
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-ci-terraform.yml@merge-queue
     if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     needs: [context]
     with:
