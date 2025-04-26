@@ -81,6 +81,14 @@ jobs:
     steps:
       - uses: cloudposse/github-action-release-label-validator@v1
 
+  mergequeue:
+    if: ${{ github.event.pull_request.state == 'open' && startsWith(github.head_ref, 'mergify/merge-queue/') }}
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terratest.yml@merge-queue
+    needs: [terraform]
+    with:
+      pr_number: ${{ github.event.pull_request.number }}
+      runs-on: ${{ inputs.runs-on }}
+
   ci:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     if: ${{ always() && (github.event_name == 'push' || github.event.pull_request.state == 'open') }}
@@ -88,15 +96,7 @@ jobs:
       - run: |
           echo '${{ toJSON(needs) }}'  # easier debug
           ! ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
-    needs: [ terraform, readme, codeowners, labels ]
-
-  queue:
-    if: ${{ github.event.pull_request.state == 'open' && startsWith(github.head_ref, 'mergify/merge-queue/') }}
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terratest.yml@merge-queue
-    needs: [ci]
-    with:
-      pr_number: ${{ github.event.pull_request.number }}
-      runs-on: ${{ inputs.runs-on }}
+    needs: [ terraform, readme, codeowners, labels, mergequeue ]
 
   release:
     needs: [ci, readme]
