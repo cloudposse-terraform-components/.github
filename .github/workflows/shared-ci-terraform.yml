@@ -16,7 +16,7 @@ name: |-
   
     jobs:
       ci-terraform:
-        uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yaml@main
+        uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yml@main
         with:
           suggestions: true
           filter-mode: diff_context
@@ -179,8 +179,7 @@ jobs:
 
   test:
     if: ${{ github.event_name == 'pull_request' && startsWith(github.head_ref, 'mergify/merge-queue/') }}
--   uses: cloudposse/.github/.github/workflows/shared-terratest.yml@merge-queue
-+   uses: cloudposse-terraform-components/.github/workflows/shared-terratest.yml@merge-queue
+    uses: cloudposse-terraform-components/.github/workflows/shared-terratest.yaml@merge-queue
     needs: [lint]
     with:
       pr_number: ${{ github.event.pull_request.number }}
