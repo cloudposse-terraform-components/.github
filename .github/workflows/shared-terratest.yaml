@@ -683,6 +683,13 @@ jobs:
               });
             }
 
+            await github.rest.issues.addLabels({
+              owner: "${{ needs.context.outputs.base_repo_owner }}",
+              repo: "${{ needs.context.outputs.base_repo_name }}",
+              issue_number: issueNumber,
+              labels: ['mocked-tests']
+            });
+
       - name: "Install Go"
         uses: actions/setup-go@v5
         if: ${{ steps.skip-tests.outputs.result == 'false' }}
