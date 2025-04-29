@@ -13,7 +13,7 @@ name: |-
       pull-requests: write
       id-token: write
       contents: read
-  
+      
     jobs:
       ci-terraform:
         uses: cloudposse/github-actions-workflows/.github/workflows/ci-terraform.yml@main
@@ -176,12 +176,3 @@ jobs:
           working_directory: ./target/${{ matrix.tfdir }}
           filter_mode: ${{ inputs.filter-mode }}
           tflint_version: "v0.49.0"
-
-  test:
-    if: ${{ github.event_name == 'pull_request' && startsWith(github.head_ref, 'mergify/merge-queue/') }}
-    uses: cloudposse/.github/.github/workflows/shared-terratest.yml@merge-queue
-    needs: [lint]
-    with:
-      pr_number: ${{ github.event.pull_request.number }}
-      runs-on: ${{ inputs.runs-on }}
-            

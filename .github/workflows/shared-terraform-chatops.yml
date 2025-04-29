@@ -9,9 +9,9 @@ on:
         required: false
         default: '["ubuntu-latest"]'
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+# concurrency:
+#   group: ${{ github.workflow }}-${{ github.ref }}
+#   cancel-in-progress: false
 
 defaults:
   run:
@@ -30,7 +30,7 @@ jobs:
       user: ${{ github.event.comment.user.login }}
 
   test:
-    uses: cloudposse/.github/.github/workflows/shared-terratest.yml@merge-queue
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terratest.yml@merge-queue
     needs: [access]
     with:
       pr_number: ${{ github.event.issue.number }}
