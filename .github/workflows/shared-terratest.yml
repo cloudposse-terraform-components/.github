@@ -469,8 +469,7 @@ jobs:
           fi
       
       - name: Failed on mocked tests when runs on merge queue
-        # steps.skip-tests.outputs.result == 'true' &&
-        if: ${{ startsWith(needs.context.outputs.head_ref, 'mergify/merge-queue/') }}
+        if: ${{ steps.skip-tests.outputs.result == 'true' && startsWith(needs.context.outputs.head_ref, 'mergify/merge-queue/') }}
         run: |
           echo "Failed on mocked tests when runs on merge queue" >> $GITHUB_STEP_SUMMARY
           exit 1;
