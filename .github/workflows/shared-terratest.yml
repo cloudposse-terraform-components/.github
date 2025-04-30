@@ -57,6 +57,7 @@ jobs:
       base_repo_owner: ${{ fromJSON(steps.pr.outputs.json).base.repo.owner.login }}
       base_repo_name: ${{ fromJSON(steps.pr.outputs.json).base.repo.name }}
       head_sha: ${{ fromJSON(steps.pr.outputs.json).head.sha }}
+      head_ref: ${{ fromJSON(steps.pr.outputs.json).head.ref }}
       head_repo_owner: ${{ fromJSON(steps.pr.outputs.json).head.repo.owner.login }}
       head_repo_name: ${{ fromJSON(steps.pr.outputs.json).head.repo.name }}
       found: ${{ steps.pr.outputs.found }}
@@ -465,7 +466,13 @@ jobs:
             echo "result=true" >> $GITHUB_OUTPUT
           else
             echo "result=false" >> $GITHUB_OUTPUT
-          fi  
+          fi
+      
+      - name: Failed on mocked tests when runs on merge queue
+        if: ${{ steps.skip-tests.outputs.result == 'true' && startsWith(needs.context.outputs.head_ref, 'mergify/merge-queue/') }}
+        run: |
+          echo "Failed on mocked tests when runs on merge queue" >> $GITHUB_STEP_SUMMARY
+          exit 1;
 
       - name: "Install Go"
         uses: actions/setup-go@v5
@@ -682,13 +689,6 @@ jobs:
                 body: commentBody,
               });
             }
-
-            await github.rest.issues.addLabels({
-              owner: "${{ needs.context.outputs.base_repo_owner }}",
-              repo: "${{ needs.context.outputs.base_repo_name }}",
-              issue_number: issueNumber,
-              labels: ['mocked-tests']
-            });
 
       - name: "Install Go"
         uses: actions/setup-go@v5
