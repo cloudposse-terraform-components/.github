@@ -93,6 +93,11 @@ jobs:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     if: ${{ always() && (github.event_name == 'push' || github.event.pull_request.state == 'open') }}
     steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "$GITHUB_CONTEXT"
+    
       - run: |
           echo '${{ toJSON(needs) }}'  # easier debug
           ! ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
