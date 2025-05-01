@@ -104,7 +104,7 @@ jobs:
     needs: [ terraform, readme, codeowners, labels, mergequeue ]
 
   release:
-    needs: [ci, readme]
+    needs: [readme]
     uses: cloudposse/.github/.github/workflows/shared-auto-release.yml@main
     if: ${{ github.event_name == 'push' }}
     with:
