@@ -203,6 +203,12 @@ We literally have <a href="{{ $terraform_modules }}">*hundreds of other terrafor
 {{ (include "includes" $file) }}
 {{- end }}
 {{- end }}
+
+{{ if has $data "terraform_docs" }}
+## Terraform Docs
+{{ $data.terraform_docs }}
+{{ end }}
+
 {{ if has (ds "config") "related" }}
 ## Related Projects
 
