@@ -59,9 +59,7 @@ tags:
 {{- end }}
 {{- end }}
 
-{{ if has (ds "config") "terraform_docs" }}
 ## Terraform Docs
 {{ (ds "config").terraform_docs }}
-{{ end }}
 
 [<img src="{{ $logo }}" height="32" align="right"/>]({{ $homepage }})
