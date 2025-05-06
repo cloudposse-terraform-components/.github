@@ -59,9 +59,6 @@ tags:
 {{- end }}
 {{- end }}
 
-## test config 2
-{{ (ds "config") }}
-
 {{ if has (ds "config") "terraform_docs" }}
 ## Terraform Docs
 {{ (ds "config").terraform_docs }}
