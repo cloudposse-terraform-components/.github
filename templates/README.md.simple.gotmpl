@@ -39,9 +39,6 @@ tags:
 {{ (ds "config").introduction }}
 {{- end }}
 
-## test config
-{{ (ds "config") }}
-
 {{- if has (ds "config") "usage" }}
 ## Usage
 
@@ -61,6 +58,9 @@ tags:
 {{ (ds "config").examples }}
 {{- end }}
 {{- end }}
+
+## test config
+{{ (ds "config") }}
 
 {{ if has (ds "config") "terraform_docs" }}
 ## Terraform Docs
