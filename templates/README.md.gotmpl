@@ -197,16 +197,15 @@ We literally have <a href="{{ $terraform_modules }}">*hundreds of other terrafor
 {{ end }}
 {{- if eq "examples" $firstNonEmptySection }}{{ template "tip_use_reference_architecture" $context }}{{- end }}
 
-
 {{ if has (ds "config") "include" }}
 {{ range $file := (datasource "config").include -}}
 {{ (include "includes" $file) }}
 {{- end }}
 {{- end }}
 
-{{ if has $data "terraform_docs" }}
+{{ if has (ds "config") "terraform_docs" }}
 ## Terraform Docs
-{{ $data.terraform_docs }}
+{{ (ds "config").terraform_docs }}
 {{ end }}
 
 {{ if has (ds "config") "related" }}
