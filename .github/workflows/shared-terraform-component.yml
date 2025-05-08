@@ -82,12 +82,11 @@ jobs:
       - uses: cloudposse/github-action-release-label-validator@v1
 
   mergequeue:
-    if: ${{ github.event.pull_request.state == 'open' && startsWith(github.head_ref, 'mergify/merge-queue/') }}
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terratest.yml@merge-queue
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terratest-queue.yml@github-merge-queue
     needs: [terraform]
     with:
-      pr_number: ${{ github.event.pull_request.number }}
       runs-on: ${{ inputs.runs-on }}
+      mock: true
 
   ci:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
