@@ -8,15 +8,11 @@ on:
         type: string
         required: false
         default: '["ubuntu-latest"]'
-      pr_number:
-        description: "PR number"
-        type: number
-        required: true
       mock:
         description: "Mock the job"
         type: boolean
         required: false
-        default: "false"
+        default: false
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
