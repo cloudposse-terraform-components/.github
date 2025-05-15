@@ -67,7 +67,7 @@ jobs:
     secrets: inherit
 
   codeowners:
-    uses: cloudposse/.github/.github/workflows/shared-codeowners.yml@added-shared-codeowners-workflows
+    uses: cloudposse/.github/.github/workflows/shared-codeowners.yml@main
     if: ${{ github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     needs: [context]
     with:
