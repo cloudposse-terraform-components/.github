@@ -1,0 +1,32 @@
+name: auto merge
+on:
+  workflow_call:
+    inputs:
+      pr_number:
+        description: 'PR number'
+        required: true
+        type: string        
+
+permissions:
+    pull-requests: write
+    id-token: write
+    contents: write
+
+jobs:
+  automerge:
+    runs-on: ['ubuntu-latest']
+    name: "Auto merge"
+    environment: release
+    steps:
+      - uses: actions/create-github-app-token@v2
+        id: github-app
+        with:
+            app-id: ${{ vars.BOT_GITHUB_APP_ID }}
+            private-key: ${{ secrets.BOT_GITHUB_APP_PRIVATE_KEY }}
+            
+      - name: Checkout
+        uses: actions/checkout@v4     
+
+      - run: "gh pr merge ${{ inputs.pr_number }} --auto"
+        env:
+            GH_TOKEN: ${{ steps.github-app.outputs.token }}
