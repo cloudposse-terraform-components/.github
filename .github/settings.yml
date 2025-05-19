@@ -67,6 +67,7 @@ environments:
     deployment_branch_policy:
       custom_branches:
         - main
+        - gh-readonly-queue/main/pr-*        
 
 # Labels: define labels for Issues and Pull Requests
 labels:
@@ -199,4 +200,3 @@ teams:
     permission: push
   - name: security
     permission: pull
-
