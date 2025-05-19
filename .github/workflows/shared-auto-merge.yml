@@ -8,9 +8,10 @@ on:
         type: string        
 
 permissions:
-    pull-requests: write
-    id-token: write
-    contents: write
+permissions:
+  pull-requests: write
+  id-token: write
+  contents: write
 
 jobs:
   automerge:
