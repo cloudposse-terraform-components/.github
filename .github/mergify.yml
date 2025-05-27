@@ -25,7 +25,7 @@ shared:
     "files~=src/.*$"
 
   # Has changes to tflint config
-  is_scaffold: &is_scaffold
+  is_lint_config: &is_lint_config
     "files~=\\.tflint\\.hcl$"
 
   # Automated pull requests from bot users
@@ -192,10 +192,11 @@ pull_request_rules:
       - *not_approved
       - or:
         - *is_go_deps
-        - *is_scaffold
+        - *is_lint_config
         - *is_components_vendor
         - *is_tests
-        - *is_github_config          
+        - not:
+            *is_github_config
         - *is_component
     actions:
       dismiss_reviews:
@@ -251,6 +252,7 @@ pull_request_rules:
 
   - name: "Add approved PR to merge queue"
     conditions:
+      - *is_a_bot    
       - *is_open
       - *not_in_conflict
       - *not_wip
@@ -271,6 +273,7 @@ pull_request_rules:
         - *is_external_contributor
         - and:
           - *is_internal_contributor
+          - *not_wip
           - *not_in_conflict
           - *checks_are_passing
     actions:
@@ -286,7 +289,7 @@ pull_request_rules:
       - and: 
         - or:
           - *is_go_deps
-          - *is_scaffold
+          - *is_lint_config
           - *is_components_vendor
           - *is_tests
           - *is_github_config
