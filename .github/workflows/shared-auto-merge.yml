@@ -8,7 +8,6 @@ on:
         type: string        
 
 permissions:
-permissions:
   pull-requests: write
   id-token: write
   contents: write
@@ -21,7 +20,6 @@ jobs:
     steps:
       - uses: actions/create-github-app-token@v2
         id: github-app
-        with:
         with:
           app-id: ${{ vars.BOT_GITHUB_APP_ID }}
           private-key: ${{ secrets.BOT_GITHUB_APP_PRIVATE_KEY }}
