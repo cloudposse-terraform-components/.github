@@ -29,5 +29,4 @@ jobs:
 
       - run: "gh pr merge ${{ inputs.pr_number }} --auto"
         env:
- env:
-  GH_TOKEN: ${{ steps.github-app.outputs.token }}
+          GH_TOKEN: ${{ steps.github-app.outputs.token }}
