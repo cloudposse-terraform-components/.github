@@ -25,7 +25,7 @@ jobs:
   # Define context job as a start point to solve problem with event races of concurrent jobs lead to stucked statuses
   # https://github.com/orgs/community/discussions/141213
   context:
-    if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
+    if: ${{ github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
       - uses: cloudposse-github-actions/get-pr@v1
@@ -44,7 +44,7 @@ jobs:
 
   terraform:
     uses: cloudposse-terraform-components/.github/.github/workflows/shared-ci-terraform.yml@main
-    if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
+    if: ${{ github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     needs: [context]
     with:
       # Workaround for https://github.com/community/community/discussions/9099
@@ -67,7 +67,7 @@ jobs:
 
   codeowners:
     uses: cloudposse/.github/.github/workflows/shared-codeowners.yml@main
-    if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
+    if: ${{ github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     needs: [context]
     with:
       is_fork: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
@@ -80,19 +80,27 @@ jobs:
     steps:
       - uses: cloudposse/github-action-release-label-validator@v1
 
+  mergequeue:
+    if: ${{ github.event_name == 'merge_group' }}
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terratest-queue.yml@main
+    needs: [terraform]
+    with:
+      runs-on: ${{ inputs.runs-on }}
+      mock: true
+
   ci:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
-    if: ${{ always() && (github.event_name == 'push' || github.event.pull_request.state == 'open') }}
+    if: ${{ always() && (github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open') }}
     steps:
       - run: |
           echo '${{ toJSON(needs) }}'  # easier debug
           ! ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
-    needs: [ terraform, readme, codeowners, labels ]
+    needs: [ terraform, readme, codeowners, labels, mergequeue ]
 
   release:
     needs: [ci, readme]
     uses: cloudposse/.github/.github/workflows/shared-auto-release.yml@main
-    if: ${{ github.event_name == 'push' }}
+    if: ${{ always() && github.event_name == 'push' && needs.ci.result == 'success' && needs.readme.result == 'success' }}
     with:
       runs-on: ${{ inputs.runs-on }}
       publish: ${{ needs.readme.outputs.changes_detected == 'false' }}

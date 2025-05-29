@@ -80,6 +80,7 @@ jobs:
           validate_readme: true
           commit_method: 'pr'
           commit_push_options: '--force-with-lease'
+          sign-commits: true
           pr_labels: ${{ inputs.pr_labels }}
         env:
           README_DEPS: docs/targets.md docs/terraform.md
