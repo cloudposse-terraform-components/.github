@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   readme:
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-readme.yml@merge-queue
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-readme.yml@main
     with:
       runs-on: ${{ inputs.runs-on }}
       pr_labels: |
