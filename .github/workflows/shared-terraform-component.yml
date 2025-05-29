@@ -43,7 +43,7 @@ jobs:
       no-release: ${{ steps.labels.outputs.no-release }}
 
   terraform:
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-ci-terraform.yml@merge-queue
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-ci-terraform.yml@main
     if: ${{ github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     needs: [context]
     with:
@@ -54,7 +54,7 @@ jobs:
       runs-on: ${{ inputs.runs-on }}
 
   readme:
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-readme.yml@merge-queue
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-readme.yml@main
     if: ${{ github.event_name == 'push' }}
     needs: [context]
     with:
@@ -82,7 +82,7 @@ jobs:
 
   mergequeue:
     if: ${{ github.event_name == 'merge_group' }}
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terratest-queue.yml@github-merge-queue
+    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terratest-queue.yml@main
     needs: [terraform]
     with:
       runs-on: ${{ inputs.runs-on }}
