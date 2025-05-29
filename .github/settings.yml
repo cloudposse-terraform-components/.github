@@ -221,3 +221,9 @@ rulesets:
           merge_method: SQUASH
           min_entries_to_merge: 1
           min_entries_to_merge_wait_minutes: 30
+    bypass_actors:
+      - actor_type: OrganizationAdmin
+        bypass_mode: always
+      - actor_id: 10562
+        actor_type: Integration
+        bypass_mode: always
