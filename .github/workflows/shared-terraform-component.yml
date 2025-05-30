@@ -19,7 +19,7 @@ permissions:
 
 concurrency:
   group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
-  cancel-in-progress: true
+  cancel-in-progress: false
   
 jobs:
   # Define context job as a start point to solve problem with event races of concurrent jobs lead to stucked statuses
