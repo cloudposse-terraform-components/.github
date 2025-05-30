@@ -28,7 +28,7 @@ jobs:
     if: ${{ github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open' }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
-      - uses: cloudposse-github-actions/get-pr@v1
+      - uses: cloudposse-github-actions/get-pr@v2
         id: pr
 
       - name: Get labels
