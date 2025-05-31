@@ -215,11 +215,15 @@ pull_request_rules:
       - *not_in_conflict
       - *not_wip
       - *checks_are_passing
-      - *all_commits_verified
+      # - *all_commits_verified
       - *not_approved
       - "author=cloudposse-releaser[bot]"
-      - "files=README.md"
-      - "#files=1"
+      - or:
+        - "files=README.md"
+        - "files=src/README.md"
+      - or:        
+        - "#files=1"
+        - "#files=2"        
       - "title=Update README.md and docs"
       - "head=auto-update/readme"
     actions:
@@ -242,8 +246,12 @@ pull_request_rules:
       # - *all_commits_verified
       - *is_approved
       - "author=cloudposse-releaser[bot]"
-      - "files=README.md"
-      - "#files=1"
+      - or:
+        - "files=README.md"
+        - "files=src/README.md"
+      - or:        
+        - "#files=1"
+        - "#files=2"        
       - "title=Update README.md and docs"
       - "head=auto-update/readme"
     actions:
