@@ -50,7 +50,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Check spelling
-        uses: crate-ci/typos@v1.16.25
+        uses: crate-ci/typos@v1.32.0
         with:
           files: |
             .
@@ -111,7 +111,7 @@ jobs:
           key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
 
       - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@ba6bb2989f94daf58a4cc6eac2c1ca7398a678bf # v3
+        uses: terraform-linters/setup-tflint@a5a1af8c6551fb10c53f1cd4ba62359f1973746f # v3
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
 
