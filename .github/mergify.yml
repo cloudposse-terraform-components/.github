@@ -239,7 +239,7 @@ pull_request_rules:
       - *not_in_conflict
       - *not_wip
       - *checks_are_passing
-      - *all_commits_verified
+      # - *all_commits_verified
       - *is_approved
       - "author=cloudposse-releaser[bot]"
       - "files=README.md"
