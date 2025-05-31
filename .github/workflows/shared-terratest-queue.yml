@@ -101,7 +101,7 @@ jobs:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v2
         if: ${{ needs.context.outputs.uses_github == 'true' }}
         id: github-app
         with:
@@ -250,7 +250,7 @@ jobs:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v2
         if: ${{ needs.context.outputs.uses_github == 'true' }}
         id: github-app
         with:
@@ -407,7 +407,7 @@ jobs:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
 
-      - uses: actions/create-github-app-token@v1
+      - uses: actions/create-github-app-token@v2
         if: ${{ needs.context.outputs.uses_github == 'true' }}
         id: github-app
         with:
