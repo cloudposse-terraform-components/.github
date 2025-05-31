@@ -388,15 +388,15 @@ pull_request_rules:
           >
           > Kindly provide details with **what** was changed, **why** it was changed.
 
-  - name: "remove outdated reviews"
-    conditions:
-      - *is_open
-      - *is_default_branch
-    actions:
-      dismiss_reviews:
-        changes_requested: true
-        approved: true
-        message: "This Pull Request was updated, so we're dismissing all reviews."
+  # - name: "remove outdated reviews"
+  #   conditions:
+  #     - *is_open
+  #     - *is_default_branch
+  #   actions:
+  #     dismiss_reviews:
+  #       changes_requested: true
+  #       approved: true
+  #       message: "This Pull Request was updated, so we're dismissing all reviews."
 
   - name: "remove triage label if approved"
     conditions:
