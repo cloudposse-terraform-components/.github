@@ -609,7 +609,7 @@ pull_request_rules:
     conditions:
       - *is_open
       - *is_default_branch
-      # - "#commits-behind>=10"
+      - "#commits-behind>=10"
     actions:
       rebase:
         bot_account: cloudpossebot
