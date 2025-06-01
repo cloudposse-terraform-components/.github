@@ -221,12 +221,6 @@ pull_request_rules:
       - "title=Update README.md and docs"
       - "head=auto-update/readme"
     actions:
-      dismiss_reviews:
-        when: "always"
-        approved: false
-        changes_requested: 
-          - "mergify[bot]"
-        message: "Dismiss all reviews before mergify auto approve"    
       review:
         type: APPROVE
         bot_account: cloudpossebot        
