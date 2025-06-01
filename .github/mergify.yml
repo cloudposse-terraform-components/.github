@@ -201,6 +201,7 @@ pull_request_rules:
     actions:
       dismiss_reviews:
         when: "always"
+        approved: false
         changes_requested: 
           - "mergify[bot]"
         message: "Dismiss all reviews before mergify auto approve"    
@@ -227,6 +228,7 @@ pull_request_rules:
     actions:
       dismiss_reviews:
         when: "always"
+        approved: false
         changes_requested: 
           - "mergify[bot]"
         message: "Dismiss all reviews before mergify auto approve"    
