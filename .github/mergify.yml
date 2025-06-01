@@ -199,12 +199,6 @@ pull_request_rules:
             *is_github_config
         - *is_component
     actions:
-      dismiss_reviews:
-        when: "always"
-        approved: false
-        changes_requested: 
-          - "mergify[bot]"
-        message: "Dismiss all reviews before mergify auto approve"    
       review:
         type: APPROVE
 
@@ -234,6 +228,7 @@ pull_request_rules:
         message: "Dismiss all reviews before mergify auto approve"    
       review:
         type: APPROVE
+        bot_account: cloudpossebot        
 
   - name: "Auto merge Readme PRs"
     conditions:
