@@ -22,6 +22,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4     
 
-      - run: "gh pr merge ${{ inputs.pr_number }} --auto"
+      - run: "gh pr merge ${{ inputs.pr_number }} --auto --squash"
         env:
           GH_TOKEN: ${{ steps.github-app.outputs.token }}
