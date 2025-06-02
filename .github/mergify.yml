@@ -131,7 +131,7 @@ shared:
   checks_are_passing: &checks_are_passing
     and:
       - "-check-pending~=Branch\\/.*$"
-      - "-check-failure~=Branch\\/.*$"   
+      - "-check-failure~=Branch\\/.*$"
 
   # Only for terraform files
   require_terraform_checks_are_passing: &require_terraform_checks_are_passing
@@ -406,17 +406,17 @@ pull_request_rules:
         message: |
           This automated PR was closed due to merge conflicts.
 
-  - name: close stale PRs with merge conflicts
-    conditions:
-      - *is_open
-      - "conflict"
-      - commits[*].date_committer < 30 days ago
-      - updated-at < 7 days ago
-    actions:
-      close:
-        message: |
-          This PR was closed due to inactivity and merge conflicts. 😭
-          Please resolve the conflicts and reopen if necessary.
+  # - name: close stale PRs with merge conflicts
+  #   conditions:
+  #     - *is_open
+  #     - "conflict"
+  #     - commits[*].date_committer < 30 days ago
+  #     - updated-at < 7 days ago
+  #   actions:
+  #     close:
+  #       message: |
+  #         This PR was closed due to inactivity and merge conflicts. 😭
+  #         Please resolve the conflicts and reopen if necessary.
 
   - name: close stale pull request after 90 days
     conditions:
