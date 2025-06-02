@@ -28,6 +28,12 @@ shared:
   is_lint_config: &is_lint_config
     "files~=\\.tflint\\.hcl$"
 
+  # Has changes in readme MD
+  is_readme_md: &is_readme_md
+    or:
+      - "files~=README\\.md$"
+      - "files~=src/README\\.md$"
+
   # Automated pull requests from bot users
   is_a_bot: &is_a_bot
     or:
@@ -125,7 +131,7 @@ shared:
   checks_are_passing: &checks_are_passing
     and:
       - "-check-pending~=Branch\\/.*$"
-      - "-check-failure~=Branch\\/.*$"   
+      - "-check-failure~=Branch\\/.*$"
 
   # Only for terraform files
   require_terraform_checks_are_passing: &require_terraform_checks_are_passing
@@ -154,13 +160,14 @@ shared:
 
   # README.md is updated together with README.yaml
   readme_updated: &readme_updated
-    or:
-      - and:
-        - -files=README.md
-        - -files=README.yaml
-      - and:
-        - files=README.md
-        - files=README.yaml
+    and:
+      - "author=cloudposse-releaser[bot]"
+      - *is_readme_md
+      - or:        
+        - "#files=1"
+        - "#files=2"        
+      - "title=Update README.md and docs"
+      - "head=auto-update/readme"
 
   # Needs Cloud Posse review
   needs_cloudposse: &needs_cloudposse
@@ -201,6 +208,7 @@ pull_request_rules:
     actions:
       review:
         type: APPROVE
+        bot_account: cloudpossebot
 
   - name: "Auto approve Readme PRs"
     conditions:
@@ -210,22 +218,7 @@ pull_request_rules:
       - *checks_are_passing
       # - *all_commits_verified
       - *not_approved
-      - "author=cloudposse-releaser[bot]"
-      - or:
-        - "files=README.md"
-        - "files=src/README.md"
-      - or:        
-        - "#files=1"
-        - "#files=2"        
-      - "title=Update README.md and docs"
-      - "head=auto-update/readme"
     actions:
-      dismiss_reviews:
-        when: "always"
-        approved: false
-        changes_requested: 
-          - "mergify[bot]"
-        message: "Dismiss all reviews before mergify auto approve"    
       review:
         type: APPROVE
         bot_account: cloudpossebot        
@@ -238,15 +231,7 @@ pull_request_rules:
       - *checks_are_passing
       # - *all_commits_verified
       - *is_approved
-      - "author=cloudposse-releaser[bot]"
-      - or:
-        - "files=README.md"
-        - "files=src/README.md"
-      - or:        
-        - "#files=1"
-        - "#files=2"        
-      - "title=Update README.md and docs"
-      - "head=auto-update/readme"
+      - *readme_updated
     actions:
       merge:
         method: squash
@@ -258,7 +243,9 @@ pull_request_rules:
       - *not_in_conflict
       - *not_wip
       - *is_approved
-      - *checks_are_passing 
+      - *checks_are_passing
+      - not:
+          *readme_updated
     actions:
       github_actions:
         workflow:
@@ -313,7 +300,7 @@ pull_request_rules:
     conditions:
       - *is_open
       - *is_a_bot
-      - "files=README.md"
+      - *is_readme_md
     actions:
       label:
         toggle:
@@ -349,7 +336,7 @@ pull_request_rules:
     conditions:
       - *is_open
       - *not_a_bot
-      - files=README.md
+      - *is_readme_md
       - -files=README.yaml
     actions:
       comment:
@@ -419,17 +406,17 @@ pull_request_rules:
         message: |
           This automated PR was closed due to merge conflicts.
 
-  - name: close stale PRs with merge conflicts
-    conditions:
-      - *is_open
-      - "conflict"
-      - commits[*].date_committer < 30 days ago
-      - updated-at < 7 days ago
-    actions:
-      close:
-        message: |
-          This PR was closed due to inactivity and merge conflicts. 😭
-          Please resolve the conflicts and reopen if necessary.
+  # - name: close stale PRs with merge conflicts
+  #   conditions:
+  #     - *is_open
+  #     - "conflict"
+  #     - commits[*].date_committer < 30 days ago
+  #     - updated-at < 7 days ago
+  #   actions:
+  #     close:
+  #       message: |
+  #         This PR was closed due to inactivity and merge conflicts. 😭
+  #         Please resolve the conflicts and reopen if necessary.
 
   - name: close stale pull request after 90 days
     conditions:
@@ -608,16 +595,17 @@ pull_request_rules:
     conditions:
       - *is_open
       - *is_default_branch
-      # - "#commits-behind>=10"
+      - "#commits-behind>=10"
     actions:
       rebase:
-        bot_account: goruha
+        bot_account: cloudpossebot
 
   - name: rebase pull requests one time when labeled with `rebase`
     conditions:
       - label=rebase
     actions:
-      rebase: {}
+      rebase:
+        bot_account: cloudpossebot
       label:
         remove:
           - rebase
