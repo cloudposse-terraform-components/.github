@@ -47,7 +47,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Terraform format
-        uses: dflook/terraform-fmt@v1
+        uses: dflook/terraform-fmt@v2
 
       - name: Reviewdog suggester
         if: ${{ inputs.suggestions }}
