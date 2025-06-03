@@ -49,12 +49,25 @@ jobs:
       go_sum_path: 'test/go.sum'
       terraform_state_path: 'state'
       terraform_state_retention_days: 10
-      # test_aws_role: ${{ steps.properties.outputs.test-aws-role || 'arn:aws:iam::799847381734:role/cptest-test-gbl-sandbox-gha-iam-terratest' }}
-      test_aws_role: ${{ 'arn:aws:iam::799847381734:role/cptest-test-gbl-sandbox-gha-iam-terratest' }}
+      test_aws_role: ${{ steps.properties.outputs.test-aws-role || 'arn:aws:iam::799847381734:role/cptest-test-gbl-sandbox-gha-iam-terratest' }}
       test_skip_concurrency: ${{ steps.properties.outputs.test-skip-concurrency }}
       test_needs_aws: ${{ steps.properties.outputs.test-needs-aws }}
       test_needs_fixtures: ${{ steps.properties.outputs.test-needs-fixtures }}
       atmos_version: 1.129.0
+      uses_github: ${{ github.event.repository.name, '-github-') || 
+        contains(steps.properties.outputs.providers, 'github') }}
+      uses_opsgenie: ${{ github.event.repository.name, '-opsgenie-') || 
+        contains(steps.properties.outputs.providers, 'opsgenie') }}
+      uses_aws: ${{ github.event.repository.name, '-aws-') || 
+        contains(steps.properties.outputs.providers, 'aws') }}
+      uses_spotinst: ${{ github.event.repository.name, '-spotinst-') || 
+        contains(steps.properties.outputs.providers, 'spotinst') }}
+      uses_datadog: ${{ github.event.repository.name, '-datadog-') || 
+        contains(steps.properties.outputs.providers, 'datadog') }}
+      uses_tfe: ${{ github.event.repository.name, '-tfe-') || 
+        contains(steps.properties.outputs.providers, 'tfe') }}
+      uses_cloudflare: ${{ github.event.repository.name, '-cloudflare-') || 
+        contains(steps.properties.outputs.providers, 'cloudflare') }}      
 
   fixtures:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
