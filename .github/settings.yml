@@ -201,7 +201,6 @@ teams:
   - name: security
     permission: pull
 
-
 rulesets:
   - name: "Merge Queue (Repo)"
     target: branch
