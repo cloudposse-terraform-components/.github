@@ -54,19 +54,19 @@ jobs:
       test_needs_aws: ${{ steps.properties.outputs.test-needs-aws }}
       test_needs_fixtures: ${{ steps.properties.outputs.test-needs-fixtures }}
       atmos_version: 1.129.0
-      uses_github: ${{ github.event.repository.name, '-github-') || 
+      uses_github: ${{ contains(github.event.repository.name, '-github-') || 
         contains(steps.properties.outputs.providers, 'github') }}
-      uses_opsgenie: ${{ github.event.repository.name, '-opsgenie-') || 
+      uses_opsgenie: ${{ contains(github.event.repository.name, '-opsgenie-') || 
         contains(steps.properties.outputs.providers, 'opsgenie') }}
-      uses_aws: ${{ github.event.repository.name, '-aws-') || 
+      uses_aws: ${{ contains(github.event.repository.name, '-aws-') || 
         contains(steps.properties.outputs.providers, 'aws') }}
-      uses_spotinst: ${{ github.event.repository.name, '-spotinst-') || 
+      uses_spotinst: ${{ contains(github.event.repository.name, '-spotinst-') || 
         contains(steps.properties.outputs.providers, 'spotinst') }}
-      uses_datadog: ${{ github.event.repository.name, '-datadog-') || 
+      uses_datadog: ${{ contains(github.event.repository.name, '-datadog-') || 
         contains(steps.properties.outputs.providers, 'datadog') }}
-      uses_tfe: ${{ github.event.repository.name, '-tfe-') || 
+      uses_tfe: ${{ contains(github.event.repository.name, '-tfe-') || 
         contains(steps.properties.outputs.providers, 'tfe') }}
-      uses_cloudflare: ${{ github.event.repository.name, '-cloudflare-') || 
+      uses_cloudflare: ${{ contains(github.event.repository.name, '-cloudflare-') || 
         contains(steps.properties.outputs.providers, 'cloudflare') }}      
 
   fixtures:
