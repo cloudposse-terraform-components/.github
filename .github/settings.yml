@@ -30,6 +30,10 @@ repository:
   # to prevent merging pull requests with merge commits.
   allow_merge_commit: false
 
+  # Either `true` to whenever there are new changes available 
+  # in the base branch, present an “update branch” option in the pull request.
+  allow_update_branch: true
+
   # Either `true` to allow rebase-merging pull requests, or `false` to prevent
   # rebase-merging.
   allow_rebase_merge: false
