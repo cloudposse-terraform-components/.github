@@ -203,7 +203,7 @@ teams:
 
 
 rulesets:
-  - name: Merge Queue
+  - name: Merge Queue (Repo)
     target: branch
     enforcement: active
     conditions:
