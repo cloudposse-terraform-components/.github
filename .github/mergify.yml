@@ -223,18 +223,18 @@ pull_request_rules:
         type: APPROVE
         bot_account: cloudpossebot        
 
-  # - name: "Auto merge Readme PRs"
-  #   conditions:
-  #     - *is_open
-  #     - *not_in_conflict
-  #     - *not_wip
-  #     - *checks_are_passing
-  #     # - *all_commits_verified
-  #     - *is_approved
-  #     - *readme_updated
-  #   actions:
-  #     merge:
-  #       method: squash
+  - name: "Auto merge Readme PRs"
+    conditions:
+      - *is_open
+      - *not_in_conflict
+      - *not_wip
+      - *checks_are_passing
+      # - *all_commits_verified
+      - *is_approved
+      - *readme_updated
+    actions:
+      merge:
+        method: squash
 
   - name: "Add approved PR to merge queue"
     conditions:
