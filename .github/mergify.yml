@@ -202,9 +202,11 @@ pull_request_rules:
         - *is_lint_config
         - *is_components_vendor
         - *is_tests
-        - not:
-            *is_github_config
         - *is_component
+      - not:
+          *is_github_config
+      - not: 
+          *readme_updated
     actions:
       review:
         type: APPROVE
@@ -218,6 +220,7 @@ pull_request_rules:
       - *checks_are_passing
       # - *all_commits_verified
       - *not_approved
+      - *readme_updated      
     actions:
       review:
         type: APPROVE
