@@ -383,30 +383,6 @@ jobs:
             echo "result=false" >> $GITHUB_OUTPUT
           fi  
 
-      - name: "Comment on PR if tests skipped"
-        if: ${{ steps.skip-tests.outputs.result == 'true' }}
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const issueNumber = ${{ needs.context.outputs.number }};
-            const comments = await github.rest.issues.listComments({
-              owner: "${{ needs.context.outputs.base_repo_owner }}",
-              repo: "${{ needs.context.outputs.base_repo_name }}",
-              issue_number: issueNumber,
-            });
-
-            const commentBody = "There are no real tests for this component. So we set terratest statuses to successful execution without running any tests";
-            const commentExists = comments.data.some(comment => comment.body === commentBody);
-
-            if (!commentExists) {
-              await github.rest.issues.createComment({
-                owner: "${{ needs.context.outputs.base_repo_owner }}",
-                repo: "${{ needs.context.outputs.base_repo_name }}",
-                issue_number: issueNumber,
-                body: commentBody,
-              });
-            }
-
       - name: "Install Go"
         uses: actions/setup-go@v5
         if: ${{ steps.skip-tests.outputs.result == 'false' }}
