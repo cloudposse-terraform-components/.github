@@ -1,108 +1,124 @@
-name: "Shared terraform module"
+name: "Shared auto release"
 on:
   workflow_call:
     inputs:
+      prerelease:
+        description: "Boolean indicating whether this release should be a prerelease"
+        required: false
+        default: false
+        type: string
+      publish:
+        description: "Whether to publish a new release immediately"
+        required: false
+        default: false
+        type: string
       runs-on:
         description: "Overrides job runs-on setting (json-encoded list)"
         type: string
         required: false
         default: '["ubuntu-latest"]'
-    secrets:
-      REPO_ACCESS_TOKEN:
-        description: "GitHub API token"
+      summary-enabled:
+        description: Enable github action summary.
         required: false
-
-permissions:
-  id-token: write
-  contents: write
-  pull-requests: write
-
-concurrency:
-  group: '${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}'
-  cancel-in-progress: false
-  
-jobs:
-  # Define context job as a start point to solve problem with event races of concurrent jobs lead to stucked statuses
-  # https://github.com/orgs/community/discussions/141213
-  context:
-    if: ${{ github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    runs-on: ${{ fromJSON(inputs.runs-on) }}
-    steps:
-      - uses: cloudposse-github-actions/get-pr@v2
-        id: pr
-
-      - name: Get labels
-        if: ${{ steps.pr.outputs.json != '' }}
-        id: labels
-        run: |-
-          echo "${{ fromJSON(steps.pr.outputs.json).labels.*.name }}"
-          echo "${{ contains( fromJSON(steps.pr.outputs.json).labels.*.name, 'no-release') }}"
-          echo "no-release=${{ contains( fromJSON(steps.pr.outputs.json).labels.*.name, 'no-release') }}" >> $GITHUB_OUTPUT
+        default: true
+        type: boolean
 
     outputs:
-      no-release: ${{ steps.labels.outputs.no-release }}
+      id:
+        description: The ID of the release that was created or updated.
+        value: ${{ jobs.release.outputs.id }}
+      name:
+        description: The name of the release
+        value: ${{ jobs.release.outputs.name }}
+      tag_name:
+        description: The name of the tag associated with the release.
+        value: ${{ jobs.release.outputs.tag_name }}
+      body:
+        description: The body of the drafted release.
+        value: ${{ jobs.release.outputs.body }}
+      html_url:
+        description: The URL users can navigate to in order to view the release
+        value: ${{ jobs.release.outputs.html_url }}
+      upload_url:
+        description: The URL for uploading assets to the release, which could be used by GitHub Actions for additional uses, for example the @actions/upload-release-asset GitHub Action.
+        value: ${{ jobs.release.outputs.upload_url }}
+      major_version:
+        description: The next major version number. For example, if the last tag or release was v1.2.3, the value would be v2.0.0.
+        value: ${{ jobs.release.outputs.major_version }}
+      minor_version:
+        description: The next minor version number. For example, if the last tag or release was v1.2.3, the value would be v1.3.0.
+        value: ${{ jobs.release.outputs.minor_version }}
+      patch_version:
+        description: The next patch version number. For example, if the last tag or release was v1.2.3, the value would be v1.2.4.
+        value: ${{ jobs.release.outputs.patch_version }}
+      resolved_version:
+        description: The next resolved version number, based on GitHub labels.
+        value: ${{ jobs.release.outputs.resolved_version }}
+      exists:
+        description: Tag exists so skip new release issue
+        value: ${{ jobs.release.outputs.exists }}
 
-  terraform:
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-ci-terraform.yml@main
-    if: ${{ github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    needs: [context]
-    with:
-      # Workaround for https://github.com/community/community/discussions/9099
-      # We should switch to nofilter once it's fixed
-      filter-mode: ${{ github.event_name == 'pull_request' && 'diff_context' || 'nofilter' }}
-      suggestions: "${{ github.event_name == 'pull_request' }}"
-      runs-on: ${{ inputs.runs-on }}
+permissions: {}
 
-  readme:
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-readme.yml@main
-    if: ${{ github.event_name == 'push' }}
-    needs: [context]
-    with:
-      runs-on: ${{ inputs.runs-on }}
-      pr_labels: |
-        auto-update
-        readme
-        ${{ needs.context.outputs.no-release == 'true' && 'no-release' || '' }}
-    secrets: inherit
-
-  codeowners:
-    uses: cloudposse/.github/.github/workflows/shared-codeowners.yml@main
-    if: ${{ github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    needs: [context]
-    with:
-      is_fork: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
-      runs-on: ${{ inputs.runs-on }}
-
-  labels:
-    runs-on: ${{ fromJSON(inputs.runs-on) }}
-    if: ${{ github.event_name == 'push' || github.event.pull_request.state == 'open' }}
-    needs: [context]
-    steps:
-      - uses: cloudposse/github-action-release-label-validator@v1
-
-  mergequeue:
-    if: ${{ github.event_name == 'merge_group' }}
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-terratest-queue.yml@main
-    needs: [terraform]
-    with:
-      runs-on: ${{ inputs.runs-on }}
-      mock: true
-    secrets: inherit
-
-  ci:
-    runs-on: ${{ fromJSON(inputs.runs-on) }}
-    if: ${{ always() && (github.event_name == 'merge_group' || github.event_name == 'push' || github.event.pull_request.state == 'open') }}
-    steps:
-      - run: |
-          echo '${{ toJSON(needs) }}'  # easier debug
-          ! ${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}
-    needs: [ terraform, readme, codeowners, labels, mergequeue ]
-
+jobs:
   release:
-    needs: [ci, readme]
-    uses: cloudposse-terraform-components/.github/.github/workflows/shared-auto-release.yml@main
-    if: ${{ always() && github.event_name == 'push' && needs.ci.result == 'success' && needs.readme.result == 'success' }}
-    with:
-      runs-on: ${{ inputs.runs-on }}
-      publish: ${{ needs.readme.outputs.changes_detected == 'false' }}
-    secrets: inherit
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
+    environment: release
+    outputs:
+      id: ${{ steps.drafter.outputs.id }}
+      name: ${{ steps.drafter.outputs.name }}
+      tag_name: ${{ steps.drafter.outputs.tag_name }}
+      body: ${{ steps.drafter.outputs.body }}
+      html_url: ${{ steps.drafter.outputs.html_url }}
+      upload_url: ${{ steps.drafter.outputs.upload_url }}
+      major_version: ${{ steps.drafter.outputs.major_version }}
+      minor_version: ${{ steps.drafter.outputs.minor_version }}
+      patch_version: ${{ steps.drafter.outputs.patch_version }}
+      resolved_version: ${{ steps.drafter.outputs.resolved_version }}
+      exists: ${{ steps.drafter.outputs.exists }}
+      
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: github-app
+        with:
+          app-id: ${{ vars.BOT_GITHUB_APP_ID }}
+          private-key: ${{ secrets.BOT_GITHUB_APP_PRIVATE_KEY }}
+
+      - name: Context
+        id: context
+        uses: cloudposse/github-action-yaml-config-query@0.1.4
+        with:
+          query: .${{ github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}.${{ inputs.prerelease }}
+          config: |-
+            # Is default branch
+            true:
+              # Is prerelease (nightly builds)
+              true:
+                config: auto-pre-release.yml
+                latest: false
+              # Is regular release
+              false:
+                config: auto-release.yml
+                latest: true
+            # Is hotfix branch
+            false:
+              # Is prerelease (nightly builds)
+              # pre releases from `non default` branch are `feature` releases
+              true: 
+                config: auto-feature-release.yml
+                latest: false              
+              # Is a regular release
+              false:
+                config: auto-release-hotfix.yml
+                latest: false
+
+      # Drafts your next Release notes as Pull Requests are merged into "main"
+      - uses: cloudposse/github-action-auto-release@v4
+        id: drafter
+        with:
+          token: ${{ steps.github-app.outputs.token }}
+          publish: ${{ inputs.publish }}
+          prerelease: ${{ inputs.prerelease }}
+          latest: ${{ steps.context.outputs.latest }}
+          summary-enabled: ${{ inputs.summary-enabled }}
+          config-name: ${{ steps.context.outputs.config }}
