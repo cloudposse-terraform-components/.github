@@ -209,7 +209,7 @@ jobs:
       terraform_state_artifact_id: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
           ref: ${{ needs.context.outputs.head_sha }}
@@ -424,7 +424,7 @@ jobs:
         platform: [terraform, opentofu]
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
           ref: ${{ needs.context.outputs.head_sha }}
@@ -622,7 +622,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
           ref: ${{ needs.context.outputs.head_sha }}
