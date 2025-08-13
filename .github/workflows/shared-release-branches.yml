@@ -17,6 +17,7 @@ permissions:
 jobs:
   major-release-tagger:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
+    if: ${{ github.event.release.prerelease == false }}
     environment: release
     steps:
       - uses: actions/create-github-app-token@v2
@@ -31,6 +32,7 @@ jobs:
 
   release-branch-manager:
     runs-on: ${{ fromJSON(inputs.runs-on) }}
+    if: ${{ github.event.release.prerelease == false }}
     environment: release
     steps:
       - uses: actions/create-github-app-token@v2
