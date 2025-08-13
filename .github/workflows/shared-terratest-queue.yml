@@ -81,7 +81,7 @@ jobs:
       terraform_state_artifact_id: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: "Install Tofu"
         uses: opentofu/setup-opentofu@v1
@@ -216,7 +216,7 @@ jobs:
         platform: [terraform, opentofu]
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: "Install Tofu"
         if: ${{ matrix.platform == 'opentofu' }}
@@ -355,7 +355,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: "Install Tofu"
         uses: opentofu/setup-opentofu@v1

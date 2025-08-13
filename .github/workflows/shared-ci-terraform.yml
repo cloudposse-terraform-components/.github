@@ -44,7 +44,7 @@ jobs:
     name: Format HCL
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Terraform format
         uses: dflook/terraform-fmt@v2
@@ -71,7 +71,7 @@ jobs:
       BATS_EXAMPLES_TESTS: input-descriptions lint output-descriptions
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -103,7 +103,7 @@ jobs:
     name: Find modules
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - id: set-matrix
         # Ignore directories whose names start with .terraform or obsolete
@@ -132,11 +132,11 @@ jobs:
       TFLINT_PLUGINS: aws
       TFLINT_CACHE_VER: 1 # Increment this to force a cache refresh
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           path: target
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           repository: cloudposse/terraform-aws-components
           ref: 1.521.0
