@@ -329,7 +329,7 @@ jobs:
           mask-aws-account-id: "no"
 
       - name: "Download Terraform state for fixtures"
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
@@ -389,7 +389,7 @@ jobs:
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
       - name: "Download Terraform state for fixtures"
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
