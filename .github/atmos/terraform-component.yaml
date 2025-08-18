@@ -8,7 +8,7 @@ docs:
       template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/refs/heads/main/README.md.gotmpl"
       output: "./README.md"
       terraform:
-        source: .
+        source: ./src
         enabled: true
         format: "markdown table"
         show_providers: true
