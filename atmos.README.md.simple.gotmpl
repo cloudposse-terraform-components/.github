@@ -69,9 +69,9 @@ tags:
 {{ if has (ds "config") "references" }}
 ## References
 
-For additional context, refer to some of these links.
 {{ range $reference := (ds "config").references }}
-{{ printf "- [%s](%s) - %s" $reference.name $reference.url $reference.description }}{{ end }}
+{{ printf "- [%s](%s) - %s" $reference.name $reference.url $reference.description }}
+{{ end }}
 
 {{ end}}
 
