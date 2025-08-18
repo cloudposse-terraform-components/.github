@@ -66,5 +66,13 @@ tags:
 <!-- markdownlint-restore -->
 {{ end }}
 
+## References
+
+For additional context, refer to some of these links.
+{{ range $reference := (ds "config").references }}
+{{ printf "- [%s](%s) - %s" $reference.name $reference.url $reference.description }}{{ end }}
+
+{{ end}}
+
 [<img src="{{ $logo }}" height="32" align="right"/>]({{ $homepage }})
 
