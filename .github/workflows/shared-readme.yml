@@ -91,6 +91,10 @@ jobs:
           token: ${{ steps.github-app.outputs.token }}
           ref: auto-update/readme
 
+      - if: ${{ steps.readme.outputs.readme_file == '' }}
+        run: |-
+          git pull
+
       - uses: cloudposse-github-actions/readme@v1
         id: readme-simple
         with:
