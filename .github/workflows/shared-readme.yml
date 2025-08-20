@@ -85,6 +85,7 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v5
+        if: ${{ steps.readme.outputs.readme_file == '' }}
         with:
           fetch-depth: 0
           token: ${{ steps.github-app.outputs.token }}
@@ -97,7 +98,7 @@ jobs:
           readme_enabled: true
           banner_enabled: false
           validate_readme: true
-          commit_method: 'commit'
+          commit_method: ${{ steps.readme.outputs.readme_file == '' && 'pr' || 'commit' }}
           commit_push_options: '--force-with-lease'
           sign-commits: true
           target: readme-simple
