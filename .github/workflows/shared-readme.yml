@@ -71,7 +71,7 @@ jobs:
           fetch-depth: 0
           token: ${{ steps.github-app.outputs.token }}
 
-      - uses: cloudposse-github-actions/readme@add-labels-on-commit
+      - uses: cloudposse-github-actions/readme@v1
         id: readme
         with:
           token: ${{ steps.github-app.outputs.token }}
@@ -82,9 +82,24 @@ jobs:
           commit_push_options: '--force-with-lease'
           sign-commits: true
           pr_labels: ${{ inputs.pr_labels }}
-        env:
-          README_DEPS: docs/targets.md docs/terraform.md
-          TERRAFORM_SOURCE_DIR: /src
 
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          token: ${{ steps.github-app.outputs.token }}
+          ref: auto-update/readme
+
+      - uses: cloudposse-github-actions/readme@v1
+        id: readme-simple
+        with:
+          token: ${{ steps.github-app.outputs.token }}
+          readme_enabled: true
+          banner_enabled: false
+          validate_readme: true
+          commit_method: 'commit'
+          commit_push_options: '--force-with-lease'
+          sign-commits: true
+          
       - run: |-
           echo "${{ steps.readme.outputs.changes_detected }}"
