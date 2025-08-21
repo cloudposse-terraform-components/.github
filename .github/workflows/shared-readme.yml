@@ -102,7 +102,7 @@ jobs:
           readme_enabled: true
           banner_enabled: false
           validate_readme: true
-          commit_method: ${{ steps.readme.outputs.readme_file == '' && 'pr' || 'commit' }}
+          commit_method: 'pr'
           commit_push_options: '--force-with-lease'
           sign-commits: true
           target: readme-simple
