@@ -37,6 +37,11 @@ docs:
         indent_level: 2
 
 commands:
+- name: readme
+  steps:
+    - "atmos docs generate readme"
+    - "atmos docs generate readme-simple"
+
 - name: test
   commands:
   - name: "deploy"
