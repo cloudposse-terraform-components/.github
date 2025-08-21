@@ -71,7 +71,7 @@ jobs:
           fetch-depth: 0
           token: ${{ steps.github-app.outputs.token }}
 
-      - uses: cloudposse-github-actions/readme@fix-readme-generation
+      - uses: cloudposse-github-actions/readme@readme-command
         id: readme
         with:
           token: ${{ steps.github-app.outputs.token }}
@@ -82,19 +82,7 @@ jobs:
           commit_push_options: '--force-with-lease'
           sign-commits: true
           pr_labels: ${{ inputs.pr_labels }}
-
-      - uses: cloudposse-github-actions/readme@fix-readme-generation
-        id: readme-simple
-        with:
-          token: ${{ steps.github-app.outputs.token }}
-          readme_enabled: true
-          banner_enabled: false
-          validate_readme: true
-          commit_method: 'pr'
-          # commit_push_options: '--force-with-lease'
-          sign-commits: true
-          pr_labels: ${{ inputs.pr_labels }}
-          target: readme-simple
+          command: readme
           
       - run: |-
           echo "${{ steps.readme.outputs.changes_detected }}"
