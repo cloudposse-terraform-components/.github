@@ -83,18 +83,6 @@ jobs:
           sign-commits: true
           pr_labels: ${{ inputs.pr_labels }}
 
-      - name: Checkout
-        uses: actions/checkout@v5
-        if: ${{ steps.readme.outputs.readme_file == '' }}
-        with:
-          fetch-depth: 0
-          token: ${{ steps.github-app.outputs.token }}
-          ref: auto-update/readme
-
-      - if: ${{ steps.readme.outputs.readme_file == '' }}
-        run: |-
-          git pull
-
       - uses: cloudposse-github-actions/readme@fix-readme-generation
         id: readme-simple
         with:
@@ -103,7 +91,7 @@ jobs:
           banner_enabled: false
           validate_readme: true
           commit_method: 'pr'
-          commit_push_options: '--force-with-lease'
+          # commit_push_options: '--force-with-lease'
           sign-commits: true
           pr_labels: ${{ inputs.pr_labels }}
           target: readme-simple
