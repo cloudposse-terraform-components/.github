@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-iam-service-linked-roles
+cloudposse-terraform-components/aws-backup
+cloudposse-terraform-components/aws-eks-github-actions-runner
+cloudposse-terraform-components/aws-managed-grafana-api-key
+cloudposse-terraform-components/aws-spa-s3-cloudfront
+cloudposse-terraform-components/aws-eks-keda
+cloudposse-terraform-components/aws-ecs
+cloudposse-terraform-components/aws-aurora-postgres
+cloudposse-terraform-components/aws-zscaler
+cloudposse-terraform-components/aws-eks-reloader
+cloudposse-terraform-components/aws-strongdm
+cloudposse-terraform-components/aws-spacelift-admin-stack
+cloudposse-terraform-components/aws-auth0-tenant
+cloudposse-terraform-components/aws-glue-schema
+cloudposse-terraform-components/aws-account-settings
+cloudposse-terraform-components/aws-vpc

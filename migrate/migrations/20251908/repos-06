@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-waf
+cloudposse-terraform-components/aws-eks-alb-controller-ingress-class
+cloudposse-terraform-components/aws-alb-experimental
+cloudposse-terraform-components/aws-cloudtrail
+cloudposse-terraform-components/aws-eks-karpenter-controller
+cloudposse-terraform-components/aws-datadog-synthetics-private-location
+cloudposse-terraform-components/aws-datadog-monitor
+cloudposse-terraform-components/aws-datadog-lambda-forwarder
+cloudposse-terraform-components/aws-datadog-credentials
+cloudposse-terraform-components/aws-managed-grafana-data-source-loki
+cloudposse-terraform-components/aws-eks-echo-server
+cloudposse-terraform-components/aws-eks-cert-manager
+cloudposse-terraform-components/aws-lambda
+cloudposse-terraform-components/aws-athena
+cloudposse-terraform-components/aws-snowflake-account
+cloudposse-terraform-components/aws-dms-replication-task

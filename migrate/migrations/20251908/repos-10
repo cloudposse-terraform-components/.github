@@ -1,0 +1,9 @@
+cloudposse-terraform-components/aws-elasticsearch
+cloudposse-terraform-components/aws-tfstate-backend
+cloudposse-terraform-components/aws-dns-primary
+cloudposse-terraform-components/aws-iam-policy
+cloudposse-terraform-components/aws-tgw-attachment
+cloudposse-terraform-components/aws-nlb
+cloudposse-terraform-components/aws-eks-cloudwatch
+cloudposse-terraform-components/aws-eks-addon
+cloudposse-terraform-components/aws-tgw-routes

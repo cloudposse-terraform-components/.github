@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-eventbridge
+cloudposse-terraform-components/aws-amplify
+cloudposse-terraform-components/aws-documentdb
+cloudposse-terraform-components/aws-managed-prometheus-workspace
+cloudposse-terraform-components/aws-rds
+cloudposse-terraform-components/aws-eks-metrics-server
+cloudposse-terraform-components/aws-snowflake-database
+cloudposse-terraform-components/aws-glue-trigger
+cloudposse-terraform-components/aws-ssosync
+cloudposse-terraform-components/aws-sftp
+cloudposse-terraform-components/aws-macie
+cloudposse-terraform-components/aws-ssm-parameters
+cloudposse-terraform-components/aws-argocd-github-repo
+cloudposse-terraform-components/aws-iam-role
+cloudposse-terraform-components/aws-aurora-mysql
+cloudposse-terraform-components/aws-account-quotas

@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-route53-resolver-dns-firewall
+cloudposse-terraform-components/aws-glue-crawler
+cloudposse-terraform-components/aws-glue-iam
+cloudposse-terraform-components/aws-eks-storage-class
+cloudposse-terraform-components/aws-aurora-mysql-resources
+cloudposse-terraform-components/aws-spacelift-spaces
+cloudposse-terraform-components/aws-glue-catalog-database
+cloudposse-terraform-components/aws-auth0-app
+cloudposse-terraform-components/aws-teams
+cloudposse-terraform-components/aws-elasticache-redis
+cloudposse-terraform-components/aws-cloudmap-namespace
+cloudposse-terraform-components/aws-glue-catalog-table
+cloudposse-terraform-components/aws-managed-grafana-dashboard
+cloudposse-terraform-components/aws-glue-workflow
+cloudposse-terraform-components/aws-eks-tailscale
+cloudposse-terraform-components/aws-cloudtrail-bucket

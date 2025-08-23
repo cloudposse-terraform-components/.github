@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-bastion
+cloudposse-terraform-components/aws-identity-center
+cloudposse-terraform-components/aws-sns-topic
+cloudposse-terraform-components/aws-github-oidc-role
+cloudposse-terraform-components/aws-api-gateway-account-settings
+cloudposse-terraform-components/aws-eks-redis-operator
+cloudposse-terraform-components/aws-inspector2
+cloudposse-terraform-components/aws-vpc-routes
+cloudposse-terraform-components/aws-cloudwatch-logs
+cloudposse-terraform-components/aws-global-accelerator-endpoint-group
+cloudposse-terraform-components/aws-eks-karpenter-node-pool
+cloudposse-terraform-components/aws-github-oidc-provider
+cloudposse-terraform-components/aws-dynamodb
+cloudposse-terraform-components/aws-eks-promtail
+cloudposse-terraform-components/aws-api-gateway-rest-api
+cloudposse-terraform-components/aws-managed-grafana-workspace
