@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-eks-spacelift-worker-pool-controller
+cloudposse-terraform-components/aws-team-roles
+cloudposse-terraform-components/aws-dms-replication-instance
+cloudposse-terraform-components/aws-eks-alb-controller-ingress-group
+cloudposse-terraform-components/aws-eks-prometheus-scraper
+cloudposse-terraform-components/aws-saml
+cloudposse-terraform-components/aws-kinesis-stream
+cloudposse-terraform-components/aws-datadog-integration
+cloudposse-terraform-components/aws-site-to-site-vpn
+cloudposse-terraform-components/aws-eks-argocd
+cloudposse-terraform-components/aws-aurora-postgres-resources
+cloudposse-terraform-components/aws-eks-spacelift-worker-pool
+cloudposse-terraform-components/aws-dms-endpoint
+cloudposse-terraform-components/aws-acm
+cloudposse-terraform-components/aws-github-webhook
+cloudposse-terraform-components/aws-account

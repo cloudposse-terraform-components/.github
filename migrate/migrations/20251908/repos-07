@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-eks-redis
+cloudposse-terraform-components/aws-dms-iam
+cloudposse-terraform-components/aws-ipam
+cloudposse-terraform-components/aws-efs
+cloudposse-terraform-components/aws-mq-broker
+cloudposse-terraform-components/aws-ec2-client-vpn
+cloudposse-terraform-components/aws-sso-saml-provider
+cloudposse-terraform-components/aws-glue-job
+cloudposse-terraform-components/aws-philips-labs-github-runners
+cloudposse-terraform-components/aws-account-map
+cloudposse-terraform-components/aws-datadog-synthetics
+cloudposse-terraform-components/aws-eks-external-secrets-operator
+cloudposse-terraform-components/aws-access-analyzer
+cloudposse-terraform-components/aws-auth0-connection
+cloudposse-terraform-components/aws-datadog-private-location-ecs
+cloudposse-terraform-components/aws-inspector

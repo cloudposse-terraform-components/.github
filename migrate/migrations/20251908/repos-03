@@ -1,0 +1,16 @@
+cloudposse-terraform-components/aws-sqs-queue
+cloudposse-terraform-components/aws-glue-registry
+cloudposse-terraform-components/aws-global-accelerator
+cloudposse-terraform-components/aws-github-runners
+cloudposse-terraform-components/aws-kms
+cloudposse-terraform-components/aws-glue-connection
+cloudposse-terraform-components/aws-network-firewall
+cloudposse-terraform-components/aws-cognito
+cloudposse-terraform-components/aws-eks-cluster
+cloudposse-terraform-components/aws-redshift
+cloudposse-terraform-components/aws-shield
+cloudposse-terraform-components/aws-github-action-token-rotator
+cloudposse-terraform-components/aws-ecs-service
+cloudposse-terraform-components/aws-ses
+cloudposse-terraform-components/aws-vpc-flow-logs-bucket
+cloudposse-terraform-components/aws-spacelift-worker-pool-asg
