@@ -172,7 +172,7 @@ jobs:
         if: ${{ needs.context.outputs.test_needs_aws == 'true' ||
           needs.context.outputs.uses_datadog == 'true' ||
           needs.context.outputs.uses_spotinst == 'true' }}
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         id: aws
         with:
           aws-region: ${{ env.AWS_REGION }}
@@ -320,7 +320,7 @@ jobs:
         if: ${{ needs.context.outputs.test_needs_aws == 'true' ||
           needs.context.outputs.uses_datadog == 'true' ||
           needs.context.outputs.uses_spotinst == 'true' }}
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         id: aws
         with:
           aws-region: ${{ env.AWS_REGION }}
@@ -453,7 +453,7 @@ jobs:
         if: ${{ needs.context.outputs.test_needs_aws == 'true' ||
           needs.context.outputs.uses_datadog == 'true' ||
           needs.context.outputs.uses_spotinst == 'true' }}
-        uses: aws-actions/configure-aws-credentials@v4
+        uses: aws-actions/configure-aws-credentials@v5
         id: aws
         with:
           aws-region: ${{ env.AWS_REGION }}
