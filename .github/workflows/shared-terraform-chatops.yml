@@ -269,7 +269,7 @@ jobs:
           atmos-version: ${{ needs.context.outputs.atmos_version }}
 
       - name: "Install Go"
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         if: ${{ steps.skip-tests.outputs.result == 'false' }}
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
@@ -475,7 +475,7 @@ jobs:
           fi  
 
       - name: "Install Go"
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         if: ${{ steps.skip-tests.outputs.result == 'false' }}
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
@@ -691,7 +691,7 @@ jobs:
             }
 
       - name: "Install Go"
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         if: ${{ steps.skip-tests.outputs.result == 'false' }}
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
