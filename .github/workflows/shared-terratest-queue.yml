@@ -178,7 +178,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
           role-session-name: "terratest"
-          mask-aws-account-id: "no"
+          mask-aws-account-id: false
 
       - name: "Create fixtures"
         id: fixtures  
@@ -326,7 +326,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
           role-session-name: "terratest"
-          mask-aws-account-id: "no"
+          mask-aws-account-id: false
 
       - name: "Download Terraform state for fixtures"
         uses: actions/download-artifact@v5
@@ -459,7 +459,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
           role-to-assume: ${{ env.AWS_ROLE_TO_ASSUME }}
           role-session-name: "terratest"
-          mask-aws-account-id: "no"
+          mask-aws-account-id: false
 
       - name: "Destroy fixtures"
         id: fixtures
