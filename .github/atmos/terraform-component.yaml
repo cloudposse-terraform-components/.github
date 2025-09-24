@@ -5,7 +5,7 @@ docs:
       input:
         - "./README.yaml"
         - get_support: true
-      template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/refs/heads/main/atmos.README.md.gotmpl"
+      template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/refs/heads/main/README.md.gotmpl"
       output: "./README.md"
       terraform:
         source: ./src
@@ -23,7 +23,7 @@ docs:
       input:
         - "./README.yaml"
         - get_support: true
-      template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/refs/heads/main/atmos.README.md.simple.gotmpl"
+      template: "https://raw.githubusercontent.com/cloudposse-terraform-components/.github/refs/heads/main/README.md.simple.gotmpl"
       output: "./src/README.md"
       terraform:
         source: ./src
