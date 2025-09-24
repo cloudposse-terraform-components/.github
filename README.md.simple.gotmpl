@@ -29,6 +29,7 @@ tags:
 {{- end }}
 {{- end }}
 
+
 {{- if has (ds "config") "description" }}
 {{ (ds "config").description }}
 {{- end }}
@@ -59,4 +60,20 @@ tags:
 {{- end }}
 {{- end }}
 
+{{ if has (ds "config") "terraform_docs" }}
+<!-- markdownlint-disable -->
+{{ (ds "config").terraform_docs }}
+<!-- markdownlint-restore -->
+{{ end }}
+
+{{ if has (ds "config") "references" }}
+## References
+
+{{ range $reference := (ds "config").references }}
+{{ printf "- [%s](%s) - %s" $reference.name $reference.url $reference.description }}
+{{ end }}
+
+{{ end}}
+
 [<img src="{{ $logo }}" height="32" align="right"/>]({{ $homepage }})
+
