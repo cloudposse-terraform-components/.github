@@ -111,7 +111,7 @@ jobs:
           key: ubuntu-latest-tflint-${{ hashFiles('.tflint.hcl') }}
 
       - name: Setup TFLint
-        uses: terraform-linters/setup-tflint@ae78205cfffec9e8d93fd2b3115c7e9d3166d4b6 # v5
+        uses: terraform-linters/setup-tflint@a8a2cbdfb17397afadcc4fb3fcd64fdb215f0f9f # v6
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
 
