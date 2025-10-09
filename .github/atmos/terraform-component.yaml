@@ -76,3 +76,7 @@ commands:
     steps:
       - "cd test"
       - "go test -timeout 1h"
+
+settings:
+  telemetry:
+    enabled: false
