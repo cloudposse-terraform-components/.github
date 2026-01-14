@@ -504,12 +504,12 @@ pull_request_rules:
       label:
         add:
           - "no-changes"
-      close:
-        message: |
-          This pull request was automatically closed as it no longer contains any changes. 
+      # close:
+      #   message: |
+      #     This pull request was automatically closed as it no longer contains any changes. 
           
-          This typically happens when another merged pull request has already included this request's 
-          proposed modifications into the default branch.
+      #     This typically happens when another merged pull request has already included this request's 
+      #     proposed modifications into the default branch.
 
   - name: welcome new contributors
     conditions:
