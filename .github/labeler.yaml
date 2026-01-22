@@ -1,11 +1,15 @@
 docs:
-  - docs/**
-  - README.*
+  - changed-files:
+    - any-glob-to-any-file:
+      - docs/**
+      - README.*
 
 automation:
-  - .gitattributes
-  - .github/**
-  - .gitignore
-  - .pre-commit-config.yaml
-  - Makefile
-  - _typos.toml
+  - changed-files:
+    - any-glob-to-any-file:
+      - .gitattributes
+      - .github/**
+      - .gitignore
+      - .pre-commit-config.yaml
+      - Makefile
+      - _typos.toml
