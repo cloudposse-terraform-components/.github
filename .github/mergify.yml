@@ -42,7 +42,7 @@ shared:
       - "author=cloudposse-releaser[bot]"
 
   # Pull requests created or co-authored by GitHub Copilot
-  is_copilot_pr: &is_copilot_pr
+  is_copilot_author: &is_copilot_author
     or:
       - "author=github-copilot[bot]"
       - "author~=.*copilot.*"
@@ -509,17 +509,17 @@ pull_request_rules:
       - *is_open
       - *has_no_changes
       - not:
-          *is_copilot_pr
+          *is_copilot_author
     actions:
       label:
         add:
           - "no-changes"
-      # close:
-      #   message: |
-      #     This pull request was automatically closed as it no longer contains any changes. 
-          
-      #     This typically happens when another merged pull request has already included this request's 
-      #     proposed modifications into the default branch.
+      close:
+        message: |
+          This pull request was automatically closed as it no longer contains any changes.
+
+          This typically happens when another merged pull request has already included this request's
+          proposed modifications into the default branch.
 
   - name: welcome new contributors
     conditions:
