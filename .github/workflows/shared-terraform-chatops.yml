@@ -356,7 +356,7 @@ jobs:
 
       - name: "Save Terraform state for fixtures"
         id: upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
@@ -553,7 +553,7 @@ jobs:
           mask-aws-account-id: false
 
       - name: "Download Terraform state for fixtures"
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
@@ -702,7 +702,7 @@ jobs:
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
       - name: "Download Terraform state for fixtures"
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v7
         with:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
