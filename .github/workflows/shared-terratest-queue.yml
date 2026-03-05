@@ -233,7 +233,7 @@ jobs:
 
       - name: "Install Terraform"
         if: ${{ matrix.platform == 'terraform' }}
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
 
       - name: "Install Atmos"
         uses: cloudposse/github-action-setup-atmos@v2
