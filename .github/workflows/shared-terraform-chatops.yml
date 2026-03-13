@@ -263,7 +263,7 @@ jobs:
           fi
 
       - name: "Install Atmos"
-        uses: cloudposse/github-action-setup-atmos@v2
+        uses: cloudposse/github-action-setup-atmos@v3
         with:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
@@ -462,7 +462,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
 
       - name: "Install Atmos"
-        uses: cloudposse/github-action-setup-atmos@v2
+        uses: cloudposse/github-action-setup-atmos@v3
         with:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
@@ -656,7 +656,7 @@ jobs:
           ln -sfnT "$(which tofu)" "$(dirname $(which tofu))"/terraform 
 
       - name: "Install Atmos"
-        uses: cloudposse/github-action-setup-atmos@v2
+        uses: cloudposse/github-action-setup-atmos@v3
         with:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
