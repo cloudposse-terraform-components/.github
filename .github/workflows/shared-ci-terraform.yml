@@ -138,20 +138,18 @@ jobs:
 
       - uses: actions/checkout@v5
         with:
-          repository: cloudposse/terraform-aws-components
-          ref: 1.521.0
-          path: terraform-aws-components
+          repository: cloudposse-terraform-components/aws-account-map
+          path: aws-account-map
           fetch-depth: 1
-          sparse-checkout: |
-            modules/account-map
 
       - run: |-
           # Copy the account-map module twice to support both cases referencing the module
           # ../account-map and ../../account-map
-          cp -r terraform-aws-components/modules/account-map ./account-map
-          cp -r terraform-aws-components/modules/account-map ./target/account-map
-          [ -n "$(ls -A ./src/*.tf 2>/dev/null )" ] || cp -r terraform-aws-components/modules/account-map ./target/src/account-map
-          rm -rf terraform-aws-components
+          # The standalone repo has modules under src/, so we map src/ -> account-map/
+          cp -r aws-account-map/src ./account-map
+          cp -r aws-account-map/src ./target/account-map
+          [ -n "$(ls -A ./src/*.tf 2>/dev/null )" ] || cp -r aws-account-map/src ./target/src/account-map
+          rm -rf aws-account-map
 
       - uses: hashicorp/setup-terraform@v3
 
