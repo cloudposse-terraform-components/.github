@@ -84,7 +84,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: "Install Tofu"
-        uses: opentofu/setup-opentofu@v1
+        uses: opentofu/setup-opentofu@v2
         with:
           tofu_wrapper: false
 
@@ -222,7 +222,7 @@ jobs:
 
       - name: "Install Tofu"
         if: ${{ matrix.platform == 'opentofu' }}
-        uses: opentofu/setup-opentofu@v1
+        uses: opentofu/setup-opentofu@v2
         with:
           tofu_wrapper: false
 
@@ -362,7 +362,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: "Install Tofu"
-        uses: opentofu/setup-opentofu@v1
+        uses: opentofu/setup-opentofu@v2
         with:
           tofu_wrapper: false
 
