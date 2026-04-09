@@ -13,7 +13,7 @@ jobs:
     name: "Auto merge"
     environment: release
     steps:
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         id: github-app
         with:
           app-id: ${{ vars.BOT_GITHUB_APP_ID }}
