@@ -326,12 +326,6 @@ pull_request_rules:
         remove:
           - "needs-re-run"
 
-  - name: "delete the head branch after merge"
-    conditions:
-      - "merged"
-    actions:
-      delete_head_branch: {}
-
   - name: "ask to resolve conflict"
     conditions:
       - *is_open
