@@ -151,7 +151,7 @@ jobs:
           [ -n "$(ls -A ./src/*.tf 2>/dev/null )" ] || cp -r aws-account-map/src ./target/src/account-map
           rm -rf aws-account-map
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
 
       - run: |-
           terraform init
