@@ -44,7 +44,7 @@ jobs:
     name: Format HCL
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Terraform format
         uses: dflook/terraform-fmt@v2
@@ -71,7 +71,7 @@ jobs:
       BATS_EXAMPLES_TESTS: input-descriptions lint output-descriptions
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -103,7 +103,7 @@ jobs:
     name: Find modules
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       - id: set-matrix
         # Ignore directories whose names start with .terraform or obsolete
@@ -132,11 +132,11 @@ jobs:
       TFLINT_PLUGINS: aws
       TFLINT_CACHE_VER: 1 # Increment this to force a cache refresh
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           path: target
 
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           repository: cloudposse-terraform-components/aws-account-map
           path: aws-account-map
@@ -151,7 +151,7 @@ jobs:
           [ -n "$(ls -A ./src/*.tf 2>/dev/null )" ] || cp -r aws-account-map/src ./target/src/account-map
           rm -rf aws-account-map
 
-      - uses: hashicorp/setup-terraform@v3
+      - uses: hashicorp/setup-terraform@v4
 
       - run: |-
           terraform init
@@ -159,7 +159,7 @@ jobs:
 
       - name: cache tflint plugins
         id: cache-plugins
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ env.TFLINT_PLUGIN_DIR }}
           key: tflint-plugins-${{ env.TFLINT_CACHE_VER }}
