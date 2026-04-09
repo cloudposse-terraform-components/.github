@@ -102,7 +102,7 @@ jobs:
           fi
 
       - name: "Install Atmos"
-        uses: cloudposse/github-action-setup-atmos@v2
+        uses: cloudposse/github-action-setup-atmos@v3
         with:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
@@ -114,7 +114,7 @@ jobs:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         if: ${{ needs.context.outputs.uses_github == 'true' }}
         id: github-app
         with:
@@ -233,10 +233,10 @@ jobs:
 
       - name: "Install Terraform"
         if: ${{ matrix.platform == 'terraform' }}
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
 
       - name: "Install Atmos"
-        uses: cloudposse/github-action-setup-atmos@v2
+        uses: cloudposse/github-action-setup-atmos@v3
         with:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
@@ -263,7 +263,7 @@ jobs:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         if: ${{ needs.context.outputs.uses_github == 'true' }}
         id: github-app
         with:
@@ -371,7 +371,7 @@ jobs:
           ln -sfnT "$(which tofu)" "$(dirname $(which tofu))"/terraform 
 
       - name: "Install Atmos"
-        uses: cloudposse/github-action-setup-atmos@v2
+        uses: cloudposse/github-action-setup-atmos@v3
         with:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
@@ -398,7 +398,7 @@ jobs:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
 
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         if: ${{ needs.context.outputs.uses_github == 'true' }}
         id: github-app
         with:
