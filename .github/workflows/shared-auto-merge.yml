@@ -13,14 +13,14 @@ jobs:
     name: "Auto merge"
     environment: release
     steps:
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         id: github-app
         with:
           app-id: ${{ vars.BOT_GITHUB_APP_ID }}
           private-key: ${{ secrets.BOT_GITHUB_APP_PRIVATE_KEY }}
             
       - name: Checkout
-        uses: actions/checkout@v5     
+        uses: actions/checkout@v6     
 
       - run: "gh pr merge ${{ inputs.pr_number }} --auto"
         env:

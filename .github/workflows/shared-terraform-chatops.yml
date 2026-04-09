@@ -209,7 +209,7 @@ jobs:
       terraform_state_artifact_id: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
           ref: ${{ needs.context.outputs.head_sha }}
@@ -245,7 +245,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Install Tofu"
-        uses: opentofu/setup-opentofu@v1
+        uses: opentofu/setup-opentofu@v2
         with:
           tofu_wrapper: false
 
@@ -263,7 +263,7 @@ jobs:
           fi
 
       - name: "Install Atmos"
-        uses: cloudposse/github-action-setup-atmos@v2
+        uses: cloudposse/github-action-setup-atmos@v3
         with:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
@@ -275,7 +275,7 @@ jobs:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         if: ${{ needs.context.outputs.uses_github == 'true' }}
         id: github-app
         with:
@@ -335,7 +335,7 @@ jobs:
         if: ${{ needs.context.outputs.test_needs_aws == 'true' ||
           needs.context.outputs.uses_datadog == 'true' ||
           needs.context.outputs.uses_spotinst == 'true' }}
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         id: aws
         with:
           aws-region: ${{ env.AWS_REGION }}
@@ -356,7 +356,7 @@ jobs:
 
       - name: "Save Terraform state for fixtures"
         id: upload
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
@@ -426,7 +426,7 @@ jobs:
         platform: [terraform, opentofu]
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
           ref: ${{ needs.context.outputs.head_sha }}
@@ -448,7 +448,7 @@ jobs:
 
       - name: "Install Tofu"
         if: ${{ matrix.platform == 'opentofu' }}
-        uses: opentofu/setup-opentofu@v1
+        uses: opentofu/setup-opentofu@v2
         with:
           tofu_wrapper: false
 
@@ -459,10 +459,10 @@ jobs:
 
       - name: "Install Terraform"
         if: ${{ matrix.platform == 'terraform' }}
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
 
       - name: "Install Atmos"
-        uses: cloudposse/github-action-setup-atmos@v2
+        uses: cloudposse/github-action-setup-atmos@v3
         with:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
@@ -483,7 +483,7 @@ jobs:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         if: ${{ needs.context.outputs.uses_github == 'true' }}
         id: github-app
         with:
@@ -544,7 +544,7 @@ jobs:
         if: ${{ needs.context.outputs.test_needs_aws == 'true' ||
           needs.context.outputs.uses_datadog == 'true' ||
           needs.context.outputs.uses_spotinst == 'true' }}
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         id: aws
         with:
           aws-region: ${{ env.AWS_REGION }}
@@ -553,7 +553,7 @@ jobs:
           mask-aws-account-id: false
 
       - name: "Download Terraform state for fixtures"
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
@@ -626,7 +626,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: ${{ needs.context.outputs.head_repo_owner }}/${{ needs.context.outputs.head_repo_name }}
           ref: ${{ needs.context.outputs.head_sha }}
@@ -647,7 +647,7 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: "Install Tofu"
-        uses: opentofu/setup-opentofu@v1
+        uses: opentofu/setup-opentofu@v2
         with:
           tofu_wrapper: false
 
@@ -656,7 +656,7 @@ jobs:
           ln -sfnT "$(which tofu)" "$(dirname $(which tofu))"/terraform 
 
       - name: "Install Atmos"
-        uses: cloudposse/github-action-setup-atmos@v2
+        uses: cloudposse/github-action-setup-atmos@v3
         with:
           install-wrapper: false
           atmos-version: ${{ needs.context.outputs.atmos_version }}
@@ -702,12 +702,12 @@ jobs:
           cache-dependency-path: "${{ needs.context.outputs.go_sum_path }}"
 
       - name: "Download Terraform state for fixtures"
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v8
         with:
           name: state
           path: ${{ needs.context.outputs.terraform_state_path }}
 
-      - uses: actions/create-github-app-token@v2
+      - uses: actions/create-github-app-token@v3
         if: ${{ needs.context.outputs.uses_github == 'true' }}
         id: github-app
         with:
@@ -768,7 +768,7 @@ jobs:
         if: ${{ needs.context.outputs.test_needs_aws == 'true' ||
           needs.context.outputs.uses_datadog == 'true' ||
           needs.context.outputs.uses_spotinst == 'true' }}
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v6
         id: aws
         with:
           aws-region: ${{ env.AWS_REGION }}
