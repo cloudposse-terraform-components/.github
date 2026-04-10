@@ -154,7 +154,6 @@ jobs:
       - uses: hashicorp/setup-terraform@v4
 
       - run: |-
-          terraform providers
           terraform init
           terraform providers
         working-directory: ./target/${{ matrix.tfdir }}
