@@ -40,7 +40,7 @@ jobs:
         with:
           id: ${{ github.event.issue.number }}
 
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         id: properties
         with:
           result-encoding: string
@@ -672,7 +672,7 @@ jobs:
 
       - name: "Comment on PR if tests skipped"
         if: ${{ steps.skip-tests.outputs.result == 'true' }}
-        uses: actions/github-script@v8
+        uses: actions/github-script@v9
         with:
           script: |
             const issueNumber = ${{ needs.context.outputs.number }};
