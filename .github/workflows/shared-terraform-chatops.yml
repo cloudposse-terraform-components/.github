@@ -560,7 +560,7 @@ jobs:
 
       - name: "Test component"
         if: ${{ steps.skip-tests.outputs.result == 'false' }}          
-        uses: robherley/go-test-action@v0
+        uses: robherley/go-test-action@v1
         with:
           moduleDirectory: test
           testArguments: -v -timeout 1h
