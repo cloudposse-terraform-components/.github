@@ -128,7 +128,7 @@ shared:
 
   # Has reviews and no changes requested
   is_approved: &is_approved
-    "branch-protection-review-decision=APPROVED"
+    "github-review-decision=APPROVED"
 
   # Has not been approved
   not_approved: &not_approved
