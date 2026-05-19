@@ -28,7 +28,7 @@ jobs:
     name: Context
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
-      - uses: actions/github-script@v8
+      - uses: actions/github-script@v9
         id: properties
         with:
           result-encoding: string
