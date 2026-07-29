@@ -81,7 +81,7 @@ jobs:
       terraform_state_artifact_id: ${{ steps.upload.outputs.artifact-id }}
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: "Install Tofu"
         uses: opentofu/setup-opentofu@v2
@@ -108,7 +108,7 @@ jobs:
           atmos-version: ${{ needs.context.outputs.atmos_version }}
 
       - name: "Install Go"
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         if: ${{ steps.skip-tests.outputs.result == 'false' }}
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
@@ -218,7 +218,7 @@ jobs:
         platform: [terraform, opentofu]
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: "Install Tofu"
         if: ${{ matrix.platform == 'opentofu' }}
@@ -257,7 +257,7 @@ jobs:
           exit 1;
 
       - name: "Install Go"
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         if: ${{ steps.skip-tests.outputs.result == 'false' }}
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
@@ -359,7 +359,7 @@ jobs:
     continue-on-error: true
     steps:
       - name: "Checkout code for ChatOps"
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: "Install Tofu"
         uses: opentofu/setup-opentofu@v2
@@ -386,7 +386,7 @@ jobs:
           fi  
 
       - name: "Install Go"
-        uses: actions/setup-go@v6
+        uses: actions/setup-go@v7
         if: ${{ steps.skip-tests.outputs.result == 'false' }}
         with:
           go-version-file: "${{ needs.context.outputs.go_mod_path }}"
