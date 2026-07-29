@@ -44,14 +44,14 @@ jobs:
     name: Format HCL
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Terraform format
-        uses: dflook/terraform-fmt@v2
+        uses: dflook/terraform-fmt@v3
 
       - name: Reviewdog suggester
         if: ${{ inputs.suggestions }}
-        uses: reviewdog/action-suggester@v1.24.0
+        uses: reviewdog/action-suggester@v1.24.3
         with:
           tool_name: "terraform fmt -recursive"
           cleanup: false
@@ -71,7 +71,7 @@ jobs:
       BATS_EXAMPLES_TESTS: input-descriptions lint output-descriptions
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -103,7 +103,7 @@ jobs:
     name: Find modules
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - id: set-matrix
         # Ignore directories whose names start with .terraform or obsolete
@@ -132,11 +132,11 @@ jobs:
       TFLINT_PLUGINS: aws
       TFLINT_CACHE_VER: 1 # Increment this to force a cache refresh
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           path: target
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           repository: cloudposse-terraform-components/aws-account-map
           path: aws-account-map
@@ -160,7 +160,7 @@ jobs:
 
       - name: cache tflint plugins
         id: cache-plugins
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ${{ env.TFLINT_PLUGIN_DIR }}
           key: tflint-plugins-${{ env.TFLINT_CACHE_VER }}
