@@ -87,6 +87,11 @@ jobs:
         uses: opentofu/setup-opentofu@v2
         with:
           tofu_wrapper: false
+          # Pinned: OpenTofu 1.13.0 dropped support for legacy state format version 1, which
+          # `terraform_remote_state` still encounters in the test fixtures. Unpinned, every
+          # component repo picked up 1.13.0 within hours of its release and the opentofu
+          # terratest variant began failing while the terraform variant kept passing.
+          tofu_version: 1.12.6
 
       - name: "Link Terraform to Tofu"
         run: |
@@ -225,6 +230,11 @@ jobs:
         uses: opentofu/setup-opentofu@v2
         with:
           tofu_wrapper: false
+          # Pinned: OpenTofu 1.13.0 dropped support for legacy state format version 1, which
+          # `terraform_remote_state` still encounters in the test fixtures. Unpinned, every
+          # component repo picked up 1.13.0 within hours of its release and the opentofu
+          # terratest variant began failing while the terraform variant kept passing.
+          tofu_version: 1.12.6
 
       - name: "Link Terraform to Tofu"
         if: ${{ matrix.platform == 'opentofu' }}
@@ -365,6 +375,11 @@ jobs:
         uses: opentofu/setup-opentofu@v2
         with:
           tofu_wrapper: false
+          # Pinned: OpenTofu 1.13.0 dropped support for legacy state format version 1, which
+          # `terraform_remote_state` still encounters in the test fixtures. Unpinned, every
+          # component repo picked up 1.13.0 within hours of its release and the opentofu
+          # terratest variant began failing while the terraform variant kept passing.
+          tofu_version: 1.12.6
 
       - name: "Link Terraform to Tofu"
         run: |
