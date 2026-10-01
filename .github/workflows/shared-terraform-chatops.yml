@@ -252,7 +252,7 @@ jobs:
           # `terraform_remote_state` still encounters in the test fixtures. Unpinned, every
           # component repo picked up 1.13.0 within hours of its release and the opentofu
           # terratest variant began failing while the terraform variant kept passing.
-          tofu_version: 1.12.6
+          tofu_version: v1.13.1
 
       - name: "Link Terraform to Tofu"
         run: |
@@ -460,7 +460,7 @@ jobs:
           # `terraform_remote_state` still encounters in the test fixtures. Unpinned, every
           # component repo picked up 1.13.0 within hours of its release and the opentofu
           # terratest variant began failing while the terraform variant kept passing.
-          tofu_version: 1.12.6
+          tofu_version: v1.13.1
 
       - name: "Link Terraform to Tofu"
         if: ${{ matrix.platform == 'opentofu' }}
@@ -664,7 +664,7 @@ jobs:
           # `terraform_remote_state` still encounters in the test fixtures. Unpinned, every
           # component repo picked up 1.13.0 within hours of its release and the opentofu
           # terratest variant began failing while the terraform variant kept passing.
-          tofu_version: 1.12.6
+          tofu_version: v1.13.1
 
       - name: "Link Terraform to Tofu"
         run: |
