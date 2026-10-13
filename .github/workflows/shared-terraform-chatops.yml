@@ -35,7 +35,7 @@ jobs:
     if: ${{ needs.access.outputs.granted == 'true' }}
     runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
-      - uses: cloudposse-github-actions/get-pr@v2
+      - uses: cloudposse-github-actions/get-pr@v3
         id: pr
         with:
           id: ${{ github.event.issue.number }}
